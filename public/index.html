@@ -62,8 +62,10 @@
 </style>
 </head>
 <body>
+<div class="noise-overlay"></div>
+<div class="glow-overlay"></div>
 <canvas class="bg-canvas" id="bgCanvas"></canvas>
-<div class="saudi-bar"><span>🇸🇦</span><span>صُنع في المملكة العربية السعودية</span><span>🇸🇦</span></div>
+<div class="saudi-bar"><span>🇸🇦</span><span>أصول طويق — صُنع في المملكة العربية السعودية</span><span>🇸🇦</span></div>
 <div class="global-bar">
   <div class="global-stat"><span class="g-dot"></span><span id="g-online">0</span> أونلاين</div>
   <div class="global-stat">🏠 <span id="g-rooms">0</span> غرفة</div>
@@ -78,10 +80,15 @@
 
   <!-- ═══ Main Menu ═══ -->
   <div class="sub-page on" id="pg-main">
-    <div class="brand">
-      <div style="font-size:48px;margin-bottom:2px">🔔</div>
-      <div class="brand-logo">بازززز</div>
-      <div class="brand-sub"><span>🇸🇦</span> منصة مسابقات سعودية <span>🇸🇦</span></div>
+    <div class="brand" style="padding:clamp(20px,5vh,40px) 0 12px">
+      <div style="display:flex;justify-content:center;margin-bottom:10px">
+        <div style="width:100px;height:100px;border-radius:24px;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,rgba(232,213,163,.1),transparent 28%),linear-gradient(180deg,rgba(198,160,80,.08),rgba(198,160,80,.02));border:1px solid var(--line);box-shadow:inset 0 0 28px rgba(232,213,163,.03),var(--shadow-sm)">
+          <svg viewBox="0 0 220 220" width="68" height="68" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="jg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8d5a3"/><stop offset="45%" stop-color="#c6a050"/><stop offset="100%" stop-color="#a8842c"/></linearGradient><filter id="jgl"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M78 52c0-16 14-28 32-28s32 12 32 28" fill="none" stroke="url(#jg)" stroke-width="7" stroke-linecap="round"/><path d="M110 52c39 0 58 29 58 63v18c0 11 5 22 14 30H38c9-8 14-19 14-30v-18c0-34 19-63 58-63Z" fill="none" stroke="url(#jg)" stroke-width="9" stroke-linejoin="round" filter="url(#jgl)"/><path d="M84 166c4 15 14 24 26 24s22-9 26-24" fill="none" stroke="url(#jg)" stroke-width="9" stroke-linecap="round"/><circle cx="110" cy="148" r="7" fill="url(#jg)"/><path d="M188 74c10 11 16 23 18 39" fill="none" stroke="url(#jg)" stroke-width="5" stroke-linecap="round" opacity=".8"/><path d="M32 74c-10 11-16 23-18 39" fill="none" stroke="url(#jg)" stroke-width="5" stroke-linecap="round" opacity=".8"/><path d="M175 48c15 12 25 28 28 48" fill="none" stroke="url(#jg)" stroke-width="3.5" stroke-linecap="round" opacity=".5"/><path d="M45 48C30 60 20 76 17 96" fill="none" stroke="url(#jg)" stroke-width="3.5" stroke-linecap="round" opacity=".5"/></svg>
+        </div>
+      </div>
+      <h1 style="text-align:center;font-size:clamp(42px,10vw,72px)">جرس</h1>
+      <div style="text-align:center;font-size:13px;letter-spacing:.4em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">JARAS</div>
+      <div style="text-align:center;font-size:12px;color:var(--dim);display:flex;align-items:center;gap:5px;justify-content:center"><span>🇸🇦</span> منصة مسابقات رقمية — أصول طويق <span>🇸🇦</span></div>
     </div>
 
     <div class="main-actions">
@@ -225,7 +232,7 @@
   </div>
 
   <div class="footer">
-    <span>🇸🇦 بازززز — صنع في السعودية</span><br>
+    <span>🇸🇦 جرس — أصول طويق</span><br>
     <a href="/admin.html">🔐 لوحة التحكم</a>
   </div>
 </div>
@@ -288,9 +295,9 @@ document.getElementById("join-name").addEventListener("keydown",e=>{if(e.key==="
 // ── Animated Background ──
 (function(){
   const c=document.getElementById("bgCanvas"),x=c.getContext("2d");let w,h,pts=[];
-  const cl=["rgba(240,180,41,","rgba(0,200,83,","rgba(56,199,240,","rgba(139,92,246,"];
+  const cl=["rgba(198,160,80,","rgba(232,213,163,","rgba(168,132,44,","rgba(126,196,126,"];
   function rs(){w=c.width=innerWidth;h=c.height=innerHeight;pts=[];for(let i=0;i<30;i++)pts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.5,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,c:cl[Math.floor(Math.random()*cl.length)],a:Math.random()*.1+.03});}
-  function dr(){x.clearRect(0,0,w,h);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=p.c+p.a+")";x.fill();});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<100){x.beginPath();x.moveTo(pts[i].x,pts[i].y);x.lineTo(pts[j].x,pts[j].y);x.strokeStyle="rgba(240,180,41,"+(0.02*(1-d/100))+")";x.lineWidth=.4;x.stroke();}}requestAnimationFrame(dr);}
+  function dr(){x.clearRect(0,0,w,h);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=p.c+p.a+")";x.fill();});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<100){x.beginPath();x.moveTo(pts[i].x,pts[i].y);x.lineTo(pts[j].x,pts[j].y);x.strokeStyle="rgba(198,160,80,"+(0.025*(1-d/100))+")";x.lineWidth=.4;x.stroke();}}requestAnimationFrame(dr);}
   addEventListener("resize",rs);rs();dr();
 })();
 </script>
