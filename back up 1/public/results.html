@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>بازر — النتائج</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas class="confetti-canvas" id="confetti-canvas"></canvas>
+<div class="container" style="padding-top:clamp(20px,5vh,40px)">
+  <div class="text-center" style="animation:slideUp .5s ease">
+    <div class="result-crown" id="r-crown">🏆</div>
+    <h1 id="r-title">النتائج</h1>
+    <p class="text-dim mb-12" id="r-sub"></p>
+  </div>
+  <div class="final-scores" id="r-scores">
+    <div class="final-score-card a" id="r-card-a"><div class="final-score-label">الفريق أ</div><div class="final-score-num" id="r-score-a">0</div></div>
+    <div class="final-score-card b" id="r-card-b"><div class="final-score-label">الفريق ب</div><div class="final-score-num" id="r-score-b">0</div></div>
+  </div>
+  <div class="card" id="r-players" style="animation:slideUp .6s ease">
+    <h3 class="mb-12">ترتيب اللاعبين</h3>
+    <div id="r-player-list"></div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <a href="/" class="btn btn-gold btn-lg" style="flex:1;text-align:center">🏠 الرئيسية</a>
+  </div>
+</div>
+<script src="js/results.js"></script>
+</body>
+</html>

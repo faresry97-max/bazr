@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>بازر — المقدّم</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-header">
+  <div class="logo">🔔 بازر</div>
+  <div class="header-stats">
+    <div class="online-badge" id="global-online">🌐 0 أونلاين</div>
+    <div class="player-counter"><span class="dot"></span><span id="player-count">0</span> في الغرفة</div>
+  </div>
+</div>
+
+<div class="container-wide">
+  <!-- Lobby -->
+  <div class="screen active" id="sc-lobby">
+    <div class="text-center">
+      <h2>غرفة الانتظار</h2>
+      <div class="room-code-display">
+        <div class="room-code-label">كود الغرفة</div>
+        <div class="room-code" id="lobby-code">------</div>
+        <div class="room-code-hint">شارك هذا الكود مع اللاعبين</div>
+      </div>
+    </div>
+    <div class="scoreboard mt-16">
+      <div class="score-card team-a-card"><div class="score-label">🔵 الفريق أ</div><div id="lobby-team-a" class="team-player-list">بانتظار...</div></div>
+      <div class="score-card team-b-card"><div class="score-label">🔴 الفريق ب</div><div id="lobby-team-b" class="team-player-list">بانتظار...</div></div>
+    </div>
+    <div class="text-center mt-24">
+      <button class="btn btn-gold btn-lg" id="start-btn" onclick="startGame()" disabled>🚀 ابدأ اللعبة</button>
+      <p class="text-dim mt-8" id="lobby-hint">بانتظار اللاعبين...</p>
+    </div>
+  </div>
+
+  <!-- Game -->
+  <div class="screen" id="sc-game">
+    <div class="game-layout">
+      <div class="main-col">
+        <div class="question-card">
+          <div class="flex-between"><div class="question-cat" id="q-cat"></div><div class="question-progress" id="q-progress"></div></div>
+          <div class="question-img-wrap hidden" id="q-img-wrap"><img id="q-img" class="question-img" alt="صورة السؤال"></div>
+          <div class="question-text" id="q-text">—</div>
+          <div class="question-answer" id="q-answer"></div>
+        </div>
+        <div id="timer-section" class="hidden">
+          <div class="timer-bar-wrap"><div class="timer-bar" id="timer-bar"></div></div>
+          <div class="timer-text" id="timer-text">15</div>
+        </div>
+        <div class="buzz-status" id="buzz-status"><div class="text-dim">⏳ بانتظار فتح الجرس...</div></div>
+        <div class="answer-result hidden" id="answer-result"></div>
+        <div class="judge-override hidden" id="judge-override">
+          <span class="text-dim" style="font-size:12px">تصحيح:</span>
+          <button class="btn btn-lime btn-sm" onclick="judgeOverride(true)">✅</button>
+          <button class="btn btn-rose btn-sm" onclick="judgeOverride(false)">❌</button>
+        </div>
+        <div class="host-controls mt-12">
+          <button class="btn btn-gold" id="open-buzz-btn" onclick="openBuzzer()">🔔 افتح الجرس</button>
+          <button class="btn btn-ghost" onclick="skipQuestion()">⏭️ تخطّي</button>
+          <button class="btn btn-ghost" onclick="nextQuestion()">← التالي</button>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="scoreboard">
+          <div class="score-card team-a-card"><div class="score-label">أ</div><div class="score-value" id="score-a">0</div></div>
+          <div class="score-card team-b-card"><div class="score-label">ب</div><div class="score-value" id="score-b">0</div></div>
+        </div>
+        <div class="card" style="padding:14px">
+          <h3 class="mb-8" style="font-size:14px">اللاعبون</h3>
+          <ul class="player-list" id="game-players"></ul>
+        </div>
+        <!-- Chat -->
+        <div class="chat-panel">
+          <div class="chat-header">💬 الدردشة</div>
+          <div class="chat-messages" id="h-chat"></div>
+          <div class="reactions-row">
+            <button class="react-btn" onclick="sendReaction('👏')">👏</button>
+            <button class="react-btn" onclick="sendReaction('🔥')">🔥</button>
+            <button class="react-btn" onclick="sendReaction('😂')">😂</button>
+            <button class="react-btn" onclick="sendReaction('💪')">💪</button>
+            <button class="react-btn" onclick="sendReaction('❤️')">❤️</button>
+          </div>
+          <div class="chat-input-row">
+            <input type="text" id="h-chat-input" placeholder="اكتب رسالة..." maxlength="120" onkeydown="if(event.key==='Enter')sendChat()">
+            <button class="btn btn-gold btn-sm" onclick="sendChat()">إرسال</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/host.js"></script>
+</body>
+</html>
