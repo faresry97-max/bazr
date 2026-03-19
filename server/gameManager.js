@@ -3,11 +3,12 @@
 const rooms = new Map();
 const QUESTION_BANK = require("./questions");
 
+// ─── Global State ───
+let globalOnline = 0;
+const leaderboard = []; // {name, score, cat, date, roomCode}
+
 // ─── Fuzzy String Matching ───
 
-/**
- * Calculate Levenshtein distance between two strings
- */
 function levenshtein(a, b) {
   const m = a.length, n = b.length;
   const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
@@ -23,61 +24,75 @@ function levenshtein(a, b) {
   return dp[m][n];
 }
 
-/**
- * Normalize Arabic text for comparison
- * Removes diacritics, normalizes alef/taa/yaa, trims whitespace
- */
 function normalizeArabic(text) {
   return text
-    .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g, "") // remove tashkeel
-    .replace(/[أإآ]/g, "ا")  // normalize alef
-    .replace(/ة/g, "ه")      // taa marbuta → haa
-    .replace(/ى/g, "ي")      // alef maqsura → yaa
-    .replace(/\s+/g, " ")    // normalize whitespace
+    .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g, "")
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ة/g, "ه")
+    .replace(/ى/g, "ي")
+    .replace(/\s+/g, " ")
     .trim()
     .toLowerCase();
 }
 
-/**
- * Check if answer matches with ~80% similarity
- * Returns { match: boolean, similarity: number }
- */
 function checkAnswer(submitted, correct) {
   const a = normalizeArabic(submitted);
   const b = normalizeArabic(correct);
-
-  // Exact match after normalization
   if (a === b) return { match: true, similarity: 100 };
-
-  // Check if submitted contains the correct answer or vice versa
   if (a.includes(b) || b.includes(a)) return { match: true, similarity: 95 };
-
-  // Levenshtein similarity
   const maxLen = Math.max(a.length, b.length);
   if (maxLen === 0) return { match: false, similarity: 0 };
   const dist = levenshtein(a, b);
   const similarity = Math.round((1 - dist / maxLen) * 100);
-
   return { match: similarity >= 70, similarity };
 }
 
-// ─── Available categories from question bank ───
+// ─── Categories ───
 function getAvailableCategories() {
   const cats = new Set();
   QUESTION_BANK.forEach(q => cats.add(q.cat));
   return [...cats];
 }
 
-// ─── Room Code Generator ───
+// ─── Global Online Count ───
+function incrementOnline() { return ++globalOnline; }
+function decrementOnline() { return Math.max(0, --globalOnline); }
+function getOnlineCount() { return globalOnline; }
+
+// ─── Leaderboard ───
+
+function addToLeaderboard(entry) {
+  leaderboard.push({
+    name: entry.name,
+    score: entry.score,
+    cat: entry.cat || "الكل",
+    date: Date.now(),
+  });
+  // Keep max 500 entries to prevent memory bloat
+  if (leaderboard.length > 500) leaderboard.splice(0, leaderboard.length - 500);
+}
+
+function getLeaderboard(period) {
+  const now = Date.now();
+  let cutoff;
+  if (period === "daily") cutoff = now - 24 * 60 * 60 * 1000;
+  else if (period === "monthly") cutoff = now - 30 * 24 * 60 * 60 * 1000;
+  else cutoff = 0;
+
+  return leaderboard
+    .filter(e => e.date >= cutoff)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10);
+}
+
+// ─── Room Management ───
+
 function generateRoomCode() {
   let code;
-  do {
-    code = String(Math.floor(100000 + Math.random() * 900000));
-  } while (rooms.has(code));
+  do { code = String(Math.floor(100000 + Math.random() * 900000)); } while (rooms.has(code));
   return code;
 }
 
-// ─── Shuffle array (Fisher-Yates) ───
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -86,10 +101,8 @@ function shuffle(arr) {
   return arr;
 }
 
-// ─── Create Room ───
 function createRoom(hostSocketId, options = {}) {
   const code = generateRoomCode();
-
   const room = {
     code,
     hostSocketId,
@@ -102,32 +115,36 @@ function createRoom(hostSocketId, options = {}) {
     timer: null,
     timerRemaining: 15,
     createdAt: Date.now(),
-    // Game settings (host configurable)
+    chat: [],  // {name, team, msg, type, time}
     settings: {
-      categories: options.categories || [],    // empty = all
+      categories: options.categories || [],
       questionCount: options.questionCount || 20,
       timerDuration: 15,
     },
   };
-
   rooms.set(code, room);
   return room;
 }
 
-/**
- * Build and shuffle question set based on room settings
- */
 function buildQuestions(room) {
   const { categories, questionCount } = room.settings;
-
   let pool = QUESTION_BANK;
-  if (categories.length > 0) {
-    pool = pool.filter(q => categories.includes(q.cat));
-  }
+  if (categories.length > 0) pool = pool.filter(q => categories.includes(q.cat));
+  room.questions = shuffle([...pool]).slice(0, Math.min(questionCount, pool.length));
+}
 
-  // Shuffle and pick
-  const shuffled = shuffle([...pool]);
-  room.questions = shuffled.slice(0, Math.min(questionCount, shuffled.length));
+function getRoomCount() { return rooms.size; }
+
+function getAllRoomInfo() {
+  const info = [];
+  for (const [, room] of rooms) {
+    info.push({
+      code: room.code,
+      state: room.state,
+      playerCount: room.players.filter(p => p.connected).length,
+    });
+  }
+  return info;
 }
 
 // ─── Player Management ───
@@ -137,7 +154,6 @@ function addPlayer(roomCode, name, team, socketId) {
   if (!room) return { success: false, error: "الغرفة غير موجودة" };
   if (room.state === "ended") return { success: false, error: "اللعبة انتهت" };
 
-  // Reconnection check
   const existing = room.players.find(p => p.name === name);
   if (existing) {
     existing.socketId = socketId;
@@ -151,13 +167,8 @@ function addPlayer(roomCode, name, team, socketId) {
 
   const player = {
     id: `p_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-    name,
-    team,
-    score: 0,
-    socketId,
-    connected: true,
+    name, team, score: 0, socketId, connected: true,
   };
-
   room.players.push(player);
   return { success: true, player, reconnected: false };
 }
@@ -183,14 +194,27 @@ function kickPlayer(roomCode, playerId) {
   return { room, player };
 }
 
+// ─── Chat ───
+
+function addChatMessage(roomCode, name, team, msg, type = "text") {
+  const room = rooms.get(roomCode);
+  if (!room) return null;
+  const entry = { name, team, msg, type, time: Date.now() };
+  room.chat.push(entry);
+  if (room.chat.length > 100) room.chat.shift();
+  return entry;
+}
+
+function addReaction(roomCode, name, team, emoji) {
+  return addChatMessage(roomCode, name, team, emoji, "reaction");
+}
+
 // ─── Game Flow ───
 
 function startGame(roomCode) {
   const room = rooms.get(roomCode);
   if (!room || room.state !== "lobby") return null;
   if (room.players.filter(p => p.connected).length < 1) return null;
-
-  // Build fresh randomized questions
   buildQuestions(room);
   room.state = "playing";
   room.currentQuestion = 0;
@@ -202,25 +226,13 @@ function startGame(roomCode) {
 function getCurrentQuestion(room) {
   if (room.currentQuestion < 0 || room.currentQuestion >= room.questions.length) return null;
   const q = room.questions[room.currentQuestion];
-  return {
-    text: q.q,
-    cat: q.cat || "",
-    index: room.currentQuestion,
-    total: room.questions.length,
-  };
+  return { text: q.q, cat: q.cat || "", index: room.currentQuestion, total: room.questions.length };
 }
 
 function getCurrentQuestionFull(room) {
   if (room.currentQuestion < 0 || room.currentQuestion >= room.questions.length) return null;
   const q = room.questions[room.currentQuestion];
-  return {
-    text: q.q,
-    answer: q.a,
-    cat: q.cat || "",
-    diff: q.diff || "",
-    index: room.currentQuestion,
-    total: room.questions.length,
-  };
+  return { text: q.q, answer: q.a, cat: q.cat || "", diff: q.diff || "", index: room.currentQuestion, total: room.questions.length };
 }
 
 // ─── Buzzer ───
@@ -237,168 +249,115 @@ function handleBuzz(roomCode, socketId) {
   const room = rooms.get(roomCode);
   if (!room || room.state !== "playing") return { success: false };
   if (!room.buzzerOpen || room.buzzedPlayer) return { success: false };
-
   const player = room.players.find(p => p.socketId === socketId && p.connected);
   if (!player) return { success: false };
-
   room.buzzerOpen = false;
   room.buzzedPlayer = { id: player.id, name: player.name, team: player.team };
   room.timerRemaining = room.settings.timerDuration;
-
   return { success: true, player };
 }
 
-// ─── Answer Submission (auto-judge with fuzzy matching) ───
+// ─── Answer ───
 
 function submitAnswer(roomCode, socketId, answerText) {
   const room = rooms.get(roomCode);
   if (!room || !room.buzzedPlayer) return null;
-
-  // Only the buzzed player can submit
   const player = room.players.find(p => p.socketId === socketId);
   if (!player || player.id !== room.buzzedPlayer.id) return null;
-
   const q = room.questions[room.currentQuestion];
   if (!q) return null;
 
   const result = checkAnswer(answerText, q.a);
-  const correct = result.match;
-
-  if (correct) {
-    player.score += 1;
-  }
+  if (result.match) player.score += 1;
 
   const buzzed = room.buzzedPlayer;
   room.buzzedPlayer = null;
   room.buzzerOpen = false;
-
-  if (room.timer) {
-    clearInterval(room.timer);
-    room.timer = null;
-  }
+  if (room.timer) { clearInterval(room.timer); room.timer = null; }
 
   return {
-    correct,
-    similarity: result.similarity,
-    playerName: buzzed.name,
-    team: buzzed.team,
-    submittedAnswer: answerText,
-    correctAnswer: q.a,
+    correct: result.match, similarity: result.similarity,
+    playerName: buzzed.name, team: buzzed.team,
+    submittedAnswer: answerText, correctAnswer: q.a,
     scores: getScores(room),
   };
 }
-
-// ─── Manual judge (host override for edge cases) ───
 
 function judgeAnswer(roomCode, correct) {
   const room = rooms.get(roomCode);
   if (!room || !room.buzzedPlayer) return null;
-
   const buzzed = room.buzzedPlayer;
-
   if (correct) {
     const player = room.players.find(p => p.id === buzzed.id);
     if (player) player.score += 1;
   }
-
   room.buzzedPlayer = null;
   room.buzzerOpen = false;
-
-  if (room.timer) {
-    clearInterval(room.timer);
-    room.timer = null;
-  }
-
-  return {
-    correct,
-    playerName: buzzed.name,
-    team: buzzed.team,
-    scores: getScores(room),
-  };
+  if (room.timer) { clearInterval(room.timer); room.timer = null; }
+  return { correct, playerName: buzzed.name, team: buzzed.team, scores: getScores(room) };
 }
 
-// ─── Next Question / Game Over ───
+// ─── Navigation ───
 
 function nextQuestion(roomCode) {
   const room = rooms.get(roomCode);
   if (!room || room.state !== "playing") return null;
-
   room.currentQuestion += 1;
   room.buzzedPlayer = null;
   room.buzzerOpen = false;
-
-  if (room.timer) {
-    clearInterval(room.timer);
-    room.timer = null;
-  }
-
+  if (room.timer) { clearInterval(room.timer); room.timer = null; }
   if (room.currentQuestion >= room.questions.length) {
     room.state = "ended";
+    // Add players to leaderboard
+    const cats = room.settings.categories.join("، ") || "الكل";
+    room.players.forEach(p => {
+      if (p.score > 0) addToLeaderboard({ name: p.name, score: p.score, cat: cats });
+    });
     return { question: null, gameOver: true, scores: getScores(room) };
   }
-
   return { question: getCurrentQuestion(room), gameOver: false };
 }
-
-// ─── Skip Question (host) ───
 
 function skipQuestion(roomCode) {
   const room = rooms.get(roomCode);
   if (!room || room.state !== "playing") return null;
-
   room.buzzedPlayer = null;
   room.buzzerOpen = false;
-  if (room.timer) {
-    clearInterval(room.timer);
-    room.timer = null;
-  }
-
+  if (room.timer) { clearInterval(room.timer); room.timer = null; }
   return { skipped: true };
 }
 
-// ─── Score Helpers ───
+// ─── Scores ───
 
 function getScores(room) {
   const teamA = room.players.filter(p => p.team === "A");
   const teamB = room.players.filter(p => p.team === "B");
   return {
-    A: teamA.reduce((sum, p) => sum + p.score, 0),
-    B: teamB.reduce((sum, p) => sum + p.score, 0),
-    players: room.players.map(p => ({
-      id: p.id, name: p.name, team: p.team, score: p.score, connected: p.connected,
-    })),
+    A: teamA.reduce((s, p) => s + p.score, 0),
+    B: teamB.reduce((s, p) => s + p.score, 0),
+    players: room.players.map(p => ({ id: p.id, name: p.name, team: p.team, score: p.score, connected: p.connected })),
   };
 }
 
 function getPlayerInfo(room) {
-  const connected = room.players.filter(p => p.connected);
   return {
-    count: connected.length,
-    players: room.players.map(p => ({
-      id: p.id, name: p.name, team: p.team, score: p.score, connected: p.connected,
-    })),
+    count: room.players.filter(p => p.connected).length,
+    players: room.players.map(p => ({ id: p.id, name: p.name, team: p.team, score: p.score, connected: p.connected })),
   };
 }
 
-// ─── Room Accessors ───
+// ─── Accessors ───
 
 function getRoom(code) { return rooms.get(code) || null; }
-
 function getRoomByHost(socketId) {
-  for (const [, room] of rooms) {
-    if (room.hostSocketId === socketId) return room;
-  }
+  for (const [, room] of rooms) { if (room.hostSocketId === socketId) return room; }
   return null;
 }
-
 function deleteRoom(code) {
   const room = rooms.get(code);
   if (room && room.timer) clearInterval(room.timer);
   rooms.delete(code);
 }
-
-// ─── Update Room Settings ───
-
 function updateSettings(roomCode, settings) {
   const room = rooms.get(roomCode);
   if (!room || room.state !== "lobby") return false;
@@ -414,4 +373,8 @@ module.exports = {
   nextQuestion, skipQuestion,
   getScores, getPlayerInfo, getRoom, getRoomByHost, deleteRoom,
   updateSettings, getAvailableCategories, checkAnswer,
+  incrementOnline, decrementOnline, getOnlineCount,
+  addChatMessage, addReaction,
+  getLeaderboard, addToLeaderboard,
+  getRoomCount, getAllRoomInfo,
 };

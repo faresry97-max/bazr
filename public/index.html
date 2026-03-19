@@ -1,151 +1,164 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بازر — لعبة المسابقات</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>بازر — لعبة المسابقات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="landing-hero">
-      <div class="hero-icon">🔔</div>
-      <h1>بازر</h1>
-      <p class="hero-sub">لعبة مسابقات جماعية أونلاين — فريقين يتنافسان!</p>
+<!-- Global Stats -->
+<div class="global-bar">
+  <div class="global-stat"><span class="g-dot"></span> <span id="g-online">0</span> أونلاين</div>
+  <div class="global-stat">🏠 <span id="g-rooms">0</span> غرفة نشطة</div>
+</div>
+
+<div class="container">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-icon">🔔</div>
+    <h1>بازر</h1>
+    <p class="hero-sub">لعبة مسابقات جماعية أونلاين — فريقين يتنافسان!</p>
+  </div>
+
+  <!-- Mode Cards -->
+  <div class="mode-cards">
+    <div class="mode-card" id="mode-host" onclick="selectMode('host')">
+      <div class="mode-icon">🎙️</div>
+      <div class="mode-title">مقدّم اللعبة</div>
+      <div class="mode-desc">أنشئ غرفة وأدر المسابقة</div>
     </div>
-
-    <!-- Mode Selection -->
-    <div class="mode-cards">
-      <div class="mode-card" id="mode-host" onclick="selectMode('host')">
-        <div class="mode-icon">🎙️</div>
-        <div class="mode-title">مقدّم اللعبة</div>
-        <div class="mode-desc">أنشئ غرفة وأدر المسابقة</div>
-      </div>
-      <div class="mode-card" id="mode-join" onclick="selectMode('join')">
-        <div class="mode-icon">🏃</div>
-        <div class="mode-title">لاعب</div>
-        <div class="mode-desc">انضم بكود الغرفة وتنافس</div>
-      </div>
+    <div class="mode-card" id="mode-join" onclick="selectMode('join')">
+      <div class="mode-icon">🏃</div>
+      <div class="mode-title">لاعب</div>
+      <div class="mode-desc">انضم بكود الغرفة وتنافس</div>
     </div>
-
-    <!-- Host Form -->
-    <div id="host-form" class="card mt-24 hidden" style="animation:slideUp .3s ease">
-      <h2>🎮 إنشاء غرفة جديدة</h2>
-
-      <div class="form-group">
-        <label>📂 اختر التصنيفات (اتركها فارغة لاختيار الكل)</label>
-        <div class="cat-grid" id="cat-grid"></div>
-      </div>
-
-      <div class="form-group">
-        <label>🔢 عدد الأسئلة</label>
-        <select id="host-qcount">
-          <option value="10">10 أسئلة</option>
-          <option value="20" selected>20 سؤال</option>
-          <option value="30">30 سؤال</option>
-          <option value="50">50 سؤال</option>
-        </select>
-      </div>
-
-      <button class="btn btn-gold btn-lg w-full" onclick="createRoom()">🚀 أنشئ الغرفة</button>
-      <div class="error-msg" id="host-error"></div>
-    </div>
-
-    <!-- Join Form -->
-    <div id="join-form" class="card mt-24 hidden" style="animation:slideUp .3s ease">
-      <h2>🏃 الانضمام للعبة</h2>
-
-      <div class="form-group">
-        <label>كود الغرفة</label>
-        <input type="text" id="join-code" placeholder="أدخل الكود المكون من ٦ أرقام" maxlength="6" inputmode="numeric" autocomplete="off">
-      </div>
-
-      <div class="form-group">
-        <label>اسمك</label>
-        <input type="text" id="join-name" placeholder="أدخل اسمك" maxlength="20" autocomplete="off">
-      </div>
-
-      <div class="form-group">
-        <label>اختر فريقك</label>
-        <div class="team-select">
-          <button class="team-btn a" id="team-a-btn" onclick="selectTeam('A')">🔵 الفريق أ</button>
-          <button class="team-btn b" id="team-b-btn" onclick="selectTeam('B')">🔴 الفريق ب</button>
-        </div>
-      </div>
-
-      <button class="btn btn-gold btn-lg w-full mt-8" onclick="joinRoom()">🚀 انضم الآن</button>
-      <div class="error-msg" id="join-error"></div>
+    <div class="mode-card" id="mode-lb" onclick="selectMode('lb')">
+      <div class="mode-icon">🏆</div>
+      <div class="mode-title">المتصدّرين</div>
+      <div class="mode-desc">أفضل 10 لاعبين</div>
     </div>
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    let selectedTeam = null;
-    let selectedCats = new Set();
+  <!-- Host Form -->
+  <div id="host-form" class="card mt-16 hidden">
+    <h2>🎮 إنشاء غرفة</h2>
+    <div class="form-group">
+      <label>📂 التصنيفات (اختياري)</label>
+      <div class="cat-grid" id="cat-grid"></div>
+    </div>
+    <div class="form-group">
+      <label>🔢 عدد الأسئلة</label>
+      <select id="host-qcount">
+        <option value="10">10</option><option value="20" selected>20</option>
+        <option value="30">30</option><option value="50">50</option>
+      </select>
+    </div>
+    <button class="btn btn-gold btn-lg w-full" onclick="createRoom()">🚀 أنشئ الغرفة</button>
+    <div class="error-msg" id="host-error"></div>
+  </div>
 
-    // Load categories
-    socket.emit("get-categories", (cats) => {
-      const grid = document.getElementById("cat-grid");
-      cats.forEach(cat => {
-        const tag = document.createElement("button");
-        tag.type = "button";
-        tag.className = "cat-tag";
-        tag.textContent = cat;
-        tag.onclick = () => {
-          tag.classList.toggle("selected");
-          if (selectedCats.has(cat)) selectedCats.delete(cat);
-          else selectedCats.add(cat);
-        };
-        grid.appendChild(tag);
-      });
-    });
+  <!-- Join Form -->
+  <div id="join-form" class="card mt-16 hidden">
+    <h2>🏃 انضم للعبة</h2>
+    <div class="form-group">
+      <label>كود الغرفة</label>
+      <input type="text" id="join-code" placeholder="الكود من ٦ أرقام" maxlength="6" inputmode="numeric" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label>اسمك</label>
+      <input type="text" id="join-name" placeholder="أدخل اسمك" maxlength="20" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label>فريقك</label>
+      <div class="team-select">
+        <button class="team-btn a" id="team-a-btn" onclick="selectTeam('A')">🔵 الفريق أ</button>
+        <button class="team-btn b" id="team-b-btn" onclick="selectTeam('B')">🔴 الفريق ب</button>
+      </div>
+    </div>
+    <button class="btn btn-gold btn-lg w-full mt-8" onclick="joinRoom()">🚀 انضم</button>
+    <div class="error-msg" id="join-error"></div>
+  </div>
 
-    function selectMode(mode) {
-      document.getElementById("mode-host").classList.toggle("active", mode === "host");
-      document.getElementById("mode-join").classList.toggle("active", mode === "join");
-      document.getElementById("host-form").classList.toggle("hidden", mode !== "host");
-      document.getElementById("join-form").classList.toggle("hidden", mode !== "join");
-    }
+  <!-- Leaderboard -->
+  <div id="lb-panel" class="card mt-16 hidden">
+    <h2>🏆 المتصدّرين</h2>
+    <div class="lb-tabs">
+      <button class="lb-tab active" onclick="loadLB('daily',this)">اليوم</button>
+      <button class="lb-tab" onclick="loadLB('monthly',this)">الشهر</button>
+    </div>
+    <div id="lb-list"></div>
+  </div>
+</div>
 
-    function selectTeam(team) {
-      selectedTeam = team;
-      document.getElementById("team-a-btn").classList.toggle("selected", team === "A");
-      document.getElementById("team-b-btn").classList.toggle("selected", team === "B");
-    }
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+let selectedTeam = null, selectedCats = new Set();
 
-    function createRoom() {
-      const questionCount = parseInt(document.getElementById("host-qcount").value);
-      socket.emit("create-room", {
-        categories: [...selectedCats],
-        questionCount,
-      }, (res) => {
-        if (res.success) {
-          window.location.href = `/host.html?room=${res.roomCode}`;
-        } else {
-          document.getElementById("host-error").textContent = "حدث خطأ أثناء إنشاء الغرفة";
-        }
-      });
-    }
+socket.on("global-stats", d => {
+  document.getElementById("g-online").textContent = d.online;
+  document.getElementById("g-rooms").textContent = d.rooms;
+});
 
-    function joinRoom() {
-      const code = document.getElementById("join-code").value.trim();
-      const name = document.getElementById("join-name").value.trim();
-      const errEl = document.getElementById("join-error");
-      if (!code || code.length !== 6) { errEl.textContent = "أدخل كود الغرفة المكون من ٦ أرقام"; return; }
-      if (!name) { errEl.textContent = "أدخل اسمك"; return; }
-      if (!selectedTeam) { errEl.textContent = "اختر فريقك"; return; }
-      errEl.textContent = "";
-      window.location.href = `/player.html?room=${code}&name=${encodeURIComponent(name)}&team=${selectedTeam}`;
-    }
+socket.emit("get-categories", cats => {
+  const grid = document.getElementById("cat-grid");
+  cats.forEach(cat => {
+    const t = document.createElement("button");
+    t.type = "button"; t.className = "cat-tag"; t.textContent = cat;
+    t.onclick = () => { t.classList.toggle("selected"); selectedCats.has(cat) ? selectedCats.delete(cat) : selectedCats.add(cat); };
+    grid.appendChild(t);
+  });
+});
 
-    document.getElementById("join-code").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") document.getElementById("join-name").focus();
-    });
-    document.getElementById("join-name").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") joinRoom();
-    });
-  </script>
+function selectMode(m) {
+  ["host","join","lb"].forEach(x => document.getElementById("mode-"+x).classList.toggle("active", x===m));
+  document.getElementById("host-form").classList.toggle("hidden", m!=="host");
+  document.getElementById("join-form").classList.toggle("hidden", m!=="join");
+  document.getElementById("lb-panel").classList.toggle("hidden", m!=="lb");
+  if (m === "lb") loadLB("daily");
+}
+
+function selectTeam(t) {
+  selectedTeam = t;
+  document.getElementById("team-a-btn").classList.toggle("selected", t==="A");
+  document.getElementById("team-b-btn").classList.toggle("selected", t==="B");
+}
+
+function createRoom() {
+  socket.emit("create-room", { categories:[...selectedCats], questionCount:parseInt(document.getElementById("host-qcount").value) }, r => {
+    if (r.success) window.location.href = "/host.html?room=" + r.roomCode;
+    else document.getElementById("host-error").textContent = "خطأ في إنشاء الغرفة";
+  });
+}
+
+function joinRoom() {
+  const code = document.getElementById("join-code").value.trim();
+  const name = document.getElementById("join-name").value.trim();
+  const err = document.getElementById("join-error");
+  if (!code || code.length !== 6) { err.textContent = "أدخل كود من ٦ أرقام"; return; }
+  if (!name) { err.textContent = "أدخل اسمك"; return; }
+  if (!selectedTeam) { err.textContent = "اختر فريقك"; return; }
+  window.location.href = `/player.html?room=${code}&name=${encodeURIComponent(name)}&team=${selectedTeam}`;
+}
+
+function loadLB(period, btn) {
+  if (btn) { document.querySelectorAll(".lb-tab").forEach(t => t.classList.remove("active")); btn.classList.add("active"); }
+  socket.emit("get-leaderboard", { period }, list => {
+    const el = document.getElementById("lb-list");
+    if (!list.length) { el.innerHTML = '<div class="lb-empty">لا توجد نتائج بعد — العب أولاً! 🎮</div>'; return; }
+    const medals = ["🥇","🥈","🥉"];
+    el.innerHTML = list.map((e, i) => `<div class="lb-row">
+      <span class="lb-rank">${medals[i] || (i+1)}</span>
+      <div><div class="lb-name">${e.name}</div><div class="lb-cat">${e.cat}</div></div>
+      <span class="lb-score">${e.score}</span>
+    </div>`).join("");
+  });
+}
+
+document.getElementById("join-code").addEventListener("keydown", e => { if (e.key === "Enter") document.getElementById("join-name").focus(); });
+document.getElementById("join-name").addEventListener("keydown", e => { if (e.key === "Enter") joinRoom(); });
+</script>
 </body>
 </html>
