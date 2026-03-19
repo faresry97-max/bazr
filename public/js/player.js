@@ -243,6 +243,12 @@ function loadImg(el, src, retries=2) {
   el.src = src;
 }
 
+// ── System broadcast ──
+socket.on("system-broadcast", d => {
+  const icons = { info: "ℹ️", warning: "⚠️", success: "✅", alert: "🚨" };
+  toast((icons[d.type] || "📢") + " " + d.msg);
+});
+
 // ── Connection ──
 socket.on("disconnect", () => { $("dc-overlay").classList.remove("hidden"); });
 socket.on("connect", () => {

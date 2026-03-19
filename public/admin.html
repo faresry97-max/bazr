@@ -131,6 +131,9 @@ label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin-botto
     <div class="sb-item" onclick="nav('questions',this)"><span class="si-icon">📝</span><span class="sb-text">الأسئلة</span></div>
     <div class="sb-item" onclick="nav('images',this)"><span class="si-icon">🖼️</span><span class="sb-text">الصور</span></div>
     <div class="sb-item" onclick="nav('leaderboard',this)"><span class="si-icon">🏆</span><span class="sb-text">المتصدرين</span></div>
+    <div class="sb-item" onclick="nav('analytics',this)"><span class="si-icon">📈</span><span class="sb-text">تحليلات</span></div>
+    <div class="sb-item" onclick="nav('broadcast',this)"><span class="si-icon">📢</span><span class="sb-text">بث رسالة</span></div>
+    <div class="sb-item" onclick="nav('tools',this)"><span class="si-icon">🧰</span><span class="sb-text">أدوات</span></div>
     <div class="sb-item" onclick="nav('logs',this)"><span class="si-icon">📋</span><span class="sb-text">السجل</span></div>
     <div class="sb-item" onclick="nav('settings',this)"><span class="si-icon">⚙️</span><span class="sb-text">الإعدادات</span></div>
   </div>
@@ -215,6 +218,86 @@ label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin-botto
   <div class="card" id="lb-card"></div>
 </div>
 
+<!-- ═══ Analytics ═══ -->
+<div class="panel" id="p-analytics">
+  <div class="acts"><button class="btn btn-g" onclick="loadAnalytics()">🔄 تحديث</button></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+    <div class="card" style="padding:14px">
+      <div class="card-title">📊 توزيع التصنيفات</div>
+      <div id="ana-cats"></div>
+    </div>
+    <div class="card" style="padding:14px">
+      <div class="card-title">📉 توزيع المستويات</div>
+      <div id="ana-diff"></div>
+    </div>
+  </div>
+  <div class="card" style="padding:14px">
+    <div class="card-title">🔍 صحة البيانات</div>
+    <div id="ana-health"></div>
+  </div>
+  <div class="card" style="padding:14px">
+    <div class="card-title">📋 ملخص النظام</div>
+    <div id="ana-summary" style="font-size:12px;color:var(--mid);line-height:2"></div>
+  </div>
+</div>
+
+<!-- ═══ Broadcast ═══ -->
+<div class="panel" id="p-broadcast">
+  <div class="card" style="padding:18px">
+    <div class="card-title">📢 بث رسالة لجميع الغرف</div>
+    <div class="fg"><label>الرسالة</label><textarea id="bc-msg" rows="3" placeholder="اكتب رسالة لجميع اللاعبين..."></textarea></div>
+    <div class="fg"><label>النوع</label>
+      <select id="bc-type">
+        <option value="info">ℹ️ إعلام</option>
+        <option value="warning">⚠️ تحذير</option>
+        <option value="success">✅ نجاح</option>
+        <option value="alert">🚨 طوارئ</option>
+      </select>
+    </div>
+    <button class="btn btn-g" onclick="sendBroadcast()" style="width:100%">📢 إرسال للجميع</button>
+    <div style="margin-top:12px;font-size:11px;color:var(--dim)">الرسالة ستظهر كإشعار لجميع اللاعبين المتصلين في جميع الغرف</div>
+  </div>
+  <div class="card" style="padding:14px">
+    <div class="card-title">📜 سجل البث</div>
+    <div id="bc-history" style="max-height:200px;overflow-y:auto"></div>
+  </div>
+</div>
+
+<!-- ═══ Tools ═══ -->
+<div class="panel" id="p-tools">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="card" style="padding:14px">
+      <div class="card-title">🎲 مولّد أسئلة عشوائية</div>
+      <p style="font-size:11px;color:var(--dim);margin-bottom:8px">اختبر سؤال عشوائي من البنك</p>
+      <button class="btn btn-p" onclick="randomQ()" style="width:100%">🎲 سؤال عشوائي</button>
+      <div id="tool-randomq" style="margin-top:8px"></div>
+    </div>
+    <div class="card" style="padding:14px">
+      <div class="card-title">🔗 روابط سريعة</div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px">
+        <a href="/" class="btn btn-o" style="font-size:11px;text-decoration:none;width:100%">🏠 الصفحة الرئيسية</a>
+        <a href="/host.html" class="btn btn-o" style="font-size:11px;text-decoration:none;width:100%">🎙️ شاشة المقدّم</a>
+        <a href="/qa.html" class="btn btn-o" style="font-size:11px;text-decoration:none;width:100%">❓ سؤال وجواب</a>
+        <a href="/guess.html" class="btn btn-o" style="font-size:11px;text-decoration:none;width:100%">🖼️ من في الصورة</a>
+      </div>
+    </div>
+    <div class="card" style="padding:14px">
+      <div class="card-title">🧹 أدوات الصيانة</div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px">
+        <button class="btn btn-r" onclick="if(confirm('حذف كل الغرف؟')){emit('admin-clear-rooms',{},()=>{refresh();alog('حذف جميع الغرف')})}" style="width:100%;font-size:11px">🗑️ حذف جميع الغرف</button>
+        <button class="btn btn-r" onclick="if(confirm('مسح المتصدرين؟')){emit('admin-clear-leaderboard',{},()=>{refresh();alog('مسح المتصدرين')})}" style="width:100%;font-size:11px">🏆 مسح المتصدرين</button>
+        <button class="btn btn-r" onclick="if(confirm('مسح السجل؟')){emit('admin-clear-logs',{},()=>{$('logmain').textContent='';alog('مسح السجل')})}" style="width:100%;font-size:11px">📋 مسح السجل</button>
+      </div>
+    </div>
+    <div class="card" style="padding:14px">
+      <div class="card-title">📊 تقرير سريع</div>
+      <p style="font-size:11px;color:var(--dim);margin-bottom:8px">حمّل تقرير شامل عن حالة المنصة</p>
+      <button class="btn btn-b" onclick="downloadReport()" style="width:100%;font-size:11px">📄 تحميل التقرير</button>
+      <button class="btn btn-l" onclick="copyStats()" style="width:100%;font-size:11px;margin-top:4px">📋 نسخ الإحصائيات</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ Logs ═══ -->
 <div class="panel" id="p-logs">
   <div class="acts">
@@ -226,20 +309,44 @@ label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin-botto
 
 <!-- ═══ Settings ═══ -->
 <div class="panel" id="p-settings">
-  <div class="card">
-    <div class="card-title">⚙️ معلومات النظام</div>
-    <div style="font-size:12px;color:var(--dim);line-height:2.2">
-      المنصة: <b style="color:var(--gold)">بازززز</b><br>
-      الإصدار: <b>2.0</b><br>
-      الأسئلة: <b id="info-qs">—</b><br>
-      التصنيفات: <b id="info-cats">—</b><br>
-      🇸🇦 صُنع في المملكة العربية السعودية
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="card" style="padding:14px">
+      <div class="card-title">⚙️ معلومات النظام</div>
+      <div style="font-size:12px;color:var(--dim);line-height:2.2">
+        المنصة: <b style="color:var(--gold)">بازززز</b><br>
+        الإصدار: <b>3.0</b><br>
+        الأسئلة: <b id="info-qs">—</b><br>
+        التصنيفات: <b id="info-cats">—</b><br>
+        أوضاع اللعب: <b>3</b> (جرس، سؤال وجواب، صور)<br>
+        🇸🇦 صُنع في المملكة العربية السعودية
+      </div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-title">🔑 بيانات الدخول</div>
-    <div style="font-size:12px;color:var(--dim);line-height:2">
-      admin / 112233<br>fares / fares97
+    <div class="card" style="padding:14px">
+      <div class="card-title">🔑 بيانات الدخول</div>
+      <div style="font-size:12px;color:var(--dim);line-height:2.4">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span class="badge on">مسؤول</span> admin / 112233</div>
+        <div style="display:flex;align-items:center;gap:6px"><span class="badge on">مسؤول</span> fares / fares97</div>
+      </div>
+    </div>
+    <div class="card" style="padding:14px">
+      <div class="card-title">🌐 روابط المنصة</div>
+      <div style="font-size:11px;color:var(--dim);line-height:2.2">
+        الرئيسية: <b style="color:var(--tA)">/</b><br>
+        الجرس (مقدّم): <b style="color:var(--tA)">/host.html</b><br>
+        الجرس (لاعب): <b style="color:var(--tA)">/player.html</b><br>
+        سؤال وجواب: <b style="color:var(--purple)">/qa.html</b><br>
+        من في الصورة: <b style="color:var(--tA)">/guess.html</b><br>
+        لوحة التحكم: <b style="color:var(--gold)">/admin.html</b>
+      </div>
+    </div>
+    <div class="card" style="padding:14px">
+      <div class="card-title">🖥️ حالة الخادم</div>
+      <div style="font-size:12px;color:var(--dim);line-height:2.2">
+        الحالة: <b style="color:var(--lime)">● نشط</b><br>
+        Socket.io: <b style="color:var(--lime)">● متصل</b><br>
+        التحديث التلقائي: <b>كل 6 ثوان</b><br>
+        <span id="set-uptime"></span>
+      </div>
     </div>
   </div>
 </div>
@@ -312,12 +419,13 @@ $("i-p").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
 $("i-u").addEventListener("keydown",e=>{if(e.key==="Enter")$("i-p").focus();});
 
 // ── Nav ──
-const titles={"overview":"📊 نظرة عامة","rooms":"🏠 الغرف","players":"👥 اللاعبين","questions":"📝 الأسئلة","images":"🖼️ الصور","leaderboard":"🏆 المتصدرين","logs":"📋 السجل","settings":"⚙️ الإعدادات"};
+const titles={"overview":"📊 نظرة عامة","rooms":"🏠 الغرف","players":"👥 اللاعبين","questions":"📝 الأسئلة","images":"🖼️ الصور","leaderboard":"🏆 المتصدرين","analytics":"📈 تحليلات","broadcast":"📢 بث رسالة","tools":"🧰 أدوات","logs":"📋 السجل","settings":"⚙️ الإعدادات"};
+let bcHistory=[];
 function nav(id,el){
   document.querySelectorAll(".panel").forEach(p=>p.classList.remove("on"));
   document.querySelectorAll(".sb-item").forEach(s=>s.classList.remove("on"));
   $("p-"+id).classList.add("on");el.classList.add("on");$("page-title").textContent=titles[id]||id;
-  if(id==="players")loadPlayers();if(id==="logs")loadLogs();if(id==="questions"&&allQs.length===0)loadQs();if(id==="images")loadImgs();
+  if(id==="players")loadPlayers();if(id==="logs")loadLogs();if(id==="questions"&&allQs.length===0)loadQs();if(id==="images")loadImgs();if(id==="analytics")loadAnalytics();
 }
 
 // ── Refresh ──
@@ -466,6 +574,85 @@ function removeImg(id){
       loadImgs();
     }
   });
+}
+
+// ── Analytics ──
+function loadAnalytics(){
+  if(!allQs.length){loadQs();setTimeout(loadAnalytics,500);return;}
+
+  // Category distribution
+  const catMap={};allQs.forEach(q=>{catMap[q.cat]=(catMap[q.cat]||0)+1;});
+  const catSorted=Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
+  const maxCat=catSorted[0]?catSorted[0][1]:1;
+  $("ana-cats").innerHTML=catSorted.map(([c,n])=>{
+    const pct=Math.round(n/allQs.length*100);
+    const w=Math.round(n/maxCat*100);
+    return`<div style="margin-bottom:4px"><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px"><span style="font-weight:700">${c}</span><span style="color:var(--dim)">${n} (${pct}%)</span></div><div style="height:6px;background:var(--s3);border-radius:3px;overflow:hidden"><div style="height:100%;width:${w}%;background:var(--gold);border-radius:3px"></div></div></div>`;
+  }).join('');
+
+  // Difficulty distribution
+  const diffMap={easy:0,medium:0,hard:0};allQs.forEach(q=>{if(diffMap[q.diff]!==undefined)diffMap[q.diff]++;});
+  const diffNames={easy:"🟢 سهل",medium:"🟡 متوسط",hard:"🔴 صعب"};
+  const diffColors={easy:"var(--lime)",medium:"var(--gold)",hard:"var(--red)"};
+  $("ana-diff").innerHTML=Object.entries(diffMap).map(([d,n])=>{
+    const pct=Math.round(n/allQs.length*100);
+    return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:11px;font-weight:700;min-width:70px">${diffNames[d]}</span><div style="flex:1;height:8px;background:var(--s3);border-radius:4px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${diffColors[d]};border-radius:4px"></div></div><span style="font-size:10px;color:var(--dim);min-width:50px;text-align:left">${n} (${pct}%)</span></div>`;
+  }).join('');
+
+  // Data health
+  const withImg=allQs.filter(q=>q.img).length;
+  const noAnswer=allQs.filter(q=>!q.a||q.a.trim()==='').length;
+  const shortQ=allQs.filter(q=>q.q.length<10).length;
+  $("ana-health").innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px">
+    <div style="padding:8px;background:var(--s2);border-radius:var(--r)"><span style="color:var(--lime)">✅</span> أسئلة كاملة: <b>${allQs.length-noAnswer-shortQ}</b></div>
+    <div style="padding:8px;background:var(--s2);border-radius:var(--r)"><span style="color:var(--tA)">🖼️</span> بصور: <b>${withImg}</b></div>
+    <div style="padding:8px;background:var(--s2);border-radius:var(--r)"><span style="color:${noAnswer?'var(--red)':'var(--lime)'}">📝</span> بدون إجابة: <b>${noAnswer}</b></div>
+    <div style="padding:8px;background:var(--s2);border-radius:var(--r)"><span style="color:${shortQ?'var(--gold)':'var(--lime)'}">📏</span> قصيرة جداً: <b>${shortQ}</b></div>
+  </div>`;
+
+  // Summary
+  $("ana-summary").innerHTML=`إجمالي الأسئلة: <b style="color:var(--gold)">${allQs.length}</b><br>التصنيفات: <b>${catSorted.length}</b><br>أكبر تصنيف: <b style="color:var(--gold)">${catSorted[0]?catSorted[0][0]:'-'}</b> (${catSorted[0]?catSorted[0][1]:0})<br>أصغر تصنيف: <b>${catSorted[catSorted.length-1]?catSorted[catSorted.length-1][0]:'-'}</b> (${catSorted[catSorted.length-1]?catSorted[catSorted.length-1][1]:0})`;
+}
+
+// ── Broadcast ──
+function sendBroadcast(){
+  const msg=$("bc-msg").value.trim();
+  if(!msg){alert("اكتب رسالة");return;}
+  const type=$("bc-type").value;
+  socket.emit("admin-broadcast",{msg,type});
+  bcHistory.unshift({msg,type,time:new Date().toLocaleTimeString("en",{hour12:false})});
+  $("bc-msg").value="";
+  renderBcHistory();
+  alog("بث: "+msg);
+}
+function renderBcHistory(){
+  const icons={info:"ℹ️",warning:"⚠️",success:"✅",alert:"🚨"};
+  $("bc-history").innerHTML=bcHistory.length?bcHistory.map(b=>`<div style="padding:6px;background:var(--s2);border-radius:6px;margin-bottom:4px;font-size:11px"><span>${icons[b.type]||"📢"}</span> <span style="color:var(--dim)">[${b.time}]</span> ${b.msg}</div>`).join(''):'<div class="empty">لا يوجد بث سابق</div>';
+}
+
+// ── Tools ──
+function randomQ(){
+  if(!allQs.length){loadQs();return;}
+  const q=allQs[Math.floor(Math.random()*allQs.length)];
+  $("tool-randomq").innerHTML=`<div style="padding:8px;background:var(--s2);border-radius:var(--r);font-size:11px"><div style="color:var(--gold);font-weight:700;margin-bottom:2px">${q.cat} • ${{easy:"سهل",medium:"متوسط",hard:"صعب"}[q.diff]||""}</div><div style="font-weight:600;margin-bottom:3px">${q.q}</div><div style="color:var(--lime)">✅ ${q.a}</div></div>`;
+}
+
+function downloadReport(){
+  const d=data||{};const now=new Date().toLocaleString("ar");
+  let report=`═══════════════════════════════════\n  بازززز — تقرير النظام\n  ${now}\n═══════════════════════════════════\n\n`;
+  report+=`📊 الإحصائيات:\n  متصل: ${d.online||0}\n  غرف: ${d.roomCount||0}\n  لاعبين: ${d.totalPlayers||0}\n  أسئلة: ${d.questionCount||0}\n  تصنيفات: ${d.categoryCount||0}\n\n`;
+  if(d.rooms&&d.rooms.length){report+=`🏠 الغرف (${d.rooms.length}):\n`;d.rooms.forEach(r=>{report+=`  [${r.code}] ${r.state} - ${r.playerCount} لاعب\n`;});}
+  if(d.leaderboard&&d.leaderboard.length){report+=`\n🏆 المتصدرين:\n`;d.leaderboard.forEach((e,i)=>{report+=`  ${i+1}. ${e.name}: ${e.score}\n`;});}
+  report+=`\n═══════════════════════════════════\n🇸🇦 بازززز — صنع في السعودية\n`;
+  const blob=new Blob([report],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="bazr-report.txt";a.click();
+  alog("تحميل تقرير");
+}
+
+function copyStats(){
+  const d=data||{};
+  const text=`بازززز | متصل: ${d.online||0} | غرف: ${d.roomCount||0} | لاعبين: ${d.totalPlayers||0} | أسئلة: ${d.questionCount||0}`;
+  navigator.clipboard.writeText(text).then(()=>alert("تم النسخ! ✅")).catch(()=>alert(text));
 }
 
 // ── Logs ──

@@ -380,6 +380,11 @@ io.on("connection", (socket) => {
   socket.on("admin-clear-logs", (d, cb) => { gm.clearLogs(); cb({ success: true }); });
 
   socket.on("admin-get-players", (d, cb) => cb(gm.getAllPlayers()));
+
+  socket.on("admin-broadcast", (d) => {
+    io.emit("system-broadcast", { msg: d.msg, type: d.type || "info" });
+    gm.addLog("broadcast", d.msg);
+  });
 });
 
 const PORT = process.env.PORT || 3000;

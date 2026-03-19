@@ -93,5 +93,6 @@ function loadImg(el, src, retries=2) {
   el.src = src;
 }
 
+socket.on("system-broadcast", d => { const icons = { info: "ℹ️", warning: "⚠️", success: "✅", alert: "🚨" }; toast((icons[d.type] || "📢") + " " + d.msg); });
 socket.on("disconnect", () => toast("⚠️ انقطع الاتصال..."));
 socket.on("connect", () => { if (gameActive) socket.emit("host-reconnect", { roomCode }, res => { if (res.success) { if (res.question) showQuestion(res.question); if (res.scores) updateScores(res.scores); updatePlayerList(res.players); toast("✅ تم إعادة الاتصال"); } }); });
