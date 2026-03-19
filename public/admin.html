@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>بازر — لوحة التحكم</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.login-wrap{max-width:400px;margin:15vh auto 0;text-align:center;animation:slideUp .5s ease}
+.login-icon{font-size:56px;margin-bottom:8px}
+.login-card{background:var(--s1);border:1.5px solid var(--s3);border-radius:var(--rl);padding:32px 24px;margin-top:16px}
+.dash{display:none;animation:fadeIn .4s ease}
+.dash.active{display:block}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.dash-title{font-size:22px;font-weight:900;color:var(--gold)}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.stat-box{background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);padding:16px;text-align:center}
+.stat-num{font-size:28px;font-weight:900;line-height:1.2}.stat-lbl{font-size:12px;color:var(--dim);margin-top:2px}
+.room-table{width:100%;border-collapse:collapse;margin-top:12px}
+.room-table th{text-align:right;padding:10px 12px;font-size:12px;color:var(--dim);border-bottom:1px solid var(--s3);font-weight:700}
+.room-table td{padding:10px 12px;font-size:14px;border-bottom:1px solid var(--s2)}
+.room-table tr:hover td{background:rgba(255,255,255,.02)}
+.room-status{padding:3px 10px;border-radius:8px;font-size:11px;font-weight:700}
+.room-status.lobby{background:rgba(240,180,41,.1);color:var(--gold)}
+.room-status.playing{background:rgba(34,213,142,.1);color:var(--lime)}
+.room-status.ended{background:rgba(240,80,96,.1);color:var(--red)}
+.del-btn{padding:4px 10px;border:none;border-radius:6px;background:rgba(240,80,96,.1);color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
+.del-btn:hover{background:rgba(240,80,96,.2)}
+.log-box{background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:12px;max-height:200px;overflow-y:auto;font-size:12px;color:var(--mid);line-height:1.8;margin-top:10px;font-family:monospace,sans-serif}
+.admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="logo">🔔 بازر</div>
+  <div class="header-stats"><div class="online-badge" id="hdr-online">🌐 0</div></div>
+</div>
+
+<div class="container-wide">
+  <!-- Login Screen -->
+  <div id="login-screen">
+    <div class="login-wrap">
+      <div class="login-icon">🔐</div>
+      <h2>لوحة التحكم</h2>
+      <p class="text-dim mb-16">دخول المسؤولين فقط</p>
+      <div class="login-card">
+        <div class="form-group"><label>اسم المستخدم</label><input type="text" id="admin-user" placeholder="admin" autocomplete="off"></div>
+        <div class="form-group"><label>كلمة المرور</label><input type="password" id="admin-pass" placeholder="••••••••" autocomplete="off"></div>
+        <button class="btn btn-gold btn-lg w-full mt-8" onclick="doLogin()">دخول 🔑</button>
+        <div class="error-msg" id="login-error"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dash" id="dashboard">
+    <div class="dash-header">
+      <div class="dash-title">🛡️ لوحة التحكم</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="text-dim" style="font-size:13px" id="admin-name"></span>
+        <button class="btn btn-ghost btn-sm" onclick="doLogout()">خروج</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-num text-lime" id="d-online">0</div><div class="stat-lbl">متصل الآن</div></div>
+      <div class="stat-box"><div class="stat-num text-gold" id="d-rooms">0</div><div class="stat-lbl">غرف نشطة</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--tA)" id="d-players">0</div><div class="stat-lbl">لاعبين في الغرف</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--purple)" id="d-questions">0</div><div class="stat-lbl">سؤال في البنك</div></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="admin-actions">
+      <button class="btn btn-gold btn-sm" onclick="refreshDash()">🔄 تحديث</button>
+      <button class="btn btn-rose btn-sm" onclick="clearAllRooms()">🗑️ حذف كل الغرف</button>
+      <button class="btn btn-lime btn-sm" onclick="clearLeaderboard()">🏆 مسح المتصدرين</button>
+      <a href="/" class="btn btn-ghost btn-sm">🏠 الرئيسية</a>
+    </div>
+
+    <!-- Rooms -->
+    <div class="card">
+      <h3 class="mb-8">🏠 الغرف النشطة</h3>
+      <div id="rooms-area">
+        <table class="room-table">
+          <thead><tr><th>الكود</th><th>الحالة</th><th>اللاعبين</th><th>إجراء</th></tr></thead>
+          <tbody id="rooms-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="card">
+      <h3 class="mb-8">🏆 المتصدرين</h3>
+      <div id="admin-lb"></div>
+    </div>
+
+    <!-- Server Log -->
+    <div class="card">
+      <h3 class="mb-8">📋 سجل الأحداث</h3>
+      <div class="log-box" id="log-box">مرحباً بك في لوحة التحكم...</div>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+let loggedIn = false;
+const $ = id => document.getElementById(id);
+
+// Admin credentials (in production, this should be server-side)
+const ADMIN_USERS = {
+  "admin": "bazr2024",
+  "fares": "fares97"
+};
+
+socket.on("global-stats", d => {
+  $("hdr-online").textContent = "🌐 " + d.online;
+  if (loggedIn) { $("d-online").textContent = d.online; $("d-rooms").textContent = d.rooms; }
+});
+
+function doLogin() {
+  const user = $("admin-user").value.trim();
+  const pass = $("admin-pass").value;
+  if (ADMIN_USERS[user] && ADMIN_USERS[user] === pass) {
+    loggedIn = true;
+    $("login-screen").style.display = "none";
+    $("dashboard").classList.add("active");
+    $("admin-name").textContent = "👤 " + user;
+    addLog("تم تسجيل الدخول: " + user);
+    refreshDash();
+    // Auto-refresh every 10s
+    setInterval(refreshDash, 10000);
+  } else {
+    $("login-error").textContent = "اسم المستخدم أو كلمة المرور خاطئة";
+  }
+}
+
+function doLogout() {
+  loggedIn = false;
+  $("login-screen").style.display = "block";
+  $("dashboard").classList.remove("active");
+  $("admin-user").value = ""; $("admin-pass").value = "";
+}
+
+function refreshDash() {
+  socket.emit("admin-get-stats", {}, data => {
+    if (!data) return;
+    $("d-online").textContent = data.online;
+    $("d-rooms").textContent = data.roomCount;
+    $("d-players").textContent = data.totalPlayers;
+    $("d-questions").textContent = data.questionCount;
+
+    // Rooms table
+    const tbody = $("rooms-tbody");
+    if (data.rooms.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--dim);padding:20px">لا توجد غرف</td></tr>';
+    } else {
+      tbody.innerHTML = data.rooms.map(r => `<tr>
+        <td style="font-weight:700;color:var(--gold);letter-spacing:2px">${r.code}</td>
+        <td><span class="room-status ${r.state}">${r.state === "lobby" ? "انتظار" : r.state === "playing" ? "قيد اللعب" : "منتهية"}</span></td>
+        <td>${r.playerCount} لاعب</td>
+        <td><button class="del-btn" onclick="deleteRoom('${r.code}')">حذف</button></td>
+      </tr>`).join("");
+    }
+
+    // Leaderboard
+    if (data.leaderboard && data.leaderboard.length) {
+      const medals = ["🥇","🥈","🥉"];
+      $("admin-lb").innerHTML = data.leaderboard.map((e, i) => `<div class="lb-row"><span class="lb-rank">${medals[i]||(i+1)}</span><div><div class="lb-name">${e.name}</div></div><span class="lb-score">${e.score}</span></div>`).join("");
+    } else {
+      $("admin-lb").innerHTML = '<div class="lb-empty">لا توجد نتائج</div>';
+    }
+  });
+}
+
+function deleteRoom(code) {
+  if (!confirm("حذف الغرفة " + code + "؟")) return;
+  socket.emit("admin-delete-room", { code }, res => {
+    if (res.success) { addLog("🗑️ تم حذف الغرفة: " + code); refreshDash(); }
+  });
+}
+
+function clearAllRooms() {
+  if (!confirm("حذف جميع الغرف؟")) return;
+  socket.emit("admin-clear-rooms", {}, res => {
+    if (res.success) { addLog("🗑️ تم حذف جميع الغرف"); refreshDash(); }
+  });
+}
+
+function clearLeaderboard() {
+  if (!confirm("مسح لوحة المتصدرين؟")) return;
+  socket.emit("admin-clear-leaderboard", {}, res => {
+    if (res.success) { addLog("🏆 تم مسح المتصدرين"); refreshDash(); }
+  });
+}
+
+function addLog(msg) {
+  const time = new Date().toLocaleTimeString("ar");
+  $("log-box").innerHTML += `\n[${time}] ${msg}`;
+  $("log-box").scrollTop = $("log-box").scrollHeight;
+}
+
+$("admin-pass").addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
+</script>
+</body>
+</html>

@@ -370,12 +370,14 @@ function updateSettings(roomCode, settings) {
   return true;
 }
 
+function clearLeaderboard() { leaderboard.length = 0; }
+
 module.exports = {
   createRoom, addPlayer, disconnectPlayer, kickPlayer,
   startGame, getCurrentQuestion, getCurrentQuestionFull,
   handleBuzz, openBuzzer, submitAnswer, judgeAnswer,
   nextQuestion, skipQuestion,
-  getScores, getPlayerInfo, getRoom, getRoomByHost, deleteRoom,
+  getScores, getPlayerInfo, getRoom, getRoomByHost, deleteRoom, clearLeaderboard,
   updateSettings, getAvailableCategories, checkAnswer,
   incrementOnline, decrementOnline, getOnlineCount,
   addChatMessage, addReaction,

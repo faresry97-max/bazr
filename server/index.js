@@ -225,6 +225,47 @@ io.on("connection", (socket) => {
       buzzedPlayer: room.buzzedPlayer, settings: room.settings,
     });
   });
+
+  // ══════════════════════════════════
+  // ║       Admin Dashboard Events   ║
+  // ══════════════════════════════════
+
+  socket.on("admin-get-stats", (data, cb) => {
+    const allRooms = gm.getAllRoomInfo();
+    const totalPlayers = allRooms.reduce((s, r) => s + r.playerCount, 0);
+    const QUESTION_BANK = require("./questions");
+    cb({
+      online: gm.getOnlineCount(),
+      roomCount: gm.getRoomCount(),
+      totalPlayers,
+      questionCount: QUESTION_BANK.length,
+      rooms: allRooms,
+      leaderboard: gm.getLeaderboard("monthly"),
+    });
+  });
+
+  socket.on("admin-delete-room", (data, cb) => {
+    const room = gm.getRoom(data.code);
+    if (room) {
+      io.to(`room:${data.code}`).emit("host-disconnected");
+      gm.deleteRoom(data.code);
+      cb({ success: true });
+    } else { cb({ success: false }); }
+  });
+
+  socket.on("admin-clear-rooms", (data, cb) => {
+    const rooms = gm.getAllRoomInfo();
+    rooms.forEach(r => {
+      io.to(`room:${r.code}`).emit("host-disconnected");
+      gm.deleteRoom(r.code);
+    });
+    cb({ success: true });
+  });
+
+  socket.on("admin-clear-leaderboard", (data, cb) => {
+    gm.clearLeaderboard();
+    cb({ success: true });
+  });
 });
 
 const PORT = process.env.PORT || 3000;
