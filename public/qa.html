@@ -7,64 +7,99 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <style>
-.qa-wrap{max-width:680px;margin:0 auto;padding:16px}
+.qa-wrap{max-width:660px;margin:0 auto;padding:16px}
 .scr{display:none;animation:fadeIn .4s ease}.scr.on{display:block}
-.role-cards{display:flex;gap:12px;margin:16px 0}
-.role-card{flex:1;padding:24px 16px;border-radius:var(--rl);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .25s}
-.role-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.role-card.selected{border-color:var(--gold);background:rgba(240,180,41,.04)}
-.rc-icon{font-size:36px;margin-bottom:6px}.rc-name{font-size:16px;font-weight:900}.rc-desc{font-size:11px;color:var(--dim);margin-top:3px}
 
-.lobby-code{font-size:clamp(32px,8vw,56px);font-weight:900;letter-spacing:10px;color:var(--gold);text-shadow:0 0 20px rgba(240,180,41,.2);text-align:center}
+/* Role Selection */
+.role-hero{text-align:center;padding:clamp(24px,6vh,48px) 0 16px}
+.role-hero-icon{font-size:52px;margin-bottom:6px;filter:drop-shadow(0 4px 12px rgba(139,92,246,.3))}
+.role-cards{display:flex;gap:12px;margin:16px 0}
+.role-card{flex:1;padding:24px 16px;border-radius:var(--rl);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .25s;position:relative;overflow:hidden}
+.role-card::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none}
+.role-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.45)}
+.role-card:hover::after{opacity:1}
+.role-card:nth-child(1):hover{border-color:var(--gold)}.role-card:nth-child(1):hover::after{background:radial-gradient(ellipse at 50% 80%,rgba(240,180,41,.06),transparent 70%)}
+.role-card:nth-child(2):hover{border-color:var(--purple)}.role-card:nth-child(2):hover::after{background:radial-gradient(ellipse at 50% 80%,rgba(139,92,246,.06),transparent 70%)}
+.rc-icon{font-size:36px;margin-bottom:6px;position:relative}.rc-name{font-size:17px;font-weight:900;position:relative}.rc-desc{font-size:11px;color:var(--dim);margin-top:3px;position:relative}
+
+/* Back button */
+.back-row{margin-bottom:12px}
+.bk-btn{display:inline-flex;align-items:center;gap:4px;padding:7px 14px;border:1px solid var(--s3);border-radius:var(--r);background:var(--s1);color:var(--mid);font-family:'Cairo';font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.bk-btn:hover{border-color:var(--gold);color:var(--txt)}
+
+/* Lobby */
+.lobby-header{text-align:center;margin-bottom:14px}
+.lobby-code-label{font-size:12px;color:var(--dim)}
+.lobby-code{font-size:clamp(32px,8vw,56px);font-weight:900;letter-spacing:10px;color:var(--gold);text-shadow:0 0 20px rgba(240,180,41,.2);cursor:pointer;transition:transform .15s}
+.lobby-code:hover{transform:scale(1.03)}
+.lobby-code:active{transform:scale(.97)}
+.lobby-hint{font-size:11px;color:var(--dim);margin-top:2px}
+.lobby-status{font-size:13px;color:var(--mid);margin-top:6px}
+.team-grid{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .team-col{flex:1;min-width:200px;background:var(--s1);border:1px solid var(--s3);border-radius:var(--rl);overflow:hidden}
 .team-head{padding:10px 14px;border-bottom:1px solid var(--s2);font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
 .team-body{padding:8px}
 .tp{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:var(--r);margin-bottom:3px;font-size:13px}
-.tp-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.tp-name{font-weight:600;flex:1}
-.tp-empty{color:var(--dim);font-size:12px;text-align:center;padding:8px;border:1px dashed var(--s3);border-radius:var(--r);margin:4px}
+.tp-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.tp-name{font-weight:600;flex:1}.tp-me{color:var(--gold)}
+.tp-empty{color:var(--dim);font-size:11px;text-align:center;padding:8px;border:1px dashed var(--s3);border-radius:var(--r);margin:3px}
+
+/* Game */
+.score-row{display:flex;gap:10px;margin-bottom:10px}
+.sc-box{flex:1;padding:12px;border-radius:var(--rl);text-align:center;position:relative}
+.sc-box.ta{background:rgba(56,199,240,.04);border:1.5px solid rgba(56,199,240,.15)}
+.sc-box.tb{background:rgba(240,80,96,.04);border:1.5px solid rgba(240,80,96,.15)}
+.sc-team{font-size:12px;color:var(--mid);font-weight:700}.sc-num{font-size:clamp(30px,6vw,48px);font-weight:900;line-height:1}
+.sc-box.ta .sc-num{color:var(--tA)}.sc-box.tb .sc-num{color:var(--tB)}
+
+.turn-banner{padding:10px 14px;border-radius:var(--r);font-weight:700;font-size:14px;text-align:center;margin-bottom:8px;transition:all .3s}
+.turn-banner.ta{background:rgba(56,199,240,.06);border:1px solid rgba(56,199,240,.15);color:var(--tA)}
+.turn-banner.tb{background:rgba(240,80,96,.06);border:1px solid rgba(240,80,96,.15);color:var(--tB)}
+.turn-wait{text-align:center;padding:6px;font-size:12px;color:var(--dim);margin-bottom:4px}
+
+.bonus-tag{display:inline-block;background:linear-gradient(135deg,#ff6b00,#ff0080);color:#fff;padding:4px 14px;border-radius:10px;font-size:11px;font-weight:800;margin-bottom:8px;animation:pulseText 1s infinite}
+
+.timer-big{text-align:center;font-size:clamp(28px,6vw,44px);font-weight:900;margin:4px 0;transition:color .3s}
+.timer-big.warn{color:var(--gold)}.timer-big.danger{color:var(--red);animation:pulseText .5s infinite}
 
 .q-card{background:var(--s1);border:1px solid var(--s3);border-radius:var(--rl);padding:clamp(18px,3vw,28px);margin-bottom:12px;position:relative;overflow:hidden}
 .q-card::before{content:'';position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--glt))}
-.q-cat-badge{display:inline-block;background:linear-gradient(135deg,var(--gold),#d4960a);color:#1a1000;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:700;margin-bottom:8px}
-.q-text{font-size:clamp(16px,3vw,24px);font-weight:700;line-height:1.7;text-align:center}
+.q-cat-badge{display:inline-block;background:linear-gradient(135deg,var(--gold),#d4960a);color:#1a1000;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:700;margin-bottom:10px}
+.q-text{font-size:clamp(17px,3.5vw,26px);font-weight:700;line-height:1.7;text-align:center}
+.q-answer-reveal{text-align:center;padding:10px;margin-top:10px;background:rgba(240,180,41,.05);border:1px solid rgba(240,180,41,.1);border-radius:var(--r);color:var(--gold);font-weight:700;font-size:14px;display:none}
+.q-answer-reveal.show{display:block;animation:fadeIn .3s ease}
+
 .opts{display:flex;flex-direction:column;gap:8px;margin:14px 0}
-.opt{padding:12px 14px;border-radius:var(--r);border:2px solid var(--s3);background:var(--s1);cursor:pointer;font-size:14px;font-weight:600;transition:all .2s;font-family:'Cairo';color:var(--txt);display:flex;align-items:center;gap:10px}
-.opt:hover:not(.dis){border-color:var(--gold);background:rgba(240,180,41,.03);transform:translateX(-3px)}
-.opt .ol{width:28px;height:28px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.opt{padding:13px 14px;border-radius:var(--r);border:2px solid var(--s3);background:var(--s1);cursor:pointer;font-size:14px;font-weight:600;transition:all .2s;font-family:'Cairo';color:var(--txt);display:flex;align-items:center;gap:10px}
+.opt:hover:not(.dis):not(.wait){border-color:var(--gold);background:rgba(240,180,41,.03);transform:translateX(-3px)}
+.opt .ol{width:30px;height:30px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;transition:all .2s}
+.opt.selected{border-color:var(--purple);background:rgba(139,92,246,.06)}.opt.selected .ol{background:var(--purple);color:#fff}
 .opt.correct{border-color:var(--lime);background:rgba(34,213,142,.08)}.opt.correct .ol{background:var(--lime);color:#000}
 .opt.wrong{border-color:var(--red);background:rgba(239,68,68,.06)}.opt.wrong .ol{background:var(--red);color:#fff}
-.opt.dis{cursor:default;opacity:.4}.opt.dis.correct{opacity:1}
-.opt.removed{opacity:.12;pointer-events:none;text-decoration:line-through}
-
-.turn-banner{padding:8px 14px;border-radius:var(--r);font-weight:700;font-size:14px;text-align:center;margin-bottom:8px}
-.turn-banner.ta{background:rgba(56,199,240,.06);border:1px solid rgba(56,199,240,.12);color:var(--tA)}
-.turn-banner.tb{background:rgba(240,80,96,.06);border:1px solid rgba(240,80,96,.12);color:var(--tB)}
-.bonus-tag{display:inline-block;background:linear-gradient(135deg,#ff6b00,#ff0080);color:#fff;padding:3px 12px;border-radius:8px;font-size:11px;font-weight:800;margin-bottom:6px}
+.opt.dis{cursor:default;opacity:.35}.opt.dis.correct{opacity:1}.opt.dis.selected.wrong{opacity:.7}
+.opt.removed{opacity:.1;pointer-events:none;text-decoration:line-through}
+.opt.wait{cursor:default;opacity:.6}
 
 .cards-row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;justify-content:center}
-.card-btn{padding:6px 12px;border-radius:var(--r);border:1.5px solid var(--s3);background:var(--s1);color:var(--txt);font-family:'Cairo';font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px}
-.card-btn:hover:not(.used){border-color:var(--gold);background:rgba(240,180,41,.05)}
+.card-btn{padding:7px 14px;border-radius:var(--r);border:1.5px solid var(--s3);background:var(--s1);color:var(--txt);font-family:'Cairo';font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px}
+.card-btn:hover:not(.used){border-color:var(--gold);background:rgba(240,180,41,.05);transform:translateY(-1px)}
 .card-btn.used{opacity:.2;cursor:default}
 
-.timer-big{text-align:center;font-size:clamp(24px,5vw,40px);font-weight:900;margin:4px 0}
-.timer-big.danger{color:var(--red);animation:pulseText .5s infinite}
+.game-actions{text-align:center;margin-top:10px;min-height:42px}
 
-.score-row{display:flex;gap:10px;margin-bottom:10px}
-.sc-box{flex:1;padding:10px;border-radius:var(--rl);text-align:center}
-.sc-box.ta{background:rgba(56,199,240,.05);border:1px solid rgba(56,199,240,.15)}
-.sc-box.tb{background:rgba(240,80,96,.05);border:1px solid rgba(240,80,96,.15)}
-.sc-team{font-size:11px;color:var(--mid);font-weight:600}.sc-num{font-size:clamp(28px,5vw,42px);font-weight:900;line-height:1}
-.sc-box.ta .sc-num{color:var(--tA)}.sc-box.tb .sc-num{color:var(--tB)}
-
+/* Effects */
 .pts-fly{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2.5em;font-weight:900;color:var(--gold);pointer-events:none;z-index:200;animation:scoreFloat 1s ease forwards}
 .flash{position:fixed;inset:0;pointer-events:none;z-index:100;animation:flash .4s ease-out forwards}
 .flash.ok{background:rgba(34,213,142,.12)}.flash.no{background:rgba(239,68,68,.12)}
+.toast-qa{position:fixed;top:16px;left:50%;transform:translateX(-50%);padding:10px 20px;background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);color:var(--txt);font-weight:600;font-size:13px;z-index:200;animation:toastIn .3s ease,toastOut .3s ease 2.7s forwards}
 
-.res-emoji{font-size:56px;text-align:center;margin-bottom:6px}
-.res-title{font-size:clamp(22px,4vw,32px);font-weight:900;text-align:center;margin-bottom:16px}
+/* Results */
+.res-area{text-align:center;padding:clamp(20px,4vh,40px) 0}
+.res-emoji{font-size:60px;margin-bottom:8px}
+.res-title{font-size:clamp(24px,5vw,36px);font-weight:900;margin-bottom:20px}
+.res-actions{display:flex;gap:10px;justify-content:center;margin-top:24px}
 
-@media(max-width:480px){.role-cards{flex-direction:column}.score-row{gap:6px}.opts .opt{padding:10px 12px}}
+@media(max-width:480px){.role-cards{flex-direction:column}.score-row{gap:6px}.opts .opt{padding:10px 12px;font-size:13px}.team-grid{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -77,69 +112,71 @@
 
 <!-- ═══ Role Selection ═══ -->
 <div class="scr on" id="sc-role">
-  <div style="text-align:center;padding:clamp(20px,5vh,40px) 0 12px">
-    <div style="font-size:48px;margin-bottom:4px">❓</div>
-    <h1 style="font-size:clamp(24px,5vw,36px)">سؤال وجواب</h1>
-    <p style="color:var(--dim);font-size:13px;margin-top:2px">اختر دورك في الجلسة</p>
+  <div class="role-hero">
+    <div class="role-hero-icon">❓</div>
+    <h1 style="font-size:clamp(26px,5vw,38px);color:var(--purple)">سؤال وجواب</h1>
+    <p style="color:var(--dim);font-size:13px;margin-top:4px">فريقين يتنافسان — اختيار من متعدد — بطاقات خاصة</p>
   </div>
   <div class="role-cards">
     <div class="role-card" onclick="chooseMod()">
       <div class="rc-icon">🎙️</div>
-      <div class="rc-name">مشرف</div>
-      <div class="rc-desc">أنشئ جلسة وتحكّم بالأسئلة</div>
+      <div class="rc-name" style="color:var(--gold)">مشرف الجلسة</div>
+      <div class="rc-desc">أنشئ جلسة وتحكّم بالأسئلة والوقت</div>
     </div>
     <div class="role-card" onclick="showJoin()">
       <div class="rc-icon">🎮</div>
-      <div class="rc-name">لاعب</div>
-      <div class="rc-desc">انضم بكود الجلسة</div>
+      <div class="rc-name" style="color:var(--purple)">لاعب</div>
+      <div class="rc-desc">انضم بكود الجلسة وتنافس</div>
     </div>
   </div>
-  <div style="text-align:center;margin-top:16px"><a href="/" style="color:var(--dim);font-size:12px;text-decoration:none">🏠 الرئيسية</a></div>
+  <div style="text-align:center;margin-top:20px"><a href="/" style="color:var(--dim);font-size:12px;text-decoration:none">← الرجوع للرئيسية</a></div>
 </div>
 
 <!-- ═══ Mod Setup ═══ -->
 <div class="scr" id="sc-mod-setup">
-  <button class="back-btn" onclick="go('sc-role')">→ رجوع</button>
+  <div class="back-row"><button class="bk-btn" onclick="go('sc-role')">→ رجوع</button></div>
   <div class="card">
-    <h2>🎙️ إعداد الجلسة</h2>
-    <div class="form-group"><label>اسمك</label><input id="mod-name" placeholder="اسم المشرف" maxlength="20"></div>
+    <h2 style="display:flex;align-items:center;gap:8px">🎙️ إعداد الجلسة</h2>
+    <div class="form-group"><label>اسم المشرف</label><input id="mod-name" placeholder="أدخل اسمك" maxlength="20"></div>
     <div class="form-group"><label>عدد الأسئلة</label>
-      <select id="mod-qcount"><option value="6">6 سريعة</option><option value="10" selected>10 عادية</option><option value="16">16 طويلة</option><option value="20">20 ماراثون</option></select>
+      <select id="mod-qcount"><option value="6">⚡ 6 سريعة</option><option value="10" selected>🎯 10 عادية</option><option value="16">🔥 16 طويلة</option><option value="20">🏆 20 ماراثون</option></select>
     </div>
     <div class="form-group"><label>وقت كل سؤال (ثانية)</label>
-      <select id="mod-time"><option value="10">10</option><option value="15">15</option><option value="20" selected>20</option><option value="30">30</option></select>
+      <select id="mod-time"><option value="10">⚡ 10ث</option><option value="15">⏱️ 15ث</option><option value="20" selected>🎯 20ث</option><option value="30">🐢 30ث</option></select>
     </div>
-    <button class="btn btn-gold btn-lg w-full" onclick="createQA()">🚀 أنشئ الجلسة</button>
+    <button class="btn btn-gold btn-lg w-full mt-8" onclick="createQA()">🚀 أنشئ الجلسة</button>
     <div class="error-msg" id="mod-err"></div>
   </div>
 </div>
 
 <!-- ═══ Player Join ═══ -->
 <div class="scr" id="sc-join">
-  <button class="back-btn" onclick="go('sc-role')">→ رجوع</button>
+  <div class="back-row"><button class="bk-btn" onclick="go('sc-role')">→ رجوع</button></div>
   <div class="card">
-    <h2>🎮 انضم للجلسة</h2>
-    <div class="form-group"><label>كود الجلسة</label><input id="join-code" placeholder="أدخل الكود" maxlength="6" inputmode="numeric"></div>
-    <div class="form-group"><label>اسمك</label><input id="join-name" placeholder="اسمك" maxlength="20"></div>
-    <div class="form-group"><label>فريقك</label>
+    <h2 style="display:flex;align-items:center;gap:8px">🎮 انضم للجلسة</h2>
+    <p style="color:var(--dim);font-size:12px;margin-bottom:12px">أدخل كود الجلسة الذي أعطاك إياه المشرف</p>
+    <div class="form-group"><label>كود الجلسة</label><input id="join-code" placeholder="أدخل الكود (٦ أرقام)" maxlength="6" inputmode="numeric" autocomplete="off"></div>
+    <div class="form-group"><label>اسمك</label><input id="join-name" placeholder="أدخل اسمك" maxlength="20" autocomplete="off"></div>
+    <div class="form-group"><label>اختر فريقك</label>
       <div class="team-select">
-        <button class="team-btn a" id="jt-a" onclick="jTeam='A';document.getElementById('jt-a').classList.add('selected');document.getElementById('jt-b').classList.remove('selected')">🔵 أ</button>
-        <button class="team-btn b" id="jt-b" onclick="jTeam='B';document.getElementById('jt-b').classList.add('selected');document.getElementById('jt-a').classList.remove('selected')">🔴 ب</button>
+        <button class="team-btn a" id="jt-a" onclick="pickTeam('A')">🔵 الفريق أ</button>
+        <button class="team-btn b" id="jt-b" onclick="pickTeam('B')">🔴 الفريق ب</button>
       </div>
     </div>
-    <button class="btn btn-gold btn-lg w-full mt-8" onclick="joinQA()">🚀 انضم</button>
+    <button class="btn btn-gold btn-lg w-full mt-8" onclick="joinQA()">🚀 انضم الآن</button>
     <div class="error-msg" id="join-err"></div>
   </div>
 </div>
 
 <!-- ═══ Lobby ═══ -->
 <div class="scr" id="sc-lobby">
-  <div style="text-align:center;margin-bottom:12px">
-    <div style="font-size:12px;color:var(--dim)">كود الجلسة</div>
-    <div class="lobby-code" id="lb-code">------</div>
-    <div style="font-size:13px;color:var(--mid);margin-top:4px" id="lb-status">بانتظار اللاعبين...</div>
+  <div class="lobby-header">
+    <div class="lobby-code-label">كود الجلسة — انقر للنسخ</div>
+    <div class="lobby-code" id="lb-code" onclick="copyCode()">------</div>
+    <div class="lobby-hint">شارك هذا الكود مع اللاعبين</div>
+    <div class="lobby-status" id="lb-status">بانتظار اللاعبين...</div>
   </div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px" id="lb-teams"></div>
+  <div class="team-grid" id="lb-teams"></div>
   <div style="text-align:center" id="lb-actions"></div>
 </div>
 
@@ -149,31 +186,37 @@
     <div class="sc-box ta"><div class="sc-team" id="g-t1n">الفريق أ</div><div class="sc-num" id="g-t1s">0</div></div>
     <div class="sc-box tb"><div class="sc-team" id="g-t2n">الفريق ب</div><div class="sc-num" id="g-t2s">0</div></div>
   </div>
-  <div id="g-bonus-area"></div>
+  <div id="g-bonus-area" style="text-align:center"></div>
   <div class="turn-banner" id="g-turn"></div>
-  <div style="text-align:center;font-size:12px;color:var(--dim);margin-bottom:4px" id="g-progress"></div>
+  <div class="turn-wait" id="g-wait"></div>
+  <div style="text-align:center;font-size:12px;color:var(--dim);margin-bottom:2px" id="g-progress"></div>
   <div class="timer-big" id="g-timer">20</div>
   <div class="timer-bar-wrap"><div class="timer-bar" id="g-bar" style="width:100%"></div></div>
   <div class="q-card">
     <div style="text-align:center"><span class="q-cat-badge" id="g-cat"></span></div>
     <div class="q-text" id="g-qtext">—</div>
+    <div class="q-answer-reveal" id="g-answer"></div>
   </div>
   <div class="opts" id="g-opts"></div>
   <div class="cards-row" id="g-cards"></div>
-  <div style="text-align:center"><button class="btn btn-gold hidden" id="g-next" onclick="nextQ()">التالي ←</button></div>
+  <div class="game-actions">
+    <button class="btn btn-gold hidden" id="g-next" onclick="nextQ()">التالي ←</button>
+  </div>
 </div>
 
 <!-- ═══ Results ═══ -->
 <div class="scr" id="sc-results">
-  <div class="res-emoji" id="r-emoji">🏆</div>
-  <div class="res-title" id="r-title">النتيجة</div>
-  <div class="score-row" style="margin:16px 0">
-    <div class="sc-box ta"><div class="sc-team" id="r-t1n"></div><div class="sc-num" id="r-t1s">0</div></div>
-    <div class="sc-box tb"><div class="sc-team" id="r-t2n"></div><div class="sc-num" id="r-t2s">0</div></div>
-  </div>
-  <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
-    <a href="/qa.html" class="btn btn-gold btn-lg">🔄 جلسة جديدة</a>
-    <a href="/" class="btn btn-ghost btn-lg">🏠 الرئيسية</a>
+  <div class="res-area">
+    <div class="res-emoji" id="r-emoji">🏆</div>
+    <div class="res-title" id="r-title">النتيجة</div>
+    <div class="score-row" style="margin:20px 0">
+      <div class="sc-box ta"><div class="sc-team" id="r-t1n">الفريق أ</div><div class="sc-num" id="r-t1s">0</div></div>
+      <div class="sc-box tb"><div class="sc-team" id="r-t2n">الفريق ب</div><div class="sc-num" id="r-t2s">0</div></div>
+    </div>
+    <div class="res-actions">
+      <a href="/qa.html" class="btn btn-gold btn-lg">🔄 جلسة جديدة</a>
+      <a href="/" class="btn btn-ghost btn-lg">🏠 الرئيسية</a>
+    </div>
   </div>
 </div>
 
@@ -181,170 +224,253 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-const socket=io();
-const $=id=>document.getElementById(id);
-const LT=['أ','ب','ج','د'];
-let role='',roomCode='',myName='',myTeam='',jTeam='';
-let isMod=false,isMyTurn=false,maxTime=20;
+const socket = io();
+const $ = id => document.getElementById(id);
+const LT = ['أ','ب','ج','د'];
+let roomCode = '', myName = '', myTeam = '', jTeam = '';
+let isMod = false, isMyTurn = false, maxTime = 20, answered = false;
 
-socket.on("global-stats",d=>{$("hdr-o").textContent="🌐 "+d.online;});
+socket.on("global-stats", d => { $("hdr-o").textContent = "🌐 " + d.online; });
 
-function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');}
+function go(id) { document.querySelectorAll('.scr').forEach(s => s.classList.remove('on')); $(id).classList.add('on'); window.scrollTo({top:0,behavior:'smooth'}); }
 
 // ── Audio ──
-const AC=window.AudioContext||window.webkitAudioContext;let actx;
-function tone(f,d,t,v){if(!actx)actx=new AC();const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(v||.12,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d);o.start();o.stop(actx.currentTime+d);}
-function sndOk(){tone(523,.1);setTimeout(()=>tone(659,.1),100);setTimeout(()=>tone(784,.15),200);}
-function sndNo(){tone(200,.15,'sawtooth');setTimeout(()=>tone(150,.2,'sawtooth'),150);}
-function flash(ok){const e=document.createElement('div');e.className='flash '+(ok?'ok':'no');document.body.appendChild(e);e.addEventListener('animationend',()=>e.remove());}
-function flyPts(t){const e=document.createElement('div');e.className='pts-fly';e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),1100);}
+const AC = window.AudioContext || window.webkitAudioContext; let actx;
+function tone(f,d,t,v) { if(!actx) actx = new AC(); try { const o=actx.createOscillator(),g=actx.createGain(); o.connect(g);g.connect(actx.destination); o.type=t||'sine';o.frequency.value=f; g.gain.setValueAtTime(v||.12,actx.currentTime); g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d); o.start();o.stop(actx.currentTime+d); } catch(e){} }
+function sndOk() { tone(523,.1);setTimeout(()=>tone(659,.1),100);setTimeout(()=>tone(784,.15),200); }
+function sndNo() { tone(200,.15,'sawtooth');setTimeout(()=>tone(150,.2,'sawtooth'),150); }
+function sndTick() { tone(800,.05,'sine',.08); }
+function flash(ok) { const e=document.createElement('div');e.className='flash '+(ok?'ok':'no');document.body.appendChild(e);e.addEventListener('animationend',()=>e.remove()); }
+function flyPts(t) { const e=document.createElement('div');e.className='pts-fly';e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),1100); }
+function toast(m) { const e=document.createElement('div');e.className='toast-qa';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),3200); }
+
+// ── Team selection ──
+function pickTeam(t) { jTeam=t; $("jt-a").classList.toggle("selected",t==="A"); $("jt-b").classList.toggle("selected",t==="B"); }
+
+// ── Copy code ──
+function copyCode() { navigator.clipboard.writeText(roomCode).then(()=>toast("📋 تم نسخ الكود!")).catch(()=>toast("الكود: "+roomCode)); }
 
 // ── Moderator ──
-function chooseMod(){go('sc-mod-setup');}
-function showJoin(){go('sc-join');}
+function chooseMod() { go('sc-mod-setup'); }
+function showJoin() { go('sc-join'); }
 
-function createQA(){
-  const name=$("mod-name").value.trim();
-  if(!name){$("mod-err").textContent="أدخل اسمك";return;}
-  socket.emit("qa-create",{modName:name,questionCount:+$("mod-qcount").value,timePerQuestion:+$("mod-time").value},r=>{
-    if(r.success){roomCode=r.code;myName=name;isMod=true;role="mod";$("lb-code").textContent=r.code;go('sc-lobby');renderLobby({teams:{A:{name:"الفريق الأزرق",score:0,players:[]},B:{name:"الفريق الأحمر",score:0,players:[]},},playerCount:0});}
+function createQA() {
+  const name = $("mod-name").value.trim();
+  if (!name) { $("mod-err").textContent = "أدخل اسمك"; return; }
+  $("mod-err").textContent = "";
+  socket.emit("qa-create", { modName:name, questionCount:+$("mod-qcount").value, timePerQuestion:+$("mod-time").value }, r => {
+    if (r.success) {
+      roomCode = r.code; myName = name; isMod = true;
+      $("lb-code").textContent = r.code;
+      renderLobby({ teams:{ A:{name:"الفريق الأزرق",score:0,players:[]}, B:{name:"الفريق الأحمر",score:0,players:[]} }, playerCount:0 });
+      go('sc-lobby');
+      toast("🎙️ تم إنشاء الجلسة — شارك الكود مع اللاعبين");
+    }
   });
 }
 
-function joinQA(){
-  const code=$("join-code").value.trim(),name=$("join-name").value.trim();
-  if(!code){$("join-err").textContent="أدخل الكود";return;}
-  if(!name){$("join-err").textContent="أدخل اسمك";return;}
-  if(!jTeam){$("join-err").textContent="اختر فريقك";return;}
-  socket.emit("qa-join",{code,name,team:jTeam},r=>{
-    if(!r.success){$("join-err").textContent=r.error;return;}
-    roomCode=code;myName=name;myTeam=jTeam;isMod=false;role="player";
-    $("lb-code").textContent=code;renderLobby(r.info);go('sc-lobby');
+function joinQA() {
+  const code = $("join-code").value.trim(), name = $("join-name").value.trim();
+  const err = $("join-err");
+  if (!code || code.length < 4) { err.textContent = "أدخل كود الجلسة"; return; }
+  if (!name) { err.textContent = "أدخل اسمك"; return; }
+  if (!jTeam) { err.textContent = "اختر فريقك"; return; }
+  err.textContent = "";
+  socket.emit("qa-join", { code, name, team:jTeam }, r => {
+    if (!r.success) { err.textContent = r.error || "خطأ في الانضمام"; return; }
+    roomCode = code; myName = name; myTeam = jTeam; isMod = false;
+    $("lb-code").textContent = code;
+    renderLobby(r.info);
+    go('sc-lobby');
+    toast("🎮 تم الانضمام بنجاح!");
   });
 }
 
 // ── Lobby ──
-socket.on("qa-update",d=>renderLobby(d));
+socket.on("qa-update", d => renderLobby(d));
 
-function renderLobby(info){
-  const ta=info.teams.A,tb=info.teams.B;
-  $("lb-status").textContent=`${info.playerCount||0} لاعب متصل`;
-  $("lb-teams").innerHTML=renderTeamCol(ta,"A")+renderTeamCol(tb,"B");
-  const canStart=ta.players.length>=1&&tb.players.length>=1;
-  $("lb-actions").innerHTML=isMod?`<button class="btn btn-gold btn-lg" onclick="startQA()" ${canStart?'':'disabled'}>🚀 ابدأ</button><div style="font-size:11px;color:var(--dim);margin-top:4px">${canStart?'✅ جاهز':'لاعب بكل فريق'}</div>`:'<div style="color:var(--mid);font-size:13px">⏳ بانتظار المشرف...</div>';
+function renderLobby(info) {
+  const ta = info.teams.A, tb = info.teams.B;
+  $("lb-status").textContent = `${info.playerCount||0} لاعب متصل`;
+  $("lb-teams").innerHTML = renderTeamCol(ta,"A") + renderTeamCol(tb,"B");
+  const canStart = ta.players.length >= 1 && tb.players.length >= 1;
+  $("lb-actions").innerHTML = isMod
+    ? `<button class="btn btn-gold btn-lg" onclick="startQA()" ${canStart?'':'disabled'} style="min-width:200px">🚀 ابدأ اللعب</button>
+       <div style="font-size:11px;color:var(--dim);margin-top:6px">${canStart ? '✅ الفرق جاهزة — يمكنك البدء!' : '⏳ يجب أن يكون لاعب واحد على الأقل بكل فريق'}</div>`
+    : '<div style="color:var(--mid);font-size:13px;padding:10px">⏳ بانتظار المشرف لبدء اللعبة...</div>';
 }
 
-function renderTeamCol(t,tn){
-  const clr=tn==="A"?"var(--tA)":"var(--tB)",bg=tn==="A"?"rgba(56,199,240,.04)":"rgba(240,80,96,.04)",icon=tn==="A"?"🔵":"🔴";
-  let body=t.players.map(p=>`<div class="tp"><div class="tp-av" style="background:${bg};color:${clr}">${p.name[0]}</div><div class="tp-name" style="${p.name===myName?'color:var(--gold)':''}">${p.name}${p.name===myName?' (أنت)':''}</div>${p.usedCard?'<span style="font-size:10px;color:var(--dim)">🃏</span>':''}</div>`).join('');
-  for(let i=t.players.length;i<5;i++)body+=`<div class="tp-empty">— فارغ —</div>`;
-  return`<div class="team-col" style="border-color:${tn==="A"?"rgba(56,199,240,.15)":"rgba(240,80,96,.15)"}"><div class="team-head" style="color:${clr}">${icon} ${t.name} <span style="margin-right:auto;font-size:11px;color:var(--dim)">${t.players.length}/5</span></div><div class="team-body">${body}</div></div>`;
+function renderTeamCol(t, tn) {
+  const clr = tn==="A" ? "var(--tA)" : "var(--tB)";
+  const bg = tn==="A" ? "rgba(56,199,240,.04)" : "rgba(240,80,96,.04)";
+  const icon = tn==="A" ? "🔵" : "🔴";
+  const border = tn==="A" ? "rgba(56,199,240,.15)" : "rgba(240,80,96,.15)";
+  let body = t.players.map(p => `<div class="tp"><div class="tp-av" style="background:${bg};color:${clr}">${p.name[0]}</div><div class="tp-name ${p.name===myName?'tp-me':''}">${p.name}${p.name===myName?' (أنت)':''}</div></div>`).join('');
+  for (let i = t.players.length; i < 5; i++) body += `<div class="tp-empty">— فارغ —</div>`;
+  return `<div class="team-col" style="border-color:${border}"><div class="team-head" style="color:${clr}">${icon} ${t.name} <span style="margin-right:auto;font-size:11px;color:var(--dim)">${t.players.length}/5</span></div><div class="team-body">${body}</div></div>`;
 }
 
-function startQA(){socket.emit("qa-start",{code:roomCode});}
+function startQA() { socket.emit("qa-start", { code:roomCode }); }
 
 // ── Game Events ──
-socket.on("qa-started",d=>{maxTime=d.info?.settings?.timePerQuestion||20;showQuestion(d.question,d.info);go('sc-game');});
-socket.on("qa-question",d=>{showQuestion(d);});
-socket.on("qa-tick",d=>{
-  $("g-timer").textContent=d.time;
-  const pct=(d.time/maxTime)*100;$("g-bar").style.width=pct+"%";
-  $("g-bar").classList.remove("warn","danger");$("g-timer").classList.remove("danger");
-  if(d.time<=3){$("g-bar").classList.add("danger");$("g-timer").classList.add("danger");}
-  else if(d.time<=Math.floor(maxTime*.4))$("g-bar").classList.add("warn");
+socket.on("qa-started", d => {
+  maxTime = d.info?.settings?.timePerQuestion || 20;
+  showQuestion(d.question, d.info);
+  go('sc-game');
 });
 
-socket.on("qa-answered",d=>{
-  const opts=document.querySelectorAll('.opt');opts.forEach(o=>o.classList.add('dis'));
-  opts[d.correctIdx]?.classList.add('correct');
-  if(!d.correct){const sel=document.querySelector('.opt.selected');if(sel)sel.classList.add('wrong');}
-  flash(d.correct);
-  if(d.correct){sndOk();flyPts('+'+d.points);}else sndNo();
-  $("g-t1s").textContent=d.scores.A;$("g-t2s").textContent=d.scores.B;
-  $("g-next").classList.remove("hidden");$("g-cards").innerHTML='';
-});
+socket.on("qa-question", d => showQuestion(d));
 
-socket.on("qa-timeup",d=>{
-  const opts=document.querySelectorAll('.opt');opts.forEach(o=>o.classList.add('dis'));
-  opts[d.correctIdx]?.classList.add('correct');
-  sndNo();$("g-next").classList.remove("hidden");$("g-cards").innerHTML='';
-});
-
-socket.on("qa-card-used",d=>{
-  if(d.card==="fifty"&&d.removedOptions){
-    d.removedOptions.forEach(i=>{const o=document.querySelectorAll('.opt')[i];if(o)o.classList.add('removed');});
+socket.on("qa-tick", d => {
+  $("g-timer").textContent = d.time;
+  const pct = (d.time / maxTime) * 100;
+  $("g-bar").style.width = pct + "%";
+  $("g-bar").classList.remove("warn","danger");
+  $("g-timer").classList.remove("warn","danger");
+  if (d.time <= 3) {
+    $("g-bar").classList.add("danger"); $("g-timer").classList.add("danger");
+    if (d.time > 0) sndTick();
+  } else if (d.time <= Math.floor(maxTime * 0.35)) {
+    $("g-bar").classList.add("warn"); $("g-timer").classList.add("warn");
   }
-  if(d.card==="time")$("g-timer").textContent=d.newTime;
-  if(d.card==="steal"){$("g-t1s").textContent=d.scores.A;$("g-t2s").textContent=d.scores.B;}
 });
 
-socket.on("qa-ended",d=>{
-  $("r-t1s").textContent=d.scores.A;$("r-t2s").textContent=d.scores.B;
-  $("r-t1n").textContent="🔵 الفريق أ";$("r-t2n").textContent="🔴 الفريق ب";
-  if(d.winner==="A"){$("r-emoji").textContent="🏆🔵";$("r-title").textContent="الفريق أ الأبطال!";$("r-title").style.color="var(--tA)";}
-  else if(d.winner==="B"){$("r-emoji").textContent="🏆🔴";$("r-title").textContent="الفريق ب الأبطال!";$("r-title").style.color="var(--tB)";}
-  else{$("r-emoji").textContent="🤝";$("r-title").textContent="تعادل!";$("r-title").style.color="var(--gold)";}
+socket.on("qa-answered", d => {
+  answered = true;
+  const opts = document.querySelectorAll('.opt');
+  opts.forEach(o => { o.classList.add('dis'); o.onclick = null; });
+  if (d.correctIdx !== undefined && opts[d.correctIdx]) opts[d.correctIdx].classList.add('correct');
+  if (!d.correct) { const sel = document.querySelector('.opt.selected'); if (sel) sel.classList.add('wrong'); }
+  flash(d.correct);
+  if (d.correct) { sndOk(); flyPts('+' + d.points); } else sndNo();
+  $("g-t1s").textContent = d.scores.A; $("g-t2s").textContent = d.scores.B;
+  // Show correct answer text
+  const ansEl = $("g-answer");
+  const correctOpt = opts[d.correctIdx];
+  if (correctOpt) { ansEl.textContent = "✅ الإجابة: " + correctOpt.querySelector('span:last-child').textContent; ansEl.classList.add("show"); }
+  // Show next button (for moderator) or waiting text (for players)
+  $("g-cards").innerHTML = '';
+  $("g-wait").textContent = '';
+  if (isMod) { $("g-next").classList.remove("hidden"); }
+  else { $("g-wait").textContent = "⏳ بانتظار المشرف..."; }
+});
+
+socket.on("qa-timeup", d => {
+  answered = true;
+  const opts = document.querySelectorAll('.opt');
+  opts.forEach(o => { o.classList.add('dis'); o.onclick = null; });
+  if (d.correctIdx !== undefined && opts[d.correctIdx]) opts[d.correctIdx].classList.add('correct');
+  sndNo();
+  const ansEl = $("g-answer");
+  const correctOpt = opts[d.correctIdx];
+  if (correctOpt) { ansEl.textContent = "⏰ الإجابة: " + correctOpt.querySelector('span:last-child').textContent; ansEl.classList.add("show"); }
+  $("g-cards").innerHTML = '';
+  $("g-wait").textContent = '';
+  if (isMod) { $("g-next").classList.remove("hidden"); }
+  else { $("g-wait").textContent = "⏳ بانتظار المشرف..."; }
+});
+
+socket.on("qa-card-used", d => {
+  if (d.card === "fifty" && d.removedOptions) {
+    d.removedOptions.forEach(i => { const o = document.querySelectorAll('.opt')[i]; if (o) o.classList.add('removed'); });
+    toast("❌ تم حذف خيارين!");
+  }
+  if (d.card === "time") { $("g-timer").textContent = d.newTime; toast("⏱️ +10 ثوان!"); }
+  if (d.card === "steal") { $("g-t1s").textContent = d.scores.A; $("g-t2s").textContent = d.scores.B; toast("🏴‍☠️ تم سرقة النقاط!"); }
+  if (d.card === "double") toast("⚡ مضاعفة النقاط!");
+  if (d.card === "shield") toast("🛡️ الدرع مفعّل!");
+});
+
+socket.on("qa-ended", d => {
+  $("r-t1s").textContent = d.scores.A; $("r-t2s").textContent = d.scores.B;
+  $("r-t1n").textContent = "🔵 الفريق أ"; $("r-t2n").textContent = "🔴 الفريق ب";
+  if (d.winner === "A") { $("r-emoji").textContent = "🏆🔵"; $("r-title").textContent = "الفريق أ الأبطال!"; $("r-title").style.color = "var(--tA)"; }
+  else if (d.winner === "B") { $("r-emoji").textContent = "🏆🔴"; $("r-title").textContent = "الفريق ب الأبطال!"; $("r-title").style.color = "var(--tB)"; }
+  else { $("r-emoji").textContent = "🤝"; $("r-title").textContent = "تعادل!"; $("r-title").style.color = "var(--gold)"; }
   go('sc-results');
 });
 
-// ── Show Question ──
-function showQuestion(q,info){
-  if(info){$("g-t1n").textContent=info.teams?.A?.name||"أ";$("g-t2n").textContent=info.teams?.B?.name||"ب";}
-  isMyTurn=q.turn.playerName===myName;
-  const tc=q.turn.team==="A"?"ta":"tb";
-  $("g-turn").className="turn-banner "+tc;
-  $("g-turn").textContent=`🎯 ${q.turn.teamName} — ${q.turn.playerName}${isMyTurn?" (أنت)":""}`;
-  $("g-progress").textContent=`السؤال ${q.index+1} / ${q.total}`;
-  $("g-cat").textContent=q.cat;
-  $("g-qtext").textContent=q.q;
-  $("g-timer").textContent=maxTime;$("g-bar").style.width="100%";
-  $("g-timer").classList.remove("danger");$("g-bar").classList.remove("warn","danger");
-  $("g-next").classList.add("hidden");
-  $("g-bonus-area").innerHTML=q.isBonus?'<div style="text-align:center"><span class="bonus-tag">🎰 بونص ×3!</span></div>':'';
+socket.on("system-broadcast", d => { const icons={info:"ℹ️",warning:"⚠️",success:"✅",alert:"🚨"}; toast((icons[d.type]||"📢")+" "+d.msg); });
 
-  // Options
-  const opts=$("g-opts");opts.innerHTML='';
-  q.options.forEach((o,i)=>{
-    const btn=document.createElement('button');btn.className='opt';
-    btn.innerHTML=`<span class="ol">${LT[i]}</span><span>${o}</span>`;
-    if(isMyTurn)btn.onclick=()=>pickOpt(i,btn);
-    else btn.style.cursor='default';
+// ── Show Question ──
+function showQuestion(q, info) {
+  answered = false;
+  if (info) {
+    $("g-t1n").textContent = info.teams?.A?.name || "الفريق أ";
+    $("g-t2n").textContent = info.teams?.B?.name || "الفريق ب";
+    if (info.teams?.A?.score !== undefined) $("g-t1s").textContent = info.teams.A.score;
+    if (info.teams?.B?.score !== undefined) $("g-t2s").textContent = info.teams.B.score;
+  }
+
+  isMyTurn = q.turn.playerName === myName;
+  const tc = q.turn.team === "A" ? "ta" : "tb";
+
+  $("g-turn").className = "turn-banner " + tc;
+  $("g-turn").textContent = `🎯 ${q.turn.teamName} — ${q.turn.playerName}${isMyTurn ? " (دورك!)" : ""}`;
+  $("g-wait").textContent = isMyTurn ? "" : `👀 ${q.turn.playerName} يجيب الآن...`;
+  $("g-progress").textContent = `السؤال ${q.index + 1} / ${q.total}`;
+  $("g-cat").textContent = q.cat;
+  $("g-qtext").textContent = q.q;
+  $("g-answer").textContent = ""; $("g-answer").classList.remove("show");
+  $("g-timer").textContent = maxTime;
+  $("g-bar").style.width = "100%";
+  $("g-timer").classList.remove("warn","danger");
+  $("g-bar").classList.remove("warn","danger");
+  $("g-next").classList.add("hidden");
+  $("g-bonus-area").innerHTML = q.isBonus ? '<span class="bonus-tag">🎰 بونص ×3!</span>' : '';
+
+  // Build options
+  const opts = $("g-opts");
+  opts.innerHTML = '';
+  q.options.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt' + (isMyTurn ? '' : ' wait');
+    btn.innerHTML = `<span class="ol">${LT[i]}</span><span>${o}</span>`;
+    if (isMyTurn) btn.onclick = () => pickOpt(i, btn);
     opts.appendChild(btn);
   });
 
-  // Cards (only for current player)
-  if(isMyTurn){
-    socket.emit("qa-get-cards",{code:roomCode},cards=>{
-      if(cards.usedCard){$("g-cards").innerHTML='';return;}
-      const cardDefs={fifty:"❌ حذف خيارين",time:"⏱️ +10ث",steal:"🏴‍☠️ سرقة",double:"⚡ مضاعفة",shield:"🛡️ درع"};
-      $("g-cards").innerHTML=cards.wallet.map(c=>`<button class="card-btn" onclick="useCard('${c}')">${cardDefs[c]||c}</button>`).join('');
+  // Cards (only for current player who hasn't used one yet)
+  $("g-cards").innerHTML = '';
+  if (isMyTurn) {
+    socket.emit("qa-get-cards", { code: roomCode }, cards => {
+      if (!cards || cards.usedCard) { $("g-cards").innerHTML = ''; return; }
+      const defs = { fifty:"❌ حذف خيارين", time:"⏱️ +10ث", steal:"🏴‍☠️ سرقة", double:"⚡ مضاعفة", shield:"🛡️ درع" };
+      $("g-cards").innerHTML = '<div style="font-size:10px;color:var(--dim);text-align:center;width:100%;margin-bottom:2px">🃏 بطاقاتك (استخدام واحد فقط)</div>' +
+        cards.wallet.map(c => `<button class="card-btn" onclick="useCard('${c}')">${defs[c]||c}</button>`).join('');
     });
-  }else{$("g-cards").innerHTML='';}
+  }
 
-  // Start timer
-  if(isMod)socket.emit("qa-timer-start",{code:roomCode});
+  // Start timer (moderator triggers)
+  if (isMod) socket.emit("qa-timer-start", { code: roomCode });
 }
 
-function pickOpt(idx,btn){
-  if(!isMyTurn)return;
-  document.querySelectorAll('.opt').forEach(o=>{o.onclick=null;});
+function pickOpt(idx, btn) {
+  if (!isMyTurn || answered) return;
+  answered = true;
+  document.querySelectorAll('.opt').forEach(o => { o.onclick = null; });
   btn.classList.add('selected');
-  socket.emit("qa-answer",{code:roomCode,optionIdx:idx});
+  socket.emit("qa-answer", { code: roomCode, optionIdx: idx });
 }
 
-function useCard(card){
-  socket.emit("qa-use-card",{code:roomCode,card});
-  $("g-cards").innerHTML='';
+function useCard(card) {
+  if (answered) return;
+  socket.emit("qa-use-card", { code: roomCode, card });
+  $("g-cards").innerHTML = '';
 }
 
-function nextQ(){
-  if(isMod)socket.emit("qa-next",{code:roomCode});
+function nextQ() {
+  if (isMod) socket.emit("qa-next", { code: roomCode });
 }
 
-// Enter key handlers
-$("join-code")?.addEventListener("keydown",e=>{if(e.key==="Enter")$("join-name").focus();});
-$("join-name")?.addEventListener("keydown",e=>{if(e.key==="Enter")joinQA();});
-$("mod-name")?.addEventListener("keydown",e=>{if(e.key==="Enter")createQA();});
+// ── Keyboard ──
+$("join-code")?.addEventListener("keydown", e => { if (e.key === "Enter") $("join-name").focus(); });
+$("join-name")?.addEventListener("keydown", e => { if (e.key === "Enter") joinQA(); });
+$("mod-name")?.addEventListener("keydown", e => { if (e.key === "Enter") createQA(); });
+
+// ── Reconnection ──
+socket.on("disconnect", () => toast("⚠️ انقطع الاتصال..."));
+socket.on("connect", () => { if (roomCode && !isMod && myName) { socket.emit("qa-join", { code:roomCode, name:myName, team:myTeam }, r => { if (r.success) toast("✅ تم إعادة الاتصال"); }); } });
 </script>
 </body>
 </html>
