@@ -5,309 +5,452 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>بازززز — من في الصورة؟</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#060610;--s1:#0d0d24;--s2:#13133a;--s3:#1c1c52;--gold:#f0b429;--glt:#ffe066;--tA:#38c7f0;--tB:#f05060;--lime:#22d58e;--red:#ef4444;--txt:#eaf0ff;--dim:#5a5a8a;--mid:#8888bb;--r:12px}
-html{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
-body{min-height:100vh;display:flex;flex-direction:column;align-items:center;
-background:radial-gradient(ellipse at 20% 0%,rgba(56,199,240,.06),transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(240,80,96,.06),transparent 50%),var(--bg)}
-.wrap{width:100%;max-width:700px;padding:16px}
-.header{display:flex;align-items:center;justify-content:space-between;padding:10px 0;margin-bottom:12px}
-.logo{font-size:20px;font-weight:900;color:var(--gold)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:10px 20px;border:none;border-radius:var(--r);font-family:'Cairo';font-size:14px;font-weight:700;cursor:pointer;transition:all .15s}
-.btn:active{transform:scale(.96)}
-.btn-g{background:linear-gradient(135deg,var(--gold),#d4960a);color:#1a1000}
-.btn-o{background:var(--s2);color:var(--mid);border:1px solid var(--s3)}
-.btn-lg{padding:14px 32px;font-size:16px}
-.card{background:var(--s1);border:1px solid var(--s3);border-radius:16px;padding:20px;margin-bottom:12px}
+.gw{max-width:660px;margin:0 auto;padding:16px}
+.scr{display:none;animation:fadeIn .4s ease}.scr.on{display:block}
 
-/* Screens */
-.scr{display:none;animation:fi .4s ease}.scr.on{display:block}
-@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+/* Header */
+.g-header{display:flex;align-items:center;justify-content:space-between;padding:8px 0;margin-bottom:10px}
+.g-logo{font-size:18px;font-weight:900;color:var(--tA);display:flex;align-items:center;gap:5px}
 
 /* Setup */
-.setup-center{text-align:center;padding:8vh 0 2vh}
-.setup-icon{font-size:56px;margin-bottom:8px}
-.team-inputs{display:flex;gap:10px;margin:14px 0}
-.team-inputs input{flex:1;padding:12px;background:var(--s2);border:1.5px solid var(--s3);border-radius:var(--r);color:var(--txt);font-family:'Cairo';font-size:14px;text-align:center;outline:none}
-.team-inputs input:focus{border-color:var(--gold)}
-.team-inputs input::placeholder{color:var(--dim)}
+.setup-hero{text-align:center;padding:clamp(24px,6vh,48px) 0 16px}
+.setup-hero-icon{font-size:56px;margin-bottom:6px;filter:drop-shadow(0 4px 12px rgba(56,199,240,.3))}
+.setup-card{background:var(--s1);border:1px solid var(--s3);border-radius:var(--rl);padding:22px;margin-bottom:12px}
+.t-inputs{display:flex;gap:10px;margin:12px 0}
+.t-inputs input{flex:1;padding:12px;background:var(--s2);border:1.5px solid var(--s3);border-radius:var(--r);color:var(--txt);font-family:'Cairo';font-size:14px;text-align:center;outline:none;transition:border-color .2s}
+.t-inputs input:focus{border-color:var(--gold)}
+.t-inputs input::placeholder{color:var(--dim)}
+.rounds-select{margin:10px 0}
+.rounds-select select{padding:10px;background:var(--s2);border:1.5px solid var(--s3);border-radius:var(--r);color:var(--txt);font-family:'Cairo';font-size:14px;outline:none;width:100%}
+.rounds-select select:focus{border-color:var(--gold)}
 
 /* Scoreboard */
-.scoreboard{display:flex;gap:12px;margin-bottom:14px}
-.score-card{flex:1;text-align:center;padding:14px;border-radius:14px;border:1.5px solid;position:relative}
-.score-card.ta{border-color:rgba(56,199,240,.25);background:rgba(56,199,240,.04)}
-.score-card.tb{border-color:rgba(240,80,96,.25);background:rgba(240,80,96,.04)}
-.sc-name{font-size:12px;font-weight:700;color:var(--mid)}.sc-val{font-size:36px;font-weight:900;line-height:1}
-.score-card.ta .sc-val{color:var(--tA)}.score-card.tb .sc-val{color:var(--tB)}
+.g-scores{display:flex;gap:10px;margin-bottom:10px}
+.g-sc{flex:1;text-align:center;padding:12px;border-radius:var(--rl);position:relative;overflow:hidden}
+.g-sc::before{content:'';position:absolute;inset:0;opacity:.03}
+.g-sc.a{border:1.5px solid rgba(56,199,240,.2);background:rgba(56,199,240,.03)}.g-sc.a::before{background:var(--tA)}
+.g-sc.b{border:1.5px solid rgba(240,80,96,.2);background:rgba(240,80,96,.03)}.g-sc.b::before{background:var(--tB)}
+.g-sc-name{font-size:12px;font-weight:700;color:var(--mid);position:relative}
+.g-sc-val{font-size:clamp(30px,6vw,44px);font-weight:900;line-height:1;position:relative}
+.g-sc.a .g-sc-val{color:var(--tA)}.g-sc.b .g-sc-val{color:var(--tB)}
 
-/* Round info */
-.round-info{text-align:center;margin-bottom:10px;font-size:13px;color:var(--dim)}
-.round-badge{display:inline-block;padding:4px 14px;border-radius:10px;background:rgba(240,180,41,.08);color:var(--gold);font-weight:700;font-size:12px;border:1px solid rgba(240,180,41,.15);margin-bottom:8px}
-
-/* Image */
-.img-card{text-align:center;margin-bottom:14px}
-.guess-img{width:100%;max-width:360px;max-height:320px;object-fit:cover;border-radius:14px;border:2px solid var(--s3);box-shadow:0 8px 28px rgba(0,0,0,.5);transition:all .3s}
-.guess-img.reveal{border-color:var(--gold);box-shadow:0 8px 36px rgba(240,180,41,.15)}
-
-/* Options grid */
-.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.opt{padding:12px;border-radius:var(--r);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;font-size:14px;font-weight:700;transition:all .2s;font-family:'Cairo'}
-.opt:hover:not(.dis){border-color:var(--gold);transform:translateY(-2px)}
-.opt.correct{border-color:var(--lime);background:rgba(34,213,142,.1);color:var(--lime)}
-.opt.wrong{border-color:var(--red);background:rgba(239,68,68,.08);color:var(--red);opacity:.5}
-.opt.dis{cursor:default;opacity:.4}
-
-/* Turn indicator */
-.turn-indicator{text-align:center;padding:10px;border-radius:var(--r);margin-bottom:10px;font-weight:700;font-size:15px}
-.turn-indicator.ta{background:rgba(56,199,240,.06);border:1px solid rgba(56,199,240,.15);color:var(--tA)}
-.turn-indicator.tb{background:rgba(240,80,96,.06);border:1px solid rgba(240,80,96,.15);color:var(--tB)}
+/* Round + Turn */
+.g-round{text-align:center;margin-bottom:6px}
+.round-pill{display:inline-block;padding:4px 16px;border-radius:12px;background:rgba(240,180,41,.06);color:var(--gold);font-weight:700;font-size:12px;border:1px solid rgba(240,180,41,.12)}
+.g-turn{text-align:center;padding:10px 14px;border-radius:var(--r);font-weight:700;font-size:15px;margin-bottom:8px;transition:all .3s}
+.g-turn.a{background:rgba(56,199,240,.05);border:1px solid rgba(56,199,240,.12);color:var(--tA)}
+.g-turn.b{background:rgba(240,80,96,.05);border:1px solid rgba(240,80,96,.12);color:var(--tB)}
 
 /* Timer */
-.timer{text-align:center;font-size:28px;font-weight:900;margin-bottom:8px}
-.timer.danger{color:var(--red);animation:pulse .5s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-.timer-bar{width:100%;height:5px;background:var(--s2);border-radius:3px;margin-bottom:12px;overflow:hidden}
-.timer-fill{height:100%;border-radius:3px;background:var(--lime);transition:width 1s linear}
-.timer-fill.warn{background:var(--gold)}.timer-fill.danger{background:var(--red)}
+.g-timer-num{text-align:center;font-size:clamp(26px,5vw,38px);font-weight:900;margin:4px 0;transition:color .3s}
+.g-timer-num.warn{color:var(--gold)}.g-timer-num.danger{color:var(--red);animation:pulseText .5s infinite}
+.g-timer-bar{width:100%;height:5px;background:var(--s2);border-radius:3px;margin-bottom:10px;overflow:hidden}
+.g-timer-fill{height:100%;border-radius:3px;background:var(--lime);transition:width 1s linear}
+.g-timer-fill.warn{background:var(--gold)}.g-timer-fill.danger{background:var(--red)}
 
-/* Result */
-.result-center{text-align:center;padding:6vh 0}
-.result-emoji{font-size:64px;margin-bottom:8px}
-.result-title{font-size:28px;font-weight:900;margin-bottom:16px}
-.result-title.ta{color:var(--tA)}.result-title.tb{color:var(--tB)}.result-title.tie{color:var(--gold)}
+/* Image */
+.g-img-wrap{text-align:center;margin-bottom:12px}
+.g-img{width:100%;max-width:340px;max-height:280px;object-fit:contain;border-radius:14px;border:2.5px solid var(--s3);box-shadow:0 8px 28px rgba(0,0,0,.5);transition:all .4s;background:var(--s2)}
+.g-img.correct-glow{border-color:var(--lime);box-shadow:0 0 30px rgba(34,213,142,.2)}
+
+/* Options */
+.g-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.g-opt{padding:13px 10px;border-radius:var(--r);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;font-size:14px;font-weight:700;transition:all .2s;font-family:'Cairo';color:var(--txt)}
+.g-opt:hover:not(.done){border-color:var(--gold);transform:translateY(-2px);background:rgba(240,180,41,.03)}
+.g-opt:active:not(.done){transform:scale(.96)}
+.g-opt.right{border-color:var(--lime);background:rgba(34,213,142,.1);color:var(--lime)}
+.g-opt.fail{border-color:var(--red);background:rgba(239,68,68,.06);color:var(--red);opacity:.5}
+.g-opt.done{cursor:default;opacity:.35}.g-opt.done.right{opacity:1}
+
+/* Answer reveal */
+.g-reveal{text-align:center;padding:10px;margin:8px 0;background:rgba(240,180,41,.04);border:1px solid rgba(240,180,41,.1);border-radius:var(--r);color:var(--gold);font-weight:700;font-size:14px;display:none}
+.g-reveal.show{display:block;animation:fadeIn .3s ease}
+
+/* Score pop */
+.sc-pop{position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);font-size:2.2em;font-weight:900;pointer-events:none;z-index:200;animation:scoreFloat 1s ease forwards}
+.sc-pop.a{color:var(--tA)}.sc-pop.b{color:var(--tB)}
 
 /* Flash */
-.flash{position:fixed;inset:0;pointer-events:none;z-index:50;animation:flashA .4s ease forwards}
-.flash.correct{background:rgba(34,213,142,.15)}.flash.wrong{background:rgba(239,68,68,.15)}
-@keyframes flashA{from{opacity:1}to{opacity:0}}
+.g-flash{position:fixed;inset:0;pointer-events:none;z-index:100;animation:flash .4s ease-out forwards}
+.g-flash.ok{background:rgba(34,213,142,.12)}.g-flash.no{background:rgba(239,68,68,.12)}
 
-@media(max-width:480px){.opts-grid{grid-template-columns:1fr}.guess-img{max-height:240px}}
+/* Result */
+.res{text-align:center;padding:clamp(24px,5vh,48px) 0}
+.res-icon{font-size:60px;margin-bottom:8px}
+.res-title{font-size:clamp(24px,5vw,34px);font-weight:900;margin-bottom:6px}
+.res-sub{font-size:14px;color:var(--dim);margin-bottom:16px}
+.res-acts{display:flex;gap:10px;justify-content:center;margin-top:20px}
+
+/* Toast */
+.g-toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);padding:10px 20px;background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);color:var(--txt);font-weight:600;font-size:13px;z-index:200;animation:toastIn .3s ease,toastOut .3s ease 2.7s forwards}
+
+@media(max-width:480px){.g-opts{grid-template-columns:1fr}.g-img{max-height:200px}.t-inputs{flex-direction:column}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<div class="header">
-  <div class="logo">🖼️ بازززز</div>
-  <a href="/" class="btn btn-o" style="font-size:12px">🏠 الرئيسية</a>
+<div class="gw">
+<div class="g-header">
+  <div class="g-logo">🖼️ بازززز</div>
+  <a href="/" class="btn btn-ghost" style="font-size:11px;padding:6px 12px">← الرئيسية</a>
 </div>
 
 <!-- ═══ Setup ═══ -->
 <div class="scr on" id="sc-setup">
-  <div class="setup-center">
-    <div class="setup-icon">🖼️</div>
-    <h1 style="font-size:28px;color:var(--gold)">من في الصورة؟</h1>
-    <p style="color:var(--dim);font-size:14px;margin:6px 0 16px">فريقين يتنافسان — ٣ جولات — ٥ نقاط لكل جولة</p>
+  <div class="setup-hero">
+    <div class="setup-hero-icon">🖼️</div>
+    <h1 style="font-size:clamp(24px,5vw,34px);color:var(--tA)">من في الصورة؟</h1>
+    <p style="color:var(--dim);font-size:13px;margin-top:4px">فريقين يتنافسان — تعرّف على العلم واربح النقاط!</p>
   </div>
-  <div class="card">
-    <div style="font-size:14px;font-weight:700;margin-bottom:8px">أسماء الفرق</div>
-    <div class="team-inputs">
+  <div class="setup-card">
+    <label style="font-size:13px;font-weight:700;color:var(--mid);margin-bottom:6px;display:block">أسماء الفرق</label>
+    <div class="t-inputs">
       <input id="t1-name" placeholder="🔵 الفريق الأول" value="الفريق الأزرق">
       <input id="t2-name" placeholder="🔴 الفريق الثاني" value="الفريق الأحمر">
     </div>
-    <button class="btn btn-g btn-lg" style="width:100%" onclick="startGame()">🚀 ابدأ اللعب</button>
+    <div class="rounds-select">
+      <label style="font-size:13px;font-weight:700;color:var(--mid);margin-bottom:6px;display:block">عدد الجولات</label>
+      <select id="rounds-count">
+        <option value="3" selected>3 جولات</option>
+        <option value="5">5 جولات</option>
+        <option value="7">7 جولات</option>
+        <option value="10">10 جولات</option>
+      </select>
+    </div>
+    <button class="btn btn-gold btn-lg w-full mt-8" onclick="startGame()">🚀 ابدأ اللعب</button>
   </div>
 </div>
 
 <!-- ═══ Game ═══ -->
 <div class="scr" id="sc-game">
-  <div class="scoreboard">
-    <div class="score-card ta"><div class="sc-name" id="g-t1n">الفريق أ</div><div class="sc-val" id="g-t1s">0</div></div>
-    <div class="score-card tb"><div class="sc-name" id="g-t2n">الفريق ب</div><div class="sc-val" id="g-t2s">0</div></div>
+  <div class="g-scores">
+    <div class="g-sc a"><div class="g-sc-name" id="g-t1n">أ</div><div class="g-sc-val" id="g-t1s">0</div></div>
+    <div class="g-sc b"><div class="g-sc-name" id="g-t2n">ب</div><div class="g-sc-val" id="g-t2s">0</div></div>
   </div>
-  <div class="round-info"><span class="round-badge" id="g-round">الجولة 1 / 3</span></div>
-  <div class="turn-indicator" id="g-turn">دور الفريق أ</div>
-  <div class="timer" id="g-timer">15</div>
-  <div class="timer-bar"><div class="timer-fill" id="g-bar" style="width:100%"></div></div>
-  <div class="img-card"><img class="guess-img" id="g-img" src="" alt="من هذا؟"></div>
-  <div class="opts-grid" id="g-opts"></div>
+  <div class="g-round"><span class="round-pill" id="g-round">الجولة 1 / 3</span></div>
+  <div class="g-turn a" id="g-turn">🎯 دور الفريق أ</div>
+  <div class="g-timer-num" id="g-timer">15</div>
+  <div class="g-timer-bar"><div class="g-timer-fill" id="g-bar" style="width:100%"></div></div>
+  <div class="g-img-wrap"><img class="g-img" id="g-img" src="" alt="❓"></div>
+  <div class="g-reveal" id="g-reveal"></div>
+  <div class="g-opts" id="g-opts"></div>
 </div>
 
 <!-- ═══ Round Result ═══ -->
 <div class="scr" id="sc-round">
-  <div class="result-center">
-    <div class="result-emoji" id="rr-emoji">✅</div>
-    <div class="result-title" id="rr-title">الفريق أ يفوز بالجولة!</div>
-    <p style="color:var(--dim);margin-bottom:20px" id="rr-sub">+5 نقاط</p>
-    <button class="btn btn-g btn-lg" onclick="nextRound()">الجولة التالية ←</button>
+  <div class="res">
+    <div class="res-icon" id="rr-icon">✅</div>
+    <div class="res-title" id="rr-title">الفريق أ يفوز!</div>
+    <div class="res-sub" id="rr-sub">+5 نقاط</div>
+    <div class="g-scores" style="max-width:300px;margin:16px auto">
+      <div class="g-sc a"><div class="g-sc-name" id="rr-t1n">أ</div><div class="g-sc-val" id="rr-t1s">0</div></div>
+      <div class="g-sc b"><div class="g-sc-name" id="rr-t2n">ب</div><div class="g-sc-val" id="rr-t2s">0</div></div>
+    </div>
+    <button class="btn btn-gold btn-lg" onclick="nextRound()" id="rr-btn">الجولة التالية ←</button>
   </div>
 </div>
 
 <!-- ═══ Final Result ═══ -->
 <div class="scr" id="sc-result">
-  <div class="result-center">
-    <div class="result-emoji" id="fr-emoji">🏆</div>
-    <div class="result-title" id="fr-title">النتيجة النهائية</div>
-    <div class="scoreboard" style="margin:20px 0">
-      <div class="score-card ta"><div class="sc-name" id="fr-t1n"></div><div class="sc-val" id="fr-t1s">0</div></div>
-      <div class="score-card tb"><div class="sc-name" id="fr-t2n"></div><div class="sc-val" id="fr-t2s">0</div></div>
+  <div class="res">
+    <div class="res-icon" id="fr-icon">🏆</div>
+    <div class="res-title" id="fr-title">النتيجة النهائية</div>
+    <div class="res-sub" id="fr-sub"></div>
+    <div class="g-scores" style="max-width:340px;margin:20px auto">
+      <div class="g-sc a"><div class="g-sc-name" id="fr-t1n">أ</div><div class="g-sc-val" id="fr-t1s">0</div></div>
+      <div class="g-sc b"><div class="g-sc-name" id="fr-t2n">ب</div><div class="g-sc-val" id="fr-t2s">0</div></div>
     </div>
-    <div style="display:flex;gap:10px;justify-content:center">
-      <button class="btn btn-g btn-lg" onclick="resetGame()">🔄 لعب مرة أخرى</button>
-      <a href="/" class="btn btn-o btn-lg">🏠 الرئيسية</a>
+    <div class="res-acts">
+      <button class="btn btn-gold btn-lg" onclick="resetGame()">🔄 مرة أخرى</button>
+      <a href="/" class="btn btn-ghost btn-lg">🏠 الرئيسية</a>
     </div>
   </div>
 </div>
 </div>
 
 <script>
-// ── Guess Who Question Bank ──
-// All images use flagcdn.com — 100% reliable, no rate limiting
 const F = "https://flagcdn.com/w320";
-const GUESS_BANK = [
-{img:F+"/sa.png",answer:"السعودية",opts:["الإمارات","السعودية","الكويت","قطر","البحرين","عُمان"]},
-{img:F+"/eg.png",answer:"مصر",opts:["العراق","سوريا","مصر","اليمن","الأردن","لبنان"]},
-{img:F+"/ae.png",answer:"الإمارات",opts:["السعودية","الإمارات","الكويت","قطر","البحرين","عُمان"]},
-{img:F+"/jp.png",answer:"اليابان",opts:["الصين","كوريا","اليابان","تايلاند","إندونيسيا","فيتنام"]},
-{img:F+"/br.png",answer:"البرازيل",opts:["الأرجنتين","البرازيل","المكسيك","كولومبيا","تشيلي","بيرو"]},
-{img:F+"/gb.png",answer:"بريطانيا",opts:["فرنسا","ألمانيا","بريطانيا","هولندا","النرويج","أيسلندا"]},
-{img:F+"/us.png",answer:"أمريكا",opts:["كندا","أمريكا","أستراليا","بريطانيا","فرنسا","ألمانيا"]},
-{img:F+"/tr.png",answer:"تركيا",opts:["تونس","تركيا","باكستان","أذربيجان","ماليزيا","الجزائر"]},
-{img:F+"/de.png",answer:"ألمانيا",opts:["بلجيكا","ألمانيا","فرنسا","هولندا","النمسا","سويسرا"]},
-{img:F+"/fr.png",answer:"فرنسا",opts:["إيطاليا","فرنسا","هولندا","رومانيا","بلجيكا","أيرلندا"]},
-{img:F+"/it.png",answer:"إيطاليا",opts:["المكسيك","إيطاليا","أيرلندا","المجر","فرنسا","رومانيا"]},
-{img:F+"/cn.png",answer:"الصين",opts:["فيتنام","الصين","تركيا","المغرب","تونس","كوريا"]},
-{img:F+"/kr.png",answer:"كوريا الجنوبية",opts:["اليابان","كوريا الجنوبية","تايوان","الصين","فيتنام","تايلاند"]},
-{img:F+"/in.png",answer:"الهند",opts:["باكستان","الهند","بنغلاديش","سريلانكا","نيبال","إيران"]},
-{img:F+"/ca.png",answer:"كندا",opts:["أمريكا","كندا","أستراليا","بريطانيا","نيوزيلندا","الدنمارك"]},
-{img:F+"/mx.png",answer:"المكسيك",opts:["إيطاليا","المكسيك","الهند","المجر","أيرلندا","البيرو"]},
-{img:F+"/ar.png",answer:"الأرجنتين",opts:["أوروغواي","الأرجنتين","اليونان","السلفادور","نيكاراغوا","هندوراس"]},
-{img:F+"/au.png",answer:"أستراليا",opts:["نيوزيلندا","أستراليا","بريطانيا","فيجي","أمريكا","كندا"]},
-{img:F+"/ru.png",answer:"روسيا",opts:["فرنسا","روسيا","هولندا","لوكسمبورغ","صربيا","سلوفاكيا"]},
-{img:F+"/za.png",answer:"جنوب أفريقيا",opts:["كينيا","جنوب أفريقيا","غانا","نيجيريا","تنزانيا","إثيوبيا"]},
-{img:F+"/ng.png",answer:"نيجيريا",opts:["غانا","نيجيريا","الكاميرون","ساحل العاج","السنغال","مالي"]},
-{img:F+"/ma.png",answer:"المغرب",opts:["تونس","المغرب","تركيا","الجزائر","ليبيا","موريتانيا"]},
-{img:F+"/pk.png",answer:"باكستان",opts:["تركيا","باكستان","الجزائر","ماليزيا","موريتانيا","تونس"]},
-{img:F+"/se.png",answer:"السويد",opts:["الدنمارك","السويد","فنلندا","النرويج","أيسلندا","سويسرا"]},
-{img:F+"/no.png",answer:"النرويج",opts:["أيسلندا","النرويج","الدنمارك","فنلندا","السويد","بريطانيا"]},
-{img:F+"/gr.png",answer:"اليونان",opts:["الأرجنتين","اليونان","أوروغواي","فنلندا","إسرائيل","السلفادور"]},
-{img:F+"/pt.png",answer:"البرتغال",opts:["إسبانيا","البرتغال","إيطاليا","البرازيل","المكسيك","فرنسا"]},
-{img:F+"/es.png",answer:"إسبانيا",opts:["البرتغال","إسبانيا","إيطاليا","المكسيك","كولومبيا","الأرجنتين"]},
-{img:F+"/np.png",answer:"نيبال",opts:["الهند","نيبال","بوتان","سريلانكا","بنغلاديش","ميانمار"]},
-{img:F+"/kz.png",answer:"كازاخستان",opts:["أوزبكستان","كازاخستان","تركمانستان","قيرغيزستان","منغوليا","طاجيكستان"]},
+const BANK = [
+{img:F+"/sa.png",a:"السعودية",opts:["الإمارات","السعودية","الكويت","قطر","البحرين","عُمان"]},
+{img:F+"/eg.png",a:"مصر",opts:["العراق","سوريا","مصر","اليمن","الأردن","لبنان"]},
+{img:F+"/ae.png",a:"الإمارات",opts:["السعودية","الإمارات","الكويت","قطر","البحرين","عُمان"]},
+{img:F+"/jp.png",a:"اليابان",opts:["الصين","كوريا","اليابان","تايلاند","إندونيسيا","فيتنام"]},
+{img:F+"/br.png",a:"البرازيل",opts:["الأرجنتين","البرازيل","المكسيك","كولومبيا","تشيلي","بيرو"]},
+{img:F+"/gb.png",a:"بريطانيا",opts:["فرنسا","ألمانيا","بريطانيا","هولندا","النرويج","أيسلندا"]},
+{img:F+"/us.png",a:"أمريكا",opts:["كندا","أمريكا","أستراليا","بريطانيا","فرنسا","ألمانيا"]},
+{img:F+"/tr.png",a:"تركيا",opts:["تونس","تركيا","باكستان","أذربيجان","ماليزيا","الجزائر"]},
+{img:F+"/de.png",a:"ألمانيا",opts:["بلجيكا","ألمانيا","فرنسا","هولندا","النمسا","سويسرا"]},
+{img:F+"/fr.png",a:"فرنسا",opts:["إيطاليا","فرنسا","هولندا","رومانيا","بلجيكا","أيرلندا"]},
+{img:F+"/it.png",a:"إيطاليا",opts:["المكسيك","إيطاليا","أيرلندا","المجر","فرنسا","رومانيا"]},
+{img:F+"/cn.png",a:"الصين",opts:["فيتنام","الصين","تركيا","المغرب","تونس","كوريا"]},
+{img:F+"/kr.png",a:"كوريا الجنوبية",opts:["اليابان","كوريا الجنوبية","تايوان","الصين","فيتنام","تايلاند"]},
+{img:F+"/in.png",a:"الهند",opts:["باكستان","الهند","بنغلاديش","سريلانكا","نيبال","إيران"]},
+{img:F+"/ca.png",a:"كندا",opts:["أمريكا","كندا","أستراليا","بريطانيا","نيوزيلندا","الدنمارك"]},
+{img:F+"/mx.png",a:"المكسيك",opts:["إيطاليا","المكسيك","الهند","المجر","أيرلندا","البيرو"]},
+{img:F+"/ar.png",a:"الأرجنتين",opts:["أوروغواي","الأرجنتين","اليونان","السلفادور","نيكاراغوا","هندوراس"]},
+{img:F+"/au.png",a:"أستراليا",opts:["نيوزيلندا","أستراليا","بريطانيا","فيجي","أمريكا","كندا"]},
+{img:F+"/ru.png",a:"روسيا",opts:["فرنسا","روسيا","هولندا","لوكسمبورغ","صربيا","سلوفاكيا"]},
+{img:F+"/za.png",a:"جنوب أفريقيا",opts:["كينيا","جنوب أفريقيا","غانا","نيجيريا","تنزانيا","إثيوبيا"]},
+{img:F+"/ng.png",a:"نيجيريا",opts:["غانا","نيجيريا","الكاميرون","ساحل العاج","السنغال","مالي"]},
+{img:F+"/ma.png",a:"المغرب",opts:["تونس","المغرب","تركيا","الجزائر","ليبيا","موريتانيا"]},
+{img:F+"/pk.png",a:"باكستان",opts:["تركيا","باكستان","الجزائر","ماليزيا","موريتانيا","تونس"]},
+{img:F+"/se.png",a:"السويد",opts:["الدنمارك","السويد","فنلندا","النرويج","أيسلندا","سويسرا"]},
+{img:F+"/no.png",a:"النرويج",opts:["أيسلندا","النرويج","الدنمارك","فنلندا","السويد","بريطانيا"]},
+{img:F+"/gr.png",a:"اليونان",opts:["الأرجنتين","اليونان","أوروغواي","فنلندا","قبرص","السلفادور"]},
+{img:F+"/pt.png",a:"البرتغال",opts:["إسبانيا","البرتغال","إيطاليا","البرازيل","المكسيك","فرنسا"]},
+{img:F+"/es.png",a:"إسبانيا",opts:["البرتغال","إسبانيا","إيطاليا","المكسيك","كولومبيا","الأرجنتين"]},
+{img:F+"/np.png",a:"نيبال",opts:["الهند","نيبال","بوتان","سريلانكا","بنغلاديش","ميانمار"]},
+{img:F+"/kz.png",a:"كازاخستان",opts:["أوزبكستان","كازاخستان","تركمانستان","قيرغيزستان","منغوليا","طاجيكستان"]},
 ];
 
 // ── Audio ──
-const AC=window.AudioContext||window.webkitAudioContext;let actx;
-function snd(f,d,t,v=.15){if(!actx)actx=new AC();const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(v,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d);o.start();o.stop(actx.currentTime+d);}
-function sndOk(){snd(523,.1);setTimeout(()=>snd(659,.1),100);setTimeout(()=>snd(784,.15),200);}
-function sndNo(){snd(200,.15,'sawtooth',.12);setTimeout(()=>snd(150,.2,'sawtooth',.12),150);}
+const AC = window.AudioContext || window.webkitAudioContext; let actx;
+function tone(f,d,t,v) { try { if(!actx) actx = new AC(); const o=actx.createOscillator(),g=actx.createGain(); o.connect(g);g.connect(actx.destination); o.type=t||'sine';o.frequency.value=f; g.gain.setValueAtTime(v||.12,actx.currentTime); g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d); o.start();o.stop(actx.currentTime+d); } catch(e){} }
+function sndOk() { tone(523,.1);setTimeout(()=>tone(659,.1),100);setTimeout(()=>tone(784,.15),200); }
+function sndNo() { tone(200,.15,'sawtooth');setTimeout(()=>tone(150,.2,'sawtooth'),150); }
+function sndTick() { tone(800,.05,'sine',.08); }
+
+// ── Helpers ──
+const $ = id => document.getElementById(id);
+function shuffle(a) { const b=[...a]; for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; }
+function go(id) { document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on')); $(id).classList.add('on'); window.scrollTo({top:0,behavior:'smooth'}); }
+function doFlash(ok) { const e=document.createElement('div');e.className='g-flash '+(ok?'ok':'no');document.body.appendChild(e);e.addEventListener('animationend',()=>e.remove()); }
+function scorePop(team,pts) { const e=document.createElement('div');e.className='sc-pop '+(team===1?'a':'b');e.textContent='+'+pts;document.body.appendChild(e);setTimeout(()=>e.remove(),1100); }
+function toast(m) { const e=document.createElement('div');e.className='g-toast';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),3200); }
 
 // ── State ──
-let t1={name:"",score:0},t2={name:"",score:0};
-let round=0,maxRounds=3,pointsPerRound=5;
-let currentTurn=1,questions=[],qi=0,tmr,tl=15,answered=false;
+let t1={name:"",score:0}, t2={name:"",score:0};
+let round=0, maxRounds=3, pts=5;
+let turn=1, questions=[], tmr=null, tl=15, locked=false;
 
-function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
-const $=id=>document.getElementById(id);
-function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');}
-function flash(type){const el=document.createElement('div');el.className='flash '+type;document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove());}
-
-function startGame(){
-  t1.name=$("t1-name").value.trim()||"الفريق الأزرق";
-  t2.name=$("t2-name").value.trim()||"الفريق الأحمر";
-  t1.score=0;t2.score=0;round=0;qi=0;currentTurn=1;
-  questions=shuffle(GUESS_BANK).slice(0,maxRounds);
-  go('sc-game');showQuestion();
+// ── Game Start ──
+function startGame() {
+  t1.name = $("t1-name").value.trim() || "الفريق الأزرق";
+  t2.name = $("t2-name").value.trim() || "الفريق الأحمر";
+  maxRounds = parseInt($("rounds-count").value) || 3;
+  t1.score = 0; t2.score = 0; round = 0; turn = 1;
+  questions = shuffle(BANK).slice(0, maxRounds);
+  if (questions.length < maxRounds) { toast("⚠️ لا توجد أسئلة كافية"); return; }
+  go('sc-game');
+  preloadAndShow();
 }
 
-function showQuestion(){
-  if(round>=maxRounds){showFinalResult();return;}
-  answered=false;
-  const q=questions[round];
-  $("g-t1n").textContent=t1.name;$("g-t2n").textContent=t2.name;
-  $("g-t1s").textContent=t1.score;$("g-t2s").textContent=t2.score;
-  $("g-round").textContent=`الجولة ${round+1} / ${maxRounds}`;
-  const team=currentTurn===1?t1:t2;
-  $("g-turn").className="turn-indicator "+(currentTurn===1?"ta":"tb");
-  $("g-turn").textContent=`🎯 دور ${team.name}`;
-  const img=$("g-img");img.classList.remove("reveal");
-  img.onerror=()=>{setTimeout(()=>{img.src="";img.src=q.img;},800);};
-  img.src=q.img;
+// ── Preload image then show question ──
+function preloadAndShow() {
+  if (round >= maxRounds) { showFinal(); return; }
+  locked = false;
+  const q = questions[round];
 
-  // Shuffle 6 options
-  const shuffled=shuffle(q.opts);
-  $("g-opts").innerHTML=shuffled.map((o,i)=>`<button class="opt" onclick="pick(${i},'${o.replace(/'/g,"\\'")}')">${o}</button>`).join("");
+  // Update UI
+  $("g-t1n").textContent = t1.name; $("g-t2n").textContent = t2.name;
+  $("g-t1s").textContent = t1.score; $("g-t2s").textContent = t2.score;
+  $("g-round").textContent = `الجولة ${round+1} / ${maxRounds}`;
+  const team = turn === 1 ? t1 : t2;
+  $("g-turn").className = "g-turn " + (turn===1?"a":"b");
+  $("g-turn").textContent = `🎯 دور ${team.name}`;
+  $("g-reveal").classList.remove("show"); $("g-reveal").textContent = "";
 
-  tl=15;startTimer();
+  // Preload image
+  const img = $("g-img");
+  img.classList.remove("correct-glow");
+  img.src = "";
+  img.alt = "⏳ جاري التحميل...";
+
+  const preload = new Image();
+  preload.onload = () => {
+    img.src = q.img;
+    img.alt = "❓ من هذا؟";
+    buildOptions(q);
+    startTimer();
+  };
+  preload.onerror = () => {
+    // Retry once
+    setTimeout(() => {
+      img.src = q.img;
+      img.alt = "❓";
+      buildOptions(q);
+      startTimer();
+    }, 500);
+  };
+  preload.src = q.img;
 }
 
-function startTimer(){
-  $("g-timer").textContent=tl;$("g-bar").style.width="100%";
-  $("g-timer").classList.remove("danger");$("g-bar").classList.remove("warn","danger");
+// ── Build Options (safe — no inline onclick with strings) ──
+function buildOptions(q) {
+  const shuffled = shuffle(q.opts);
+  const grid = $("g-opts");
+  grid.innerHTML = '';
+  shuffled.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'g-opt';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => pickAnswer(opt, btn, q));
+    grid.appendChild(btn);
+  });
+}
+
+// ── Timer ──
+function startTimer() {
   clearInterval(tmr);
-  tmr=setInterval(()=>{
-    tl--;$("g-timer").textContent=tl;$("g-bar").style.width=(tl/15*100)+"%";
-    if(tl<=5){$("g-timer").classList.add("danger");$("g-bar").classList.add("danger");}
-    else if(tl<=8)$("g-bar").classList.add("warn");
-    if(tl<=0){clearInterval(tmr);timeUp();}
-  },1000);
+  tl = 15;
+  $("g-timer").textContent = tl;
+  $("g-bar").style.width = "100%";
+  $("g-timer").classList.remove("warn","danger");
+  $("g-bar").classList.remove("warn","danger");
+
+  tmr = setInterval(() => {
+    tl--;
+    $("g-timer").textContent = tl;
+    $("g-bar").style.width = (tl/15*100) + "%";
+
+    $("g-timer").classList.remove("warn","danger");
+    $("g-bar").classList.remove("warn","danger");
+    if (tl <= 3) {
+      $("g-timer").classList.add("danger"); $("g-bar").classList.add("danger");
+      if (tl > 0) sndTick();
+    } else if (tl <= 7) {
+      $("g-timer").classList.add("warn"); $("g-bar").classList.add("warn");
+    }
+
+    if (tl <= 0) {
+      clearInterval(tmr); tmr = null;
+      handleTimeUp();
+    }
+  }, 1000);
 }
 
-function timeUp(){
-  if(answered)return;
-  // Switch to other team
-  if(currentTurn===1){currentTurn=2;showQuestion();}
-  else{answered=true;showRoundResult(null);}
+function stopTimer() {
+  clearInterval(tmr); tmr = null;
 }
 
-function pick(idx,name){
-  if(answered)return;answered=true;clearInterval(tmr);
-  const q=questions[round];
-  const btns=document.querySelectorAll('.opt');btns.forEach(b=>b.classList.add('dis'));
+// ── Time Up ──
+function handleTimeUp() {
+  if (locked) return;
 
-  if(name===q.answer){
-    btns[idx].classList.add('correct');$("g-img").classList.add("reveal");
-    const team=currentTurn===1?t1:t2;team.score+=pointsPerRound;
-    $("g-t1s").textContent=t1.score;$("g-t2s").textContent=t2.score;
-    flash('correct');sndOk();
-    setTimeout(()=>showRoundResult(currentTurn),1200);
-  }else{
-    btns[idx].classList.add('wrong');
+  if (turn === 1) {
+    // Team 1 ran out — give team 2 a chance
+    turn = 2;
+    toast("⏰ انتهى الوقت — دور " + t2.name + "!");
+    preloadAndShow();
+  } else {
+    // Both teams failed
+    locked = true;
+    const q = questions[round];
+    revealAnswer(q);
+    sndNo();
+    setTimeout(() => showRoundResult(null), 1500);
+  }
+}
+
+// ── Pick Answer ──
+function pickAnswer(name, btn, q) {
+  if (locked) return;
+  locked = true;
+  stopTimer();
+
+  const btns = document.querySelectorAll('.g-opt');
+  btns.forEach(b => b.classList.add('done'));
+
+  if (name === q.a) {
+    // Correct!
+    btn.classList.add('right');
+    $("g-img").classList.add("correct-glow");
+    const team = turn === 1 ? t1 : t2;
+    team.score += pts;
+    $("g-t1s").textContent = t1.score; $("g-t2s").textContent = t2.score;
+    doFlash(true); sndOk(); scorePop(turn, pts);
+    revealAnswer(q);
+    setTimeout(() => showRoundResult(turn), 1500);
+  } else {
+    // Wrong
+    btn.classList.add('fail');
     // Highlight correct
-    btns.forEach(b=>{if(b.textContent===q.answer)b.classList.add('correct');});
-    flash('wrong');sndNo();
-    if(currentTurn===1){
-      // Give other team a chance
-      setTimeout(()=>{answered=false;currentTurn=2;showQuestion();},1500);
-    }else{
-      setTimeout(()=>showRoundResult(null),1500);
+    btns.forEach(b => { if (b.textContent === q.a) b.classList.add('right'); });
+    doFlash(false); sndNo();
+
+    if (turn === 1) {
+      // Give team 2 a chance
+      toast("❌ خطأ — دور " + t2.name + "!");
+      setTimeout(() => { locked = false; turn = 2; preloadAndShow(); }, 1500);
+    } else {
+      // Both teams failed
+      revealAnswer(q);
+      setTimeout(() => showRoundResult(null), 1500);
     }
   }
 }
 
-function showRoundResult(winner){
-  if(winner){
-    const team=winner===1?t1:t2;
-    $("rr-emoji").textContent="✅";
-    $("rr-title").textContent=team.name+" يفوز بالجولة!";
-    $("rr-title").className="result-title "+(winner===1?"ta":"tb");
-    $("rr-sub").textContent="+"+pointsPerRound+" نقاط";
-  }else{
-    $("rr-emoji").textContent="⏰";
-    $("rr-title").textContent="لم يجب أحد!";
-    $("rr-title").className="result-title tie";
-    $("rr-sub").textContent="لا نقاط لأي فريق";
+// ── Reveal Answer ──
+function revealAnswer(q) {
+  const reveal = $("g-reveal");
+  reveal.textContent = "✅ الإجابة الصحيحة: " + q.a;
+  reveal.classList.add("show");
+  // Highlight correct option
+  document.querySelectorAll('.g-opt').forEach(b => {
+    b.classList.add('done');
+    if (b.textContent === q.a) b.classList.add('right');
+  });
+}
+
+// ── Round Result ──
+function showRoundResult(winner) {
+  stopTimer();
+  $("rr-t1n").textContent = t1.name; $("rr-t2n").textContent = t2.name;
+  $("rr-t1s").textContent = t1.score; $("rr-t2s").textContent = t2.score;
+
+  if (winner) {
+    const team = winner === 1 ? t1 : t2;
+    $("rr-icon").textContent = winner === 1 ? "🔵✅" : "🔴✅";
+    $("rr-title").textContent = team.name + " يفوز بالجولة!";
+    $("rr-title").style.color = winner === 1 ? "var(--tA)" : "var(--tB)";
+    $("rr-sub").textContent = "+" + pts + " نقاط";
+  } else {
+    $("rr-icon").textContent = "⏰";
+    $("rr-title").textContent = "لم يجب أحد بشكل صحيح!";
+    $("rr-title").style.color = "var(--gold)";
+    $("rr-sub").textContent = "لا نقاط لأي فريق";
   }
+
+  $("rr-btn").textContent = (round + 1 >= maxRounds) ? "النتائج 🏆" : "الجولة التالية ←";
   go('sc-round');
 }
 
-function nextRound(){
-  round++;currentTurn=(round%2===0)?1:2;
-  if(round>=maxRounds){showFinalResult();return;}
-  go('sc-game');showQuestion();
+// ── Next Round ──
+function nextRound() {
+  round++;
+  turn = (round % 2 === 0) ? 1 : 2; // Alternate starting team
+  if (round >= maxRounds) { showFinal(); return; }
+  go('sc-game');
+  preloadAndShow();
 }
 
-function showFinalResult(){
-  $("fr-t1n").textContent=t1.name;$("fr-t2n").textContent=t2.name;
-  $("fr-t1s").textContent=t1.score;$("fr-t2s").textContent=t2.score;
-  if(t1.score>t2.score){$("fr-emoji").textContent="🏆🔵";$("fr-title").textContent=t1.name+" الأبطال!";$("fr-title").className="result-title ta";}
-  else if(t2.score>t1.score){$("fr-emoji").textContent="🏆🔴";$("fr-title").textContent=t2.name+" الأبطال!";$("fr-title").className="result-title tb";}
-  else{$("fr-emoji").textContent="🤝";$("fr-title").textContent="تعادل!";$("fr-title").className="result-title tie";}
+// ── Final Result ──
+function showFinal() {
+  stopTimer();
+  $("fr-t1n").textContent = t1.name; $("fr-t2n").textContent = t2.name;
+  $("fr-t1s").textContent = t1.score; $("fr-t2s").textContent = t2.score;
+
+  if (t1.score > t2.score) {
+    $("fr-icon").textContent = "🏆🔵";
+    $("fr-title").textContent = t1.name + " الأبطال!";
+    $("fr-title").style.color = "var(--tA)";
+    $("fr-sub").textContent = `${t1.score} — ${t2.score}`;
+  } else if (t2.score > t1.score) {
+    $("fr-icon").textContent = "🏆🔴";
+    $("fr-title").textContent = t2.name + " الأبطال!";
+    $("fr-title").style.color = "var(--tB)";
+    $("fr-sub").textContent = `${t1.score} — ${t2.score}`;
+  } else {
+    $("fr-icon").textContent = "🤝";
+    $("fr-title").textContent = "تعادل!";
+    $("fr-title").style.color = "var(--gold)";
+    $("fr-sub").textContent = `${t1.score} — ${t2.score}`;
+  }
   go('sc-result');
 }
 
-function resetGame(){t1.score=0;t2.score=0;round=0;go('sc-setup');}
+function resetGame() { t1.score=0; t2.score=0; round=0; stopTimer(); go('sc-setup'); }
 </script>
 </body>
 </html>
