@@ -1,16 +1,4 @@
-/* ═══ بازر — Complete Design System + Eid Al-Fitr Theme ═══ */
-
-/* ── Eid Al-Fitr Banner ── */
-.eid-banner{text-align:center;padding:20px 16px;margin:-4px -16px 16px;
-background:linear-gradient(135deg,rgba(240,180,41,.08),rgba(139,92,246,.06),rgba(34,213,142,.05));
-border:1.5px solid rgba(240,180,41,.15);border-radius:var(--rl);position:relative;overflow:hidden;animation:fadeIn .6s ease}
-.eid-banner::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 L35 20 L30 15 L25 20Z' fill='rgba(240,180,41,0.04)'/%3E%3C/svg%3E") repeat;pointer-events:none}
-.eid-decorations{font-size:22px;letter-spacing:8px;margin-bottom:6px;animation:eidSparkle 2s ease-in-out infinite}
-.eid-msg{font-size:clamp(18px,4vw,28px);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--glt),#fff,var(--glt),var(--gold));
-background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:eidShimmer 3s linear infinite;line-height:1.6}
-.eid-sub{font-size:clamp(12px,2.5vw,16px);color:var(--mid);font-weight:600;margin-top:2px}
-@keyframes eidSparkle{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-@keyframes eidShimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+/* ═══ Bazzzzz — Complete Design System ═══ */
 
 :root {
   --bg:#060610;--s1:#0d0d24;--s2:#13133a;--s3:#1c1c52;--s4:#252566;

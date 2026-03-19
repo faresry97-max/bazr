@@ -3,46 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>بازر — منصة المسابقات</title>
+<title>Bazzzzz — منصة المسابقات</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <style>
-.games-section{margin:24px 0 16px}
-.games-label{text-align:center;font-size:13px;font-weight:700;color:var(--dim);margin-bottom:12px;letter-spacing:.5px}
+/* ── Animated Background ── */
+.bg-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none}
+
+/* ── Saudi Identity ── */
+.saudi-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 12px;
+background:linear-gradient(90deg,rgba(0,100,60,.15),rgba(0,100,60,.05));border-bottom:1px solid rgba(0,100,60,.12);font-size:11px;color:rgba(0,200,83,.7);font-weight:600}
+
+/* ── Eid Banner ── */
+.eid-banner{text-align:center;padding:18px 16px;margin:0 0 12px;
+background:linear-gradient(135deg,rgba(240,180,41,.07),rgba(139,92,246,.05),rgba(34,213,142,.04));
+border:1.5px solid rgba(240,180,41,.12);border-radius:var(--rl);overflow:hidden;animation:fadeIn .6s ease}
+.eid-deco{font-size:20px;letter-spacing:6px;margin-bottom:4px;animation:eidSparkle 2s ease-in-out infinite}
+.eid-msg{font-size:clamp(16px,3.5vw,24px);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--glt),#fff,var(--glt),var(--gold));
+background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:eidShimmer 3s linear infinite}
+.eid-sub{font-size:clamp(11px,2vw,14px);color:var(--mid);font-weight:600;margin-top:2px}
+@keyframes eidSparkle{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes eidShimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+
+/* ── Hero ── */
+.hero-logo{font-size:clamp(36px,8vw,64px);font-weight:900;letter-spacing:3px;
+background:linear-gradient(135deg,#00c853,var(--gold),var(--glt));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:2px}
+.hero-tagline{color:var(--dim);font-size:13px;display:flex;align-items:center;gap:6px;justify-content:center}
+.sa-flag{font-size:16px}
+
+/* ── Game Modes ── */
+.games-section{margin:20px 0 12px}
+.games-label{text-align:center;font-size:12px;font-weight:700;color:var(--dim);margin-bottom:10px;letter-spacing:.5px}
 .game-modes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.game-mode{padding:28px 16px;border-radius:var(--rl);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.game-mode{padding:24px 14px;border-radius:var(--rl);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .3s;position:relative;overflow:hidden}
 .game-mode::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none}
-.game-mode:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.game-mode:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .game-mode.selected{border-width:2px}
-.game-mode.gm-buzzer.selected{border-color:var(--gold)}.game-mode.gm-buzzer.selected::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(240,180,41,.08),transparent 70%)}
-.game-mode.gm-buzzer:hover{border-color:rgba(240,180,41,.5)}
-.game-mode.gm-qa.selected{border-color:var(--purple)}.game-mode.gm-qa.selected::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(139,92,246,.08),transparent 70%)}
-.game-mode.gm-qa:hover{border-color:rgba(139,92,246,.5)}
-.gm-icon{font-size:44px;margin-bottom:6px;position:relative;filter:drop-shadow(0 4px 12px rgba(0,0,0,.3))}
-.gm-name{font-size:20px;font-weight:900;position:relative;margin-bottom:2px}
-.gm-sub{font-size:11px;color:var(--dim);line-height:1.7;position:relative;margin-bottom:10px}
-.gm-tag{display:inline-block;padding:4px 12px;border-radius:12px;font-size:10px;font-weight:800;position:relative;letter-spacing:.3px}
-.gm-buzzer .gm-name{color:var(--gold)}.gm-buzzer .gm-tag{background:rgba(240,180,41,.1);color:var(--gold);border:1px solid rgba(240,180,41,.18)}
-.gm-qa .gm-name{color:var(--purple)}.gm-qa .gm-tag{background:rgba(139,92,246,.1);color:var(--purple);border:1px solid rgba(139,92,246,.18)}
+.game-mode.gm-buzzer.selected{border-color:var(--gold)}.game-mode.gm-buzzer.selected::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(240,180,41,.07),transparent 70%)}
+.game-mode.gm-buzzer:hover{border-color:rgba(240,180,41,.4)}
+.game-mode.gm-qa.selected{border-color:var(--purple)}.game-mode.gm-qa.selected::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(139,92,246,.07),transparent 70%)}
+.game-mode.gm-qa:hover{border-color:rgba(139,92,246,.4)}
+.gm-icon{font-size:40px;margin-bottom:6px;position:relative}
+.gm-name{font-size:18px;font-weight:900;position:relative;margin-bottom:2px}
+.gm-sub{font-size:10px;color:var(--dim);line-height:1.7;position:relative;margin-bottom:8px}
+.gm-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:9px;font-weight:800;position:relative}
+.gm-buzzer .gm-name{color:var(--gold)}.gm-buzzer .gm-tag{background:rgba(240,180,41,.08);color:var(--gold);border:1px solid rgba(240,180,41,.15)}
+.gm-qa .gm-name{color:var(--purple)}.gm-qa .gm-tag{background:rgba(139,92,246,.08);color:var(--purple);border:1px solid rgba(139,92,246,.15)}
 
-.sub-opts{display:flex;gap:8px;margin-top:14px}
-.sub-opt{flex:1;padding:14px 10px;border-radius:var(--r);border:1.5px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .2s}
-.sub-opt:hover{border-color:rgba(240,180,41,.3);transform:translateY(-1px)}
-.sub-opt.active{border-color:var(--gold);background:rgba(240,180,41,.05)}
-.sub-opt .so-icon{font-size:22px;margin-bottom:2px}
-.sub-opt .so-title{font-size:13px;font-weight:700}
+.sub-opts{display:flex;gap:8px;margin-top:12px}
+.sub-opt{flex:1;padding:12px 8px;border-radius:var(--r);border:1.5px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .2s}
+.sub-opt:hover{border-color:rgba(240,180,41,.25)}
+.sub-opt.active{border-color:var(--gold);background:rgba(240,180,41,.04)}
+.sub-opt .so-icon{font-size:20px;margin-bottom:2px}.sub-opt .so-title{font-size:12px;font-weight:700}
 
-.qa-features{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 16px}
-.qa-feat{padding:4px 12px;border-radius:12px;font-size:10px;font-weight:700}
+.qa-features{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:10px 0 14px}
+.qa-feat{padding:3px 10px;border-radius:10px;font-size:9px;font-weight:700}
 
-.divider{display:flex;align-items:center;gap:12px;margin:24px 0 12px}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--s3)}
-.divider span{font-size:11px;color:var(--dim);font-weight:600}
+.footer{text-align:center;padding:20px 0 24px;font-size:11px;color:var(--dim)}
+.footer a{color:var(--dim);text-decoration:none;opacity:.3;transition:opacity .2s}
+.footer a:hover{opacity:1}
 
-@media(max-width:480px){.game-modes{grid-template-columns:1fr 1fr}.sub-opts{flex-direction:column}}
+@media(max-width:480px){.sub-opts{flex-direction:column}.saudi-bar{font-size:10px}}
 </style>
 </head>
 <body>
+<canvas class="bg-canvas" id="bgCanvas"></canvas>
+
+<!-- Saudi Identity Bar -->
+<div class="saudi-bar">
+  <span class="sa-flag">🇸🇦</span>
+  <span>صُنع في المملكة العربية السعودية</span>
+  <span class="sa-flag">🇸🇦</span>
+</div>
+
+<!-- Global Stats -->
 <div class="global-bar">
   <div class="global-stat"><span class="g-dot"></span> <span id="g-online">0</span> أونلاين</div>
   <div class="global-stat">🏠 <span id="g-rooms">0</span> غرفة</div>
@@ -51,16 +86,16 @@
 <div class="container">
   <!-- Eid Banner -->
   <div class="eid-banner">
-    <div class="eid-decorations">🌙✨🕌✨🌙</div>
+    <div class="eid-deco">🌙✨🕌✨🌙</div>
     <div class="eid-msg">كل عام وانتم بخير</div>
     <div class="eid-sub">تقبل الله منا ومنكم صالح الأعمال</div>
-    <div class="eid-decorations" style="font-size:16px;margin-top:6px">🎉🌟🎊🌟🎉</div>
   </div>
 
-  <div class="hero">
-    <div class="hero-icon">🎮</div>
-    <h1>بازر</h1>
-    <p class="hero-sub">منصة المسابقات — اختر وضع اللعب!</p>
+  <!-- Hero -->
+  <div class="hero" style="padding:20px 0 12px">
+    <div style="font-size:52px;margin-bottom:4px">🔔</div>
+    <div class="hero-logo">Bazzzzz</div>
+    <div class="hero-tagline"><span class="sa-flag">🇸🇦</span> منصة مسابقات سعودية <span class="sa-flag">🇸🇦</span></div>
   </div>
 
   <!-- Game Modes -->
@@ -70,56 +105,40 @@
       <div class="game-mode gm-buzzer selected" id="gm-buzzer" onclick="selectGame('buzzer')">
         <div class="gm-icon">🔔</div>
         <div class="gm-name">وضع الجرس</div>
-        <div class="gm-sub">اضغط الجرس أولاً<br>واكتب الإجابة قبل الوقت</div>
+        <div class="gm-sub">اضغط الجرس أولاً واكتب الإجابة</div>
         <div class="gm-tag">👥 أونلاين مباشر</div>
       </div>
       <div class="game-mode gm-qa" id="gm-qa" onclick="selectGame('qa')">
         <div class="gm-icon">❓</div>
         <div class="gm-name">سؤال وجواب</div>
-        <div class="gm-sub">اختيار من متعدد<br>قدرات خاصة وإنجازات</div>
-        <div class="gm-tag">⚡ تنافسية محلية</div>
+        <div class="gm-sub">اختيار من متعدد مع قدرات خاصة</div>
+        <div class="gm-tag">⚡ تنافسية</div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Buzzer Mode Panel ═══ -->
+  <!-- Buzzer Panel -->
   <div id="buzzer-panel">
     <div class="sub-opts">
-      <div class="sub-opt active" id="so-host" onclick="selectSub('host')">
-        <div class="so-icon">🎙️</div><div class="so-title">أنشئ غرفة</div>
-      </div>
-      <div class="sub-opt" id="so-join" onclick="selectSub('join')">
-        <div class="so-icon">🏃</div><div class="so-title">انضم للعبة</div>
-      </div>
-      <div class="sub-opt" id="so-lb" onclick="selectSub('lb')">
-        <div class="so-icon">🏆</div><div class="so-title">المتصدّرين</div>
-      </div>
+      <div class="sub-opt active" id="so-host" onclick="selectSub('host')"><div class="so-icon">🎙️</div><div class="so-title">أنشئ غرفة</div></div>
+      <div class="sub-opt" id="so-join" onclick="selectSub('join')"><div class="so-icon">🏃</div><div class="so-title">انضم</div></div>
+      <div class="sub-opt" id="so-lb" onclick="selectSub('lb')"><div class="so-icon">🏆</div><div class="so-title">المتصدّرين</div></div>
     </div>
-
     <div id="host-form" class="card mt-16 hidden">
       <h2>🎮 إنشاء غرفة</h2>
       <div class="form-group"><label>📂 التصنيفات</label><div class="cat-grid" id="cat-grid"></div></div>
-      <div class="form-group"><label>🔢 عدد الأسئلة</label>
-        <select id="host-qcount"><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option><option value="50">50</option></select>
-      </div>
+      <div class="form-group"><label>🔢 عدد الأسئلة</label><select id="host-qcount"><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option><option value="50">50</option></select></div>
       <button class="btn btn-gold btn-lg w-full" onclick="createRoom()">🚀 أنشئ الغرفة</button>
       <div class="error-msg" id="host-error"></div>
     </div>
-
     <div id="join-form" class="card mt-16 hidden">
       <h2>🏃 انضم للعبة</h2>
       <div class="form-group"><label>كود الغرفة</label><input type="text" id="join-code" placeholder="أدخل الكود (٦ أرقام)" maxlength="6" inputmode="numeric" autocomplete="off"></div>
       <div class="form-group"><label>اسمك</label><input type="text" id="join-name" placeholder="أدخل اسمك" maxlength="20" autocomplete="off"></div>
-      <div class="form-group"><label>فريقك</label>
-        <div class="team-select">
-          <button class="team-btn a" id="team-a-btn" onclick="selectTeam('A')">🔵 الفريق أ</button>
-          <button class="team-btn b" id="team-b-btn" onclick="selectTeam('B')">🔴 الفريق ب</button>
-        </div>
-      </div>
+      <div class="form-group"><label>فريقك</label><div class="team-select"><button class="team-btn a" id="team-a-btn" onclick="selectTeam('A')">🔵 الفريق أ</button><button class="team-btn b" id="team-b-btn" onclick="selectTeam('B')">🔴 الفريق ب</button></div></div>
       <button class="btn btn-gold btn-lg w-full mt-8" onclick="joinRoom()">🚀 انضم</button>
       <div class="error-msg" id="join-error"></div>
     </div>
-
     <div id="lb-panel" class="card mt-16 hidden">
       <h2>🏆 المتصدّرين</h2>
       <div class="lb-tabs"><button class="lb-tab active" onclick="loadLB('daily',this)">اليوم</button><button class="lb-tab" onclick="loadLB('monthly',this)">الشهر</button></div>
@@ -127,27 +146,26 @@
     </div>
   </div>
 
-  <!-- ═══ Q&A Mode Panel ═══ -->
+  <!-- Q&A Panel -->
   <div id="qa-panel" class="hidden">
-    <div class="card mt-16" style="text-align:center;border-color:rgba(139,92,246,.2)">
-      <div style="font-size:52px;margin-bottom:6px">❓</div>
+    <div class="card mt-16" style="text-align:center;border-color:rgba(139,92,246,.15)">
+      <div style="font-size:48px;margin-bottom:4px">❓</div>
       <h2 style="color:var(--purple)">وضع سؤال وجواب</h2>
-      <p style="color:var(--dim);font-size:13px;margin:6px 0 14px;line-height:1.8">اختيار من متعدد • فريقين يتنافسان • قدرات خاصة تقلب الموازين</p>
+      <p style="color:var(--dim);font-size:12px;margin:4px 0 12px;line-height:1.8">اختيار من متعدد — فريقين — قدرات خاصة</p>
       <div class="qa-features">
-        <span class="qa-feat" style="background:rgba(139,92,246,.1);color:var(--purple);border:1px solid rgba(139,92,246,.15)">⚔️ فريقين</span>
-        <span class="qa-feat" style="background:rgba(0,200,83,.06);color:var(--lime);border:1px solid rgba(0,200,83,.12)">❌ حذف خيارين</span>
-        <span class="qa-feat" style="background:rgba(240,180,41,.08);color:var(--gold);border:1px solid rgba(240,180,41,.15)">⏱️ وقت إضافي</span>
-        <span class="qa-feat" style="background:rgba(240,80,96,.06);color:var(--tB);border:1px solid rgba(240,80,96,.12)">🏴‍☠️ سرقة نقاط</span>
-        <span class="qa-feat" style="background:rgba(56,199,240,.06);color:var(--tA);border:1px solid rgba(56,199,240,.12)">⚡ مضاعفة</span>
-        <span class="qa-feat" style="background:rgba(240,180,41,.06);color:var(--gold);border:1px solid rgba(240,180,41,.12)">🏆 إنجازات</span>
+        <span class="qa-feat" style="background:rgba(139,92,246,.08);color:var(--purple);border:1px solid rgba(139,92,246,.12)">⚔️ فريقين</span>
+        <span class="qa-feat" style="background:rgba(0,200,83,.05);color:var(--lime);border:1px solid rgba(0,200,83,.1)">❌ حذف خيارين</span>
+        <span class="qa-feat" style="background:rgba(240,180,41,.06);color:var(--gold);border:1px solid rgba(240,180,41,.1)">⏱️ وقت إضافي</span>
+        <span class="qa-feat" style="background:rgba(240,80,96,.05);color:var(--tB);border:1px solid rgba(240,80,96,.1)">🏴‍☠️ سرقة</span>
+        <span class="qa-feat" style="background:rgba(56,199,240,.05);color:var(--tA);border:1px solid rgba(56,199,240,.1)">⚡ مضاعفة</span>
       </div>
-      <a href="/sg.html" class="btn btn-lg w-full" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;box-shadow:0 4px 24px rgba(139,92,246,.25);font-size:18px">🚀 ابدأ اللعب</a>
+      <a href="/sg.html" class="btn btn-lg w-full" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;box-shadow:0 4px 20px rgba(139,92,246,.2)">🚀 ابدأ اللعب</a>
     </div>
   </div>
 
-  <div class="divider mt-24"><span>بازر — منصة المسابقات</span></div>
-  <div style="text-align:center;padding-bottom:24px">
-    <a href="/admin.html" style="color:var(--dim);font-size:11px;text-decoration:none;opacity:.4;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.4">🔐 لوحة التحكم</a>
+  <div class="footer mt-24">
+    <span>🇸🇦 Bazzzzz — صنع في السعودية</span><br>
+    <a href="/admin.html" style="font-size:10px">🔐 لوحة التحكم</a>
   </div>
 </div>
 
@@ -164,20 +182,20 @@ socket.emit("get-categories", cats => {
   const grid = document.getElementById("cat-grid");
   cats.forEach(cat => {
     const t = document.createElement("button");
-    t.type="button"; t.className="cat-tag"; t.textContent=cat;
-    t.onclick=()=>{t.classList.toggle("selected"); selectedCats.has(cat)?selectedCats.delete(cat):selectedCats.add(cat);};
+    t.type="button";t.className="cat-tag";t.textContent=cat;
+    t.onclick=()=>{t.classList.toggle("selected");selectedCats.has(cat)?selectedCats.delete(cat):selectedCats.add(cat);};
     grid.appendChild(t);
   });
 });
 
-function selectGame(g) {
-  document.getElementById("gm-buzzer").classList.toggle("selected", g==="buzzer");
-  document.getElementById("gm-qa").classList.toggle("selected", g==="qa");
-  document.getElementById("buzzer-panel").classList.toggle("hidden", g!=="buzzer");
-  document.getElementById("qa-panel").classList.toggle("hidden", g!=="qa");
-  if (g==="buzzer") selectSub("host");
+function selectGame(g){
+  document.getElementById("gm-buzzer").classList.toggle("selected",g==="buzzer");
+  document.getElementById("gm-qa").classList.toggle("selected",g==="qa");
+  document.getElementById("buzzer-panel").classList.toggle("hidden",g!=="buzzer");
+  document.getElementById("qa-panel").classList.toggle("hidden",g!=="qa");
+  if(g==="buzzer")selectSub("host");
 }
-function selectSub(m) {
+function selectSub(m){
   ["host","join","lb"].forEach(x=>document.getElementById("so-"+x).classList.toggle("active",x===m));
   document.getElementById("host-form").classList.toggle("hidden",m!=="host");
   document.getElementById("join-form").classList.toggle("hidden",m!=="join");
@@ -187,9 +205,54 @@ function selectSub(m) {
 function selectTeam(t){selectedTeam=t;document.getElementById("team-a-btn").classList.toggle("selected",t==="A");document.getElementById("team-b-btn").classList.toggle("selected",t==="B");}
 function createRoom(){socket.emit("create-room",{categories:[...selectedCats],questionCount:parseInt(document.getElementById("host-qcount").value)},r=>{if(r.success)window.location.href="/host.html?room="+r.roomCode;else document.getElementById("host-error").textContent="خطأ";});}
 function joinRoom(){const c=document.getElementById("join-code").value.trim(),n=document.getElementById("join-name").value.trim(),e=document.getElementById("join-error");if(!c||c.length!==6){e.textContent="أدخل كود ٦ أرقام";return;}if(!n){e.textContent="أدخل اسمك";return;}if(!selectedTeam){e.textContent="اختر فريقك";return;}window.location.href=`/player.html?room=${c}&name=${encodeURIComponent(n)}&team=${selectedTeam}`;}
-function loadLB(p,btn){if(btn){document.querySelectorAll(".lb-tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active");}socket.emit("get-leaderboard",{period:p},list=>{const el=document.getElementById("lb-list");if(!list.length){el.innerHTML='<div class="lb-empty">لا توجد نتائج — العب أولاً! 🎮</div>';return;}const m=["🥇","🥈","🥉"];el.innerHTML=list.map((e,i)=>`<div class="lb-row"><span class="lb-rank">${m[i]||(i+1)}</span><div><div class="lb-name">${e.name}</div><div class="lb-cat">${e.cat}</div></div><span class="lb-score">${e.score}</span></div>`).join("");});}
+function loadLB(p,btn){if(btn){document.querySelectorAll(".lb-tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active");}socket.emit("get-leaderboard",{period:p},list=>{const el=document.getElementById("lb-list");if(!list.length){el.innerHTML='<div class="lb-empty">لا توجد نتائج — العب! 🎮</div>';return;}const m=["🥇","🥈","🥉"];el.innerHTML=list.map((e,i)=>`<div class="lb-row"><span class="lb-rank">${m[i]||(i+1)}</span><div><div class="lb-name">${e.name}</div><div class="lb-cat">${e.cat}</div></div><span class="lb-score">${e.score}</span></div>`).join("");});}
+
 document.getElementById("join-code").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("join-name").focus();});
 document.getElementById("join-name").addEventListener("keydown",e=>{if(e.key==="Enter")joinRoom();});
+
+// ── Animated Background ──
+(function(){
+  const canvas = document.getElementById("bgCanvas");
+  const ctx = canvas.getContext("2d");
+  let w, h, particles = [];
+  const colors = ["rgba(240,180,41,","rgba(0,200,83,","rgba(56,199,240,","rgba(139,92,246,"];
+
+  function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;init();}
+  function init(){
+    particles=[];
+    for(let i=0;i<40;i++){
+      particles.push({
+        x:Math.random()*w, y:Math.random()*h,
+        r:Math.random()*2+0.5, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
+        color:colors[Math.floor(Math.random()*colors.length)],
+        alpha:Math.random()*.15+.03
+      });
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=w; if(p.x>w)p.x=0;
+      if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.color+p.alpha+")"; ctx.fill();
+    });
+    // Draw connections
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<120){
+          ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle="rgba(240,180,41,"+(0.03*(1-dist/120))+")"; ctx.lineWidth=0.5; ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener("resize",resize); resize(); draw();
+})();
 </script>
 </body>
 </html>

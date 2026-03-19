@@ -233,12 +233,11 @@ io.on("connection", (socket) => {
   socket.on("admin-get-stats", (data, cb) => {
     const allRooms = gm.getAllRoomInfo();
     const totalPlayers = allRooms.reduce((s, r) => s + r.playerCount, 0);
-    const QUESTION_BANK = require("./questions");
     cb({
       online: gm.getOnlineCount(),
       roomCount: gm.getRoomCount(),
       totalPlayers,
-      questionCount: QUESTION_BANK.length,
+      questionCount: gm.getQuestionCount(),
       rooms: allRooms,
       leaderboard: gm.getLeaderboard("monthly"),
     });
