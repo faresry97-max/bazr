@@ -230,47 +230,83 @@ io.on("connection", (socket) => {
   // ║       Admin Dashboard Events   ║
   // ══════════════════════════════════
 
-  socket.on("admin-get-stats", (data, cb) => {
-    const allRooms = gm.getAllRoomInfo();
-    const totalPlayers = allRooms.reduce((s, r) => s + r.playerCount, 0);
-    cb({
-      online: gm.getOnlineCount(),
-      roomCount: gm.getRoomCount(),
-      totalPlayers,
-      questionCount: gm.getQuestionCount(),
-      rooms: allRooms,
-      leaderboard: gm.getLeaderboard("monthly"),
-    });
+  socket.on("admin-stats", (d, cb) => cb(gm.getFullStats()));
+
+  socket.on("admin-get-questions", (d, cb) => {
+    cb({ questions: gm.getQuestionSample(), categories: gm.getAvailableCategories() });
   });
 
-  socket.on("admin-delete-room", (data, cb) => {
-    const room = gm.getRoom(data.code);
+  socket.on("admin-add-question", (d, cb) => {
+    const q = gm.adminAddQuestion(d);
+    gm.addLog("add-question", q.q);
+    cb({ success: true, question: q });
+  });
+
+  socket.on("admin-edit-question", (d, cb) => {
+    const q = gm.adminEditQuestion(d.id, d.updates);
+    if (q) { gm.addLog("edit-question", q.q); cb({ success: true }); }
+    else cb({ success: false });
+  });
+
+  socket.on("admin-delete-question", (d, cb) => {
+    if (gm.adminDeleteQuestion(d.id)) { gm.addLog("delete-question", "ID:" + d.id); cb({ success: true }); }
+    else cb({ success: false });
+  });
+
+  socket.on("admin-bulk-import", (d, cb) => {
+    const count = gm.adminBulkImport(d.questions || []);
+    gm.addLog("bulk-import", count + " questions");
+    cb({ success: true, count });
+  });
+
+  socket.on("admin-delete-room", (d, cb) => {
+    const room = gm.getRoom(d.code);
     if (room) {
-      io.to(`room:${data.code}`).emit("host-disconnected");
-      gm.deleteRoom(data.code);
+      io.to(`room:${d.code}`).emit("host-disconnected");
+      gm.deleteRoom(d.code);
+      gm.addLog("delete-room", d.code);
       cb({ success: true });
-    } else { cb({ success: false }); }
+    } else cb({ success: false });
   });
 
-  socket.on("admin-clear-rooms", (data, cb) => {
-    const rooms = gm.getAllRoomInfo();
-    rooms.forEach(r => {
+  socket.on("admin-force-close", (d, cb) => {
+    if (gm.forceCloseRoom(d.code)) {
+      io.to(`room:${d.code}`).emit("game-over", { scores: { A: 0, B: 0, players: [] }, winner: "tie" });
+      gm.addLog("force-close", d.code);
+      cb({ success: true });
+    } else cb({ success: false });
+  });
+
+  socket.on("admin-clear-rooms", (d, cb) => {
+    gm.getAllRoomInfo().forEach(r => {
       io.to(`room:${r.code}`).emit("host-disconnected");
       gm.deleteRoom(r.code);
     });
+    gm.addLog("clear-all-rooms", "");
     cb({ success: true });
   });
 
-  socket.on("admin-get-questions", (data, cb) => {
-    const qs = gm.getQuestionSample();
-    const cats = gm.getAvailableCategories();
-    cb({ questions: qs, categories: cats });
+  socket.on("admin-kick-player", (d, cb) => {
+    const result = gm.adminKickPlayer(d.roomCode, d.playerName);
+    if (result) {
+      const s = [...io.sockets.sockets.values()].find(s => s.data.playerName === d.playerName && s.data.roomCode === d.roomCode);
+      if (s) { s.emit("kicked"); s.leave(`room:${d.roomCode}`); }
+      io.to(`room:${d.roomCode}`).emit("player-update", gm.getPlayerInfo(result.room));
+      gm.addLog("kick-player", d.playerName + " from " + d.roomCode);
+      cb({ success: true });
+    } else cb({ success: false });
   });
 
-  socket.on("admin-clear-leaderboard", (data, cb) => {
+  socket.on("admin-clear-leaderboard", (d, cb) => {
     gm.clearLeaderboard();
+    gm.addLog("clear-leaderboard", "");
     cb({ success: true });
   });
+
+  socket.on("admin-get-logs", (d, cb) => cb(gm.getLogs(d.limit || 100)));
+  socket.on("admin-clear-logs", (d, cb) => { gm.clearLogs(); cb({ success: true }); });
+
+  socket.on("admin-get-players", (d, cb) => cb(gm.getAllPlayers()));
 });
 
 const PORT = process.env.PORT || 3000;

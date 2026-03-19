@@ -5,291 +5,420 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>بازززز — لوحة التحكم</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
 <style>
-.login-center{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px)}
-.login-box{width:100%;max-width:360px;text-align:center;animation:slideUp .5s ease}
-.login-box .icon{font-size:56px;margin-bottom:8px}
-.login-card{background:var(--s1);border:1.5px solid var(--s3);border-radius:var(--rl);padding:28px 22px;margin-top:12px}
-.login-card input{margin-bottom:10px}
-.login-card .btn{margin-top:6px}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#060610;--s1:#0d0d24;--s2:#13133a;--s3:#1c1c52;--gold:#f0b429;--glt:#ffe066;--tA:#38c7f0;--tB:#f05060;--lime:#22d58e;--red:#ef4444;--purple:#a78bfa;--txt:#eaf0ff;--dim:#5a5a8a;--mid:#8888bb;--r:10px}
+html{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+body{min-height:100vh;display:flex}
+input,select,textarea{width:100%;padding:9px 12px;background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);color:var(--txt);font-family:'Cairo';font-size:13px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+input::placeholder,textarea::placeholder{color:var(--dim)}
+label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin-bottom:3px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:8px 16px;border:none;border-radius:var(--r);font-family:'Cairo';font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn:active{transform:scale(.96)}.btn:disabled{opacity:.3;cursor:not-allowed}
+.btn-g{background:linear-gradient(135deg,var(--gold),#d4960a);color:#1a1000}.btn-r{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.btn-b{background:rgba(56,199,240,.1);color:var(--tA);border:1px solid rgba(56,199,240,.2)}.btn-o{background:var(--s2);color:var(--mid);border:1px solid var(--s3)}
+.btn-p{background:rgba(139,92,246,.1);color:var(--purple);border:1px solid rgba(139,92,246,.2)}.btn-l{background:rgba(34,213,142,.1);color:var(--lime);border:1px solid rgba(34,213,142,.2)}
 
-.dash{display:none}.dash.on{display:block;animation:fadeIn .4s ease}
-.dash-head{display:flex;align-items:center;justify-content:space-between;padding:12px 0;flex-wrap:wrap;gap:8px}
-.dash-logo{font-size:18px;font-weight:900;color:var(--gold);display:flex;align-items:center;gap:6px}
+/* Login */
+.login-wrap{display:flex;align-items:center;justify-content:center;width:100%;min-height:100vh}
+.login-box{width:340px;text-align:center;animation:su .5s ease}
+.login-card{background:var(--s1);border:1.5px solid var(--s3);border-radius:16px;padding:28px 22px;margin-top:14px}
+.login-card input{margin-bottom:8px}.err{color:var(--red);font-size:12px;margin-top:6px;min-height:16px}
 
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:16px}
-.st{background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);padding:14px;text-align:center;transition:border-color .2s}
-.st:hover{border-color:rgba(240,180,41,.2)}
-.st-n{font-size:24px;font-weight:900;line-height:1.2}.st-l{font-size:11px;color:var(--dim);margin-top:2px}
+/* Layout */
+.sidebar{width:220px;background:var(--s1);border-left:1px solid var(--s2);display:flex;flex-direction:column;height:100vh;position:fixed;right:0;top:0;z-index:20}
+.sb-logo{padding:16px;font-size:17px;font-weight:900;color:var(--gold);border-bottom:1px solid var(--s2);display:flex;align-items:center;gap:6px}
+.sb-menu{flex:1;padding:8px;overflow-y:auto}
+.sb-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:600;color:var(--mid);transition:all .15s;margin-bottom:2px}
+.sb-item:hover{background:rgba(255,255,255,.03);color:var(--txt)}
+.sb-item.on{background:rgba(240,180,41,.06);color:var(--gold);border:1px solid rgba(240,180,41,.1)}
+.sb-item .si-icon{width:20px;text-align:center;font-size:14px}
+.sb-footer{padding:12px;border-top:1px solid var(--s2);font-size:10px;color:var(--dim);text-align:center}
+.main{margin-right:220px;flex:1;min-height:100vh;padding:16px 20px}
 
-.tabs{display:flex;gap:4px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
-.tab{padding:8px 16px;border-radius:var(--r);border:1px solid var(--s3);background:var(--s1);color:var(--mid);
-font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
-.tab.on{border-color:var(--gold);background:rgba(240,180,41,.06);color:var(--gold)}
-.tab:hover{border-color:rgba(240,180,41,.3)}
+/* Top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.topbar-title{font-size:18px;font-weight:900}
 
-.panel{display:none}.panel.on{display:block;animation:fadeIn .3s ease}
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:16px}
+.st{background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);padding:12px;text-align:center}
+.st-n{font-size:22px;font-weight:900;line-height:1.2}.st-l{font-size:10px;color:var(--dim);margin-top:1px}
 
+/* Panels */
+.panel{display:none;animation:fi .3s ease}.panel.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes su{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* Card */
+.card{background:var(--s1);border:1px solid var(--s3);border-radius:12px;padding:16px;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+
+/* Table */
 .tbl{width:100%;border-collapse:collapse}
-.tbl th{text-align:right;padding:8px 10px;font-size:11px;color:var(--dim);border-bottom:1px solid var(--s3);font-weight:700}
-.tbl td{padding:8px 10px;font-size:13px;border-bottom:1px solid var(--s2)}
+.tbl th{text-align:right;padding:7px 10px;font-size:10px;color:var(--dim);border-bottom:1px solid var(--s3);font-weight:700}
+.tbl td{padding:7px 10px;font-size:12px;border-bottom:1px solid var(--s2)}
 .tbl tr:hover td{background:rgba(255,255,255,.015)}
-.badge-s{padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700}
-.badge-s.lobby{background:rgba(240,180,41,.08);color:var(--gold)}
-.badge-s.playing{background:rgba(34,213,142,.08);color:var(--lime)}
-.badge-s.ended{background:rgba(240,80,96,.08);color:var(--red)}
-.xbtn{padding:3px 8px;border:none;border-radius:5px;background:rgba(240,80,96,.08);color:var(--red);font-size:11px;font-weight:700;cursor:pointer;font-family:'Cairo'}
-.xbtn:hover{background:rgba(240,80,96,.18)}
+.badge{padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700}
+.badge.lobby{background:rgba(240,180,41,.08);color:var(--gold)}.badge.playing{background:rgba(34,213,142,.08);color:var(--lime)}.badge.ended{background:rgba(239,68,68,.08);color:var(--red)}
+.badge.on{background:rgba(34,213,142,.08);color:var(--lime)}.badge.off{background:rgba(90,90,138,.1);color:var(--dim)}
 
-.q-browse{max-height:400px;overflow-y:auto;scrollbar-width:thin}
-.q-item{padding:10px 12px;background:var(--s2);border-radius:var(--r);margin-bottom:6px;font-size:13px}
-.q-item .q-cat{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:2px}
-.q-item .q-txt{font-weight:600;line-height:1.6}
-.q-item .q-ans{font-size:11px;color:var(--lime);margin-top:2px}
+/* Actions row */
+.acts{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
 
-.actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.log{background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:10px;max-height:200px;overflow-y:auto;
-font-size:11px;color:var(--mid);line-height:1.8;direction:ltr;text-align:left;font-family:'Courier New',monospace;white-space:pre-wrap}
-.empty{text-align:center;padding:24px;color:var(--dim);font-size:13px}
+/* Question items */
+.qi{padding:10px;background:var(--s2);border-radius:var(--r);margin-bottom:5px;font-size:12px;display:flex;gap:8px;align-items:flex-start}
+.qi-body{flex:1;min-width:0}
+.qi-cat{font-size:9px;font-weight:700;color:var(--gold)}.qi-txt{font-weight:600;line-height:1.6;margin:2px 0}.qi-ans{font-size:11px;color:var(--lime)}
+.qi-acts{display:flex;gap:4px;flex-shrink:0}
+.qi-acts .btn{padding:4px 8px;font-size:10px}
 
-.q-filter-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.q-filter-row select{max-width:180px;font-size:13px;padding:8px 10px}
-.q-filter-row input{max-width:240px;font-size:13px;padding:8px 10px}
-.q-count{font-size:12px;color:var(--dim);margin-bottom:8px}
+/* Filter row */
+.filters{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.filters select,.filters input{max-width:180px;font-size:12px;padding:7px 10px}
+.q-count{font-size:11px;color:var(--dim);margin-bottom:6px}
+.q-scroll{max-height:500px;overflow-y:auto;scrollbar-width:thin}
 
-@media(max-width:500px){.stats{grid-template-columns:1fr 1fr}.tabs{gap:2px}.tab{padding:6px 12px;font-size:11px}}
+/* Log */
+.logbox{background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:10px;max-height:400px;overflow-y:auto;font-size:10px;color:var(--mid);line-height:1.8;direction:ltr;text-align:left;font-family:'Courier New',monospace;white-space:pre-wrap}
+
+/* Modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)}
+.modal-bg.on{display:flex}
+.modal{background:var(--s1);border:1.5px solid var(--s3);border-radius:16px;padding:22px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;animation:su .3s ease}
+.modal h3{font-size:16px;font-weight:800;margin-bottom:12px}
+.fg{margin-bottom:10px}
+.modal-acts{display:flex;gap:8px;margin-top:14px}
+.modal-acts .btn{flex:1}
+
+.empty{text-align:center;padding:20px;color:var(--dim);font-size:12px}
+.hidden{display:none!important}
+
+@media(max-width:700px){.sidebar{width:56px}.sidebar .sb-text,.sidebar .sb-footer span{display:none}.sb-logo span{display:none}.sb-item{justify-content:center;padding:10px}.main{margin-right:56px;padding:12px}.stats{grid-template-columns:1fr 1fr}.filters{flex-direction:column}.filters select,.filters input{max-width:100%}}
 </style>
 </head>
 <body>
-<div class="page-header">
-  <div class="logo">🔔 بازززز</div>
-  <div class="header-stats"><div class="online-badge" id="hdr-o">🌐 0</div></div>
-</div>
 
-<!-- ═══ Login ═══ -->
+<!-- ═══ LOGIN ═══ -->
 <div id="sc-login">
-  <div class="login-center">
-    <div class="login-box">
-      <div class="icon">🔐</div>
-      <h2>لوحة التحكم</h2>
-      <p class="text-dim">دخول المسؤولين فقط</p>
-      <div class="login-card">
-        <input type="text" id="i-user" placeholder="اسم المستخدم" autocomplete="username">
-        <input type="password" id="i-pass" placeholder="كلمة المرور" autocomplete="current-password">
-        <button class="btn btn-gold btn-lg w-full" onclick="login()">دخول 🔑</button>
-        <div class="error-msg" id="login-err"></div>
-        <div style="margin-top:12px;font-size:11px;color:var(--dim)">المستخدم: admin — كلمة المرور: 112233</div>
-      </div>
+<div class="login-wrap">
+<div class="login-box">
+  <div style="font-size:48px;margin-bottom:6px">🛡️</div>
+  <div style="font-size:24px;font-weight:900;color:var(--gold)">بازززز</div>
+  <div style="color:var(--dim);font-size:13px">لوحة التحكم — دخول المسؤولين</div>
+  <div class="login-card">
+    <input type="text" id="i-u" placeholder="اسم المستخدم" autocomplete="username">
+    <input type="password" id="i-p" placeholder="كلمة المرور" autocomplete="current-password">
+    <button class="btn btn-g" style="width:100%;padding:11px;font-size:14px;margin-top:4px" onclick="doLogin()">دخول 🔑</button>
+    <div class="err" id="lerr"></div>
+    <div style="margin-top:10px;font-size:10px;color:var(--dim)">admin / 112233</div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="sc-dash" class="hidden" style="display:flex;width:100%">
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sb-logo">🔔 <span class="sb-text">بازززز</span></div>
+  <div class="sb-menu">
+    <div class="sb-item on" onclick="nav('overview',this)"><span class="si-icon">📊</span><span class="sb-text">نظرة عامة</span></div>
+    <div class="sb-item" onclick="nav('rooms',this)"><span class="si-icon">🏠</span><span class="sb-text">الغرف</span></div>
+    <div class="sb-item" onclick="nav('players',this)"><span class="si-icon">👥</span><span class="sb-text">اللاعبين</span></div>
+    <div class="sb-item" onclick="nav('questions',this)"><span class="si-icon">📝</span><span class="sb-text">الأسئلة</span></div>
+    <div class="sb-item" onclick="nav('leaderboard',this)"><span class="si-icon">🏆</span><span class="sb-text">المتصدرين</span></div>
+    <div class="sb-item" onclick="nav('logs',this)"><span class="si-icon">📋</span><span class="sb-text">السجل</span></div>
+    <div class="sb-item" onclick="nav('settings',this)"><span class="si-icon">⚙️</span><span class="sb-text">الإعدادات</span></div>
+  </div>
+  <div class="sb-footer"><span>🇸🇦 صنع في السعودية</span></div>
+</div>
+
+<!-- Main -->
+<div class="main">
+<div class="topbar">
+  <div class="topbar-title" id="page-title">📊 نظرة عامة</div>
+  <div style="display:flex;gap:6px;align-items:center">
+    <span style="font-size:11px;color:var(--dim)" id="d-user"></span>
+    <a href="/" class="btn btn-o" style="font-size:11px">🏠</a>
+    <button class="btn btn-o" style="font-size:11px" onclick="doLogout()">خروج</button>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats" id="stats-row">
+  <div class="st"><div class="st-n" style="color:var(--lime)" id="s-on">0</div><div class="st-l">متصل</div></div>
+  <div class="st"><div class="st-n" style="color:var(--gold)" id="s-rm">0</div><div class="st-l">غرف</div></div>
+  <div class="st"><div class="st-n" style="color:var(--tA)" id="s-pl">0</div><div class="st-l">لاعبين</div></div>
+  <div class="st"><div class="st-n" style="color:var(--purple)" id="s-qs">0</div><div class="st-l">أسئلة</div></div>
+  <div class="st"><div class="st-n" style="color:var(--tB)" id="s-ct">0</div><div class="st-l">تصنيفات</div></div>
+</div>
+
+<!-- ═══ Overview ═══ -->
+<div class="panel on" id="p-overview">
+  <div class="card"><div class="card-title">🏠 أحدث الغرف</div><table class="tbl"><thead><tr><th>كود</th><th>الحالة</th><th>لاعبين</th></tr></thead><tbody id="ov-rooms"></tbody></table></div>
+  <div class="card"><div class="card-title">🏆 المتصدرين</div><div id="ov-lb"></div></div>
+  <div class="card"><div class="card-title">📋 آخر الأحداث</div><div class="logbox" id="ov-log" style="max-height:150px"></div></div>
+</div>
+
+<!-- ═══ Rooms ═══ -->
+<div class="panel" id="p-rooms">
+  <div class="acts">
+    <button class="btn btn-g" onclick="refresh()">🔄 تحديث</button>
+    <button class="btn btn-r" onclick="if(confirm('حذف جميع الغرف؟'))emit('admin-clear-rooms',{},()=>{refresh();alog('حذف جميع الغرف')})">🗑️ حذف الكل</button>
+  </div>
+  <div class="card"><table class="tbl"><thead><tr><th>كود</th><th>الحالة</th><th>لاعبين</th><th>سؤال</th><th>إجراء</th></tr></thead><tbody id="t-rooms"></tbody></table></div>
+</div>
+
+<!-- ═══ Players ═══ -->
+<div class="panel" id="p-players">
+  <div class="acts"><button class="btn btn-g" onclick="loadPlayers()">🔄 تحديث</button></div>
+  <div class="card"><table class="tbl"><thead><tr><th>الاسم</th><th>الفريق</th><th>النقاط</th><th>الغرفة</th><th>الحالة</th><th></th></tr></thead><tbody id="t-players"></tbody></table></div>
+</div>
+
+<!-- ═══ Questions ═══ -->
+<div class="panel" id="p-questions">
+  <div class="acts">
+    <button class="btn btn-g" onclick="openModal('addQ')">➕ إضافة سؤال</button>
+    <button class="btn btn-p" onclick="openModal('importQ')">📥 استيراد</button>
+    <button class="btn btn-b" onclick="exportQs()">📤 تصدير JSON</button>
+    <button class="btn btn-o" onclick="loadQs()">🔄 تحديث</button>
+  </div>
+  <div class="filters">
+    <select id="f-cat" onchange="filterQs()"><option value="">كل التصنيفات</option></select>
+    <select id="f-diff" onchange="filterQs()"><option value="">كل المستويات</option><option value="easy">سهل</option><option value="medium">متوسط</option><option value="hard">صعب</option></select>
+    <input type="text" id="f-search" placeholder="بحث..." oninput="filterQs()">
+  </div>
+  <div class="q-count" id="qcount"></div>
+  <div class="q-scroll" id="qlist"></div>
+</div>
+
+<!-- ═══ Leaderboard ═══ -->
+<div class="panel" id="p-leaderboard">
+  <div class="acts">
+    <button class="btn btn-r" onclick="if(confirm('مسح؟'))emit('admin-clear-leaderboard',{},()=>{refresh();alog('مسح المتصدرين')})">🗑️ مسح</button>
+    <button class="btn btn-g" onclick="refresh()">🔄 تحديث</button>
+  </div>
+  <div class="card" id="lb-card"></div>
+</div>
+
+<!-- ═══ Logs ═══ -->
+<div class="panel" id="p-logs">
+  <div class="acts">
+    <button class="btn btn-g" onclick="loadLogs()">🔄 تحديث</button>
+    <button class="btn btn-r" onclick="emit('admin-clear-logs',{},()=>{$('logmain').textContent='';alog('مسح السجل')})">🧹 مسح</button>
+  </div>
+  <div class="card"><div class="logbox" id="logmain" style="max-height:500px"></div></div>
+</div>
+
+<!-- ═══ Settings ═══ -->
+<div class="panel" id="p-settings">
+  <div class="card">
+    <div class="card-title">⚙️ معلومات النظام</div>
+    <div style="font-size:12px;color:var(--dim);line-height:2.2">
+      المنصة: <b style="color:var(--gold)">بازززز</b><br>
+      الإصدار: <b>2.0</b><br>
+      الأسئلة: <b id="info-qs">—</b><br>
+      التصنيفات: <b id="info-cats">—</b><br>
+      🇸🇦 صُنع في المملكة العربية السعودية
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🔑 بيانات الدخول</div>
+    <div style="font-size:12px;color:var(--dim);line-height:2">
+      admin / 112233<br>fares / fares97
     </div>
   </div>
 </div>
 
-<!-- ═══ Dashboard ═══ -->
-<div class="dash" id="dash">
-<div class="container-wide">
-  <div class="dash-head">
-    <div class="dash-logo">🛡️ لوحة التحكم</div>
-    <div style="display:flex;gap:6px;align-items:center">
-      <span class="text-dim" style="font-size:12px" id="d-user"></span>
-      <a href="/" class="btn btn-ghost btn-sm">🏠</a>
-      <button class="btn btn-ghost btn-sm" onclick="logout()">خروج</button>
-    </div>
-  </div>
+</div><!-- /main -->
+</div><!-- /sc-dash -->
 
-  <!-- Stats -->
-  <div class="stats">
-    <div class="st"><div class="st-n text-lime" id="s-online">0</div><div class="st-l">متصل الآن</div></div>
-    <div class="st"><div class="st-n text-gold" id="s-rooms">0</div><div class="st-l">غرف نشطة</div></div>
-    <div class="st"><div class="st-n" style="color:var(--tA)" id="s-players">0</div><div class="st-l">لاعبين</div></div>
-    <div class="st"><div class="st-n" style="color:var(--purple)" id="s-qs">0</div><div class="st-l">سؤال</div></div>
-    <div class="st"><div class="st-n" style="color:var(--tB)" id="s-cats">0</div><div class="st-l">تصنيف</div></div>
+<!-- ═══ Add Question Modal ═══ -->
+<div class="modal-bg" id="m-addQ" onclick="if(event.target===this)closeModal('addQ')">
+<div class="modal">
+  <h3>➕ إضافة سؤال</h3>
+  <div class="fg"><label>السؤال</label><textarea id="aq-q" rows="2" placeholder="نص السؤال..."></textarea></div>
+  <div class="fg"><label>الإجابة</label><input id="aq-a" placeholder="الإجابة الصحيحة"></div>
+  <div style="display:flex;gap:6px">
+    <div class="fg" style="flex:1"><label>التصنيف</label><input id="aq-cat" placeholder="علوم"></div>
+    <div class="fg" style="flex:1"><label>المستوى</label><select id="aq-diff"><option value="easy">سهل</option><option value="medium" selected>متوسط</option><option value="hard">صعب</option></select></div>
   </div>
+  <div class="fg"><label>رابط صورة (اختياري)</label><input id="aq-img" placeholder="https://..."></div>
+  <div class="err" id="aq-err"></div>
+  <div class="modal-acts"><button class="btn btn-g" onclick="addQuestion()">إضافة ✅</button><button class="btn btn-o" onclick="closeModal('addQ')">إلغاء</button></div>
+</div>
+</div>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab on" onclick="showTab('rooms',this)">🏠 الغرف</button>
-    <button class="tab" onclick="showTab('questions',this)">📝 الأسئلة</button>
-    <button class="tab" onclick="showTab('leaderboard',this)">🏆 المتصدرين</button>
-    <button class="tab" onclick="showTab('settings',this)">⚙️ الإعدادات</button>
-    <button class="tab" onclick="showTab('log',this)">📋 السجل</button>
+<!-- ═══ Import Modal ═══ -->
+<div class="modal-bg" id="m-importQ" onclick="if(event.target===this)closeModal('importQ')">
+<div class="modal">
+  <h3>📥 استيراد أسئلة</h3>
+  <div class="fg"><label>JSON (مصفوفة من الأسئلة)</label>
+    <textarea id="imp-data" rows="8" placeholder='[{"q":"السؤال","a":"الجواب","cat":"علوم","diff":"easy"}]'></textarea>
   </div>
+  <div class="err" id="imp-err"></div>
+  <div class="modal-acts"><button class="btn btn-g" onclick="importQs()">استيراد 📥</button><button class="btn btn-o" onclick="closeModal('importQ')">إلغاء</button></div>
+</div>
+</div>
 
-  <!-- Panel: Rooms -->
-  <div class="panel on" id="p-rooms">
-    <div class="actions">
-      <button class="btn btn-gold btn-sm" onclick="refresh()">🔄 تحديث</button>
-      <button class="btn btn-rose btn-sm" onclick="clearRooms()">🗑️ حذف الكل</button>
-    </div>
-    <div class="card" style="padding:14px">
-      <table class="tbl"><thead><tr><th>الكود</th><th>الحالة</th><th>اللاعبين</th><th></th></tr></thead>
-      <tbody id="t-rooms"></tbody></table>
-    </div>
+<!-- ═══ Edit Question Modal ═══ -->
+<div class="modal-bg" id="m-editQ" onclick="if(event.target===this)closeModal('editQ')">
+<div class="modal">
+  <h3>✏️ تعديل سؤال</h3>
+  <input type="hidden" id="eq-id">
+  <div class="fg"><label>السؤال</label><textarea id="eq-q" rows="2"></textarea></div>
+  <div class="fg"><label>الإجابة</label><input id="eq-a"></div>
+  <div style="display:flex;gap:6px">
+    <div class="fg" style="flex:1"><label>التصنيف</label><input id="eq-cat"></div>
+    <div class="fg" style="flex:1"><label>المستوى</label><select id="eq-diff"><option value="easy">سهل</option><option value="medium">متوسط</option><option value="hard">صعب</option></select></div>
   </div>
-
-  <!-- Panel: Questions -->
-  <div class="panel" id="p-questions">
-    <div class="q-filter-row">
-      <select id="q-cat-filter" onchange="filterQs()"><option value="">كل التصنيفات</option></select>
-      <input type="text" id="q-search" placeholder="بحث في الأسئلة..." oninput="filterQs()">
-      <select id="q-diff-filter" onchange="filterQs()"><option value="">كل المستويات</option><option value="easy">سهل</option><option value="medium">متوسط</option><option value="hard">صعب</option></select>
-    </div>
-    <div class="q-count" id="q-count"></div>
-    <div class="q-browse" id="q-list"></div>
-  </div>
-
-  <!-- Panel: Leaderboard -->
-  <div class="panel" id="p-leaderboard">
-    <div class="actions">
-      <button class="btn btn-rose btn-sm" onclick="clearLB()">🗑️ مسح المتصدرين</button>
-    </div>
-    <div class="card" style="padding:14px" id="lb-area"></div>
-  </div>
-
-  <!-- Panel: Settings -->
-  <div class="panel" id="p-settings">
-    <div class="card" style="padding:18px">
-      <h3 class="mb-12" style="font-size:15px">⚙️ إعدادات النظام</h3>
-      <div class="form-group"><label>عدد الأسئلة الافتراضي للغرف الجديدة</label>
-        <select id="set-qcount"><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option><option value="50">50</option></select>
-      </div>
-      <div class="form-group"><label>وقت الإجابة (ثانية)</label>
-        <select id="set-timer"><option value="10">10</option><option value="15" selected>15</option><option value="20">20</option><option value="30">30</option></select>
-      </div>
-      <div style="padding:12px;background:var(--s2);border-radius:var(--r);margin-top:12px">
-        <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:6px">📊 معلومات النظام</div>
-        <div style="font-size:12px;color:var(--dim);line-height:2">
-          المنصة: Bazzzzz (بازززز)<br>
-          الإصدار: 2.0<br>
-          بنك الأسئلة: <span id="info-qs">—</span> سؤال<br>
-          التصنيفات: <span id="info-cats">—</span><br>
-          🇸🇦 صنع في المملكة العربية السعودية
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Panel: Log -->
-  <div class="panel" id="p-log">
-    <div class="actions"><button class="btn btn-ghost btn-sm" onclick="clearLog()">🧹 مسح السجل</button></div>
-    <div class="card" style="padding:14px"><div class="log" id="logbox"></div></div>
-  </div>
-
+  <div class="modal-acts"><button class="btn btn-g" onclick="saveEdit()">حفظ ✅</button><button class="btn btn-o" onclick="closeModal('editQ')">إلغاء</button></div>
 </div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-const socket = io();
-let ok = false, allQs = [], timer = null;
-const $ = id => document.getElementById(id);
+const socket=io();let ok=false,allQs=[],timer=null,data={};
+const $=id=>document.getElementById(id);
+function emit(ev,d,cb){socket.emit(ev,d,cb||function(){});}
+
+socket.on("global-stats",d=>{if(ok){$("s-on").textContent=d.online;$("s-rm").textContent=d.rooms;}});
+socket.on("connect",()=>{if(ok)refresh();});
 
 // ── Auth ──
-function login() {
-  const u = $("i-user").value.trim().toLowerCase();
-  const p = $("i-pass").value.trim();
-  // Simple auth
-  if ((u === "admin" && p === "112233") || (u === "fares" && p === "fares97")) {
-    ok = true;
-    $("sc-login").style.display = "none";
-    $("dash").classList.add("on");
-    $("d-user").textContent = "👤 " + u;
-    log("تسجيل دخول: " + u);
-    refresh();
-    loadQuestions();
-    timer = setInterval(refresh, 6000);
-  } else {
-    $("login-err").textContent = "❌ بيانات خاطئة — جرب admin / 112233";
-  }
+function doLogin(){
+  const u=$("i-u").value.trim().toLowerCase(),p=$("i-p").value.trim();
+  if((u==="admin"&&p==="112233")||(u==="fares"&&p==="fares97")){
+    ok=true;$("sc-login").classList.add("hidden");$("sc-dash").classList.remove("hidden");$("sc-dash").style.display="flex";
+    $("d-user").textContent="👤 "+u;refresh();loadQs();timer=setInterval(refresh,6000);alog("دخول: "+u);
+  }else{$("lerr").textContent="❌ بيانات خاطئة";}
 }
-function logout() { ok = false; clearInterval(timer); $("sc-login").style.display = "block"; $("dash").classList.remove("on"); }
+function doLogout(){ok=false;clearInterval(timer);$("sc-login").classList.remove("hidden");$("sc-dash").classList.add("hidden");$("i-u").value="";$("i-p").value="";$("lerr").textContent="";}
+$("i-p").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
+$("i-u").addEventListener("keydown",e=>{if(e.key==="Enter")$("i-p").focus();});
 
-$("i-pass").addEventListener("keydown", e => { if (e.key === "Enter") login(); });
-$("i-user").addEventListener("keydown", e => { if (e.key === "Enter") $("i-pass").focus(); });
-
-// ── Global stats ──
-socket.on("global-stats", d => { $("hdr-o").textContent = "🌐 " + d.online; if (ok) { $("s-online").textContent = d.online; $("s-rooms").textContent = d.rooms; } });
-socket.on("connect", () => { if (ok) { log("✅ متصل"); refresh(); } });
-socket.on("disconnect", () => { if (ok) log("⚠️ انقطع الاتصال"); });
-
-// ── Tabs ──
-function showTab(id, btn) {
-  document.querySelectorAll(".panel").forEach(p => p.classList.remove("on"));
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("on"));
-  $("p-" + id).classList.add("on"); btn.classList.add("on");
-  if (id === "questions" && allQs.length === 0) loadQuestions();
+// ── Nav ──
+const titles={"overview":"📊 نظرة عامة","rooms":"🏠 الغرف","players":"👥 اللاعبين","questions":"📝 الأسئلة","leaderboard":"🏆 المتصدرين","logs":"📋 السجل","settings":"⚙️ الإعدادات"};
+function nav(id,el){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("on"));
+  document.querySelectorAll(".sb-item").forEach(s=>s.classList.remove("on"));
+  $("p-"+id).classList.add("on");el.classList.add("on");$("page-title").textContent=titles[id]||id;
+  if(id==="players")loadPlayers();if(id==="logs")loadLogs();if(id==="questions"&&allQs.length===0)loadQs();
 }
 
 // ── Refresh ──
-function refresh() {
-  socket.emit("admin-get-stats", {}, d => {
-    if (!d) return;
-    $("s-online").textContent = d.online || 0;
-    $("s-rooms").textContent = d.roomCount || 0;
-    $("s-players").textContent = d.totalPlayers || 0;
-    $("s-qs").textContent = d.questionCount || 0;
-    $("info-qs").textContent = d.questionCount || 0;
-
-    // Rooms
-    const tb = $("t-rooms");
-    if (!d.rooms || !d.rooms.length) { tb.innerHTML = '<tr><td colspan="4" class="empty">لا توجد غرف</td></tr>'; }
-    else { tb.innerHTML = d.rooms.map(r => { const sl = {lobby:"انتظار",playing:"يلعب",ended:"منتهية"}[r.state]||r.state; return `<tr><td style="font-weight:700;color:var(--gold);letter-spacing:2px">${r.code}</td><td><span class="badge-s ${r.state}">${sl}</span></td><td>${r.playerCount}</td><td><button class="xbtn" onclick="delRoom('${r.code}')">حذف</button></td></tr>`; }).join(""); }
-
-    // Leaderboard
-    const lb = $("lb-area");
-    if (d.leaderboard && d.leaderboard.length) {
-      const m = ["🥇","🥈","🥉"];
-      lb.innerHTML = d.leaderboard.map((e, i) => `<div class="lb-row"><span class="lb-rank">${m[i]||(i+1)}</span><div class="lb-name">${e.name}</div><span class="lb-score">${e.score}</span></div>`).join("");
-    } else { lb.innerHTML = '<div class="empty">لا توجد نتائج</div>'; }
+function refresh(){
+  emit("admin-stats",{},d=>{
+    if(!d)return;data=d;
+    $("s-on").textContent=d.online;$("s-rm").textContent=d.roomCount;$("s-pl").textContent=d.totalPlayers;
+    $("s-qs").textContent=d.questionCount;$("s-ct").textContent=d.categoryCount;
+    $("info-qs").textContent=d.questionCount;$("info-cats").textContent=d.categoryCount;
+    renderRooms(d.rooms);renderLB(d.leaderboard);renderOvLog(d.logs);
   });
 }
 
-// ── Questions browser ──
-function loadQuestions() {
-  socket.emit("admin-get-questions", {}, d => {
-    if (!d || !d.questions) return;
-    allQs = d.questions;
-    $("s-qs").textContent = allQs.length;
-    $("s-cats").textContent = d.categories ? d.categories.length : 0;
-    $("info-qs").textContent = allQs.length;
-    $("info-cats").textContent = d.categories ? d.categories.join("، ") : "—";
+function renderRooms(rooms){
+  const sl={"lobby":"انتظار","playing":"يلعب","ended":"منتهية"};
+  const mkRow=r=>`<tr><td style="font-weight:700;color:var(--gold);letter-spacing:1px">${r.code}</td><td><span class="badge ${r.state}">${sl[r.state]||r.state}</span></td><td>${r.playerCount}/${r.totalPlayers||r.playerCount}</td><td>${(r.currentQuestion||0)+1}/${r.totalQuestions||"?"}</td><td style="display:flex;gap:3px"><button class="btn btn-r" style="padding:3px 6px;font-size:10px" onclick="delRoom('${r.code}')">حذف</button><button class="btn btn-o" style="padding:3px 6px;font-size:10px" onclick="forceClose('${r.code}')">إغلاق</button></td></tr>`;
+  $("t-rooms").innerHTML=rooms.length?rooms.map(mkRow).join(""):'<tr><td colspan="5" class="empty">لا توجد غرف</td></tr>';
+  $("ov-rooms").innerHTML=rooms.slice(0,5).length?rooms.slice(0,5).map(r=>`<tr><td style="color:var(--gold)">${r.code}</td><td><span class="badge ${r.state}">${sl[r.state]||r.state}</span></td><td>${r.playerCount}</td></tr>`).join(""):'<tr><td colspan="3" class="empty">—</td></tr>';
+}
 
-    // Populate category filter
-    const sel = $("q-cat-filter");
-    sel.innerHTML = '<option value="">كل التصنيفات</option>';
-    if (d.categories) d.categories.forEach(c => { const o = document.createElement("option"); o.value = c; o.textContent = c; sel.appendChild(o); });
+function renderLB(lb){
+  const m=["🥇","🥈","🥉"];
+  const html=lb&&lb.length?lb.map((e,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12px"><span style="font-weight:900;min-width:24px">${m[i]||(i+1)}</span><span style="flex:1;font-weight:600">${e.name}</span><span style="font-weight:900;color:var(--gold)">${e.score}</span></div>`).join(""):'<div class="empty">لا نتائج</div>';
+  $("lb-card").innerHTML=html;$("ov-lb").innerHTML=html;
+}
 
+function renderOvLog(logs){
+  if(!logs||!logs.length){$("ov-log").textContent="لا أحداث";return;}
+  $("ov-log").textContent=logs.slice(0,20).map(l=>{const d=new Date(l.time);return`[${d.toLocaleTimeString("en",{hour12:false})}] ${l.action}: ${l.details}`;}).join("\n");
+}
+
+// ── Rooms ──
+function delRoom(c){if(!confirm("حذف "+c+"؟"))return;emit("admin-delete-room",{code:c},r=>{if(r.success){alog("حذف غرفة: "+c);refresh();}});}
+function forceClose(c){if(!confirm("إغلاق "+c+"؟"))return;emit("admin-force-close",{code:c},r=>{if(r.success){alog("إغلاق: "+c);refresh();}});}
+
+// ── Players ──
+function loadPlayers(){
+  emit("admin-get-players",{},players=>{
+    const tb=$("t-players");
+    if(!players||!players.length){tb.innerHTML='<tr><td colspan="6" class="empty">لا يوجد لاعبين</td></tr>';return;}
+    tb.innerHTML=players.map(p=>`<tr><td style="font-weight:600">${p.name}</td><td>${p.team==="A"?'<span style="color:var(--tA)">أ</span>':'<span style="color:var(--tB)">ب</span>'}</td><td>${p.score}</td><td style="color:var(--gold)">${p.roomCode}</td><td><span class="badge ${p.connected?"on":"off"}">${p.connected?"متصل":"منقطع"}</span></td><td><button class="btn btn-r" style="padding:2px 6px;font-size:10px" onclick="kickP('${p.roomCode}','${p.name}')">طرد</button></td></tr>`).join("");
+  });
+}
+function kickP(code,name){if(!confirm("طرد "+name+"؟"))return;emit("admin-kick-player",{roomCode:code,playerName:name},r=>{if(r.success){alog("طرد: "+name);loadPlayers();}});}
+
+// ── Questions ──
+function loadQs(){
+  emit("admin-get-questions",{},d=>{
+    if(!d)return;allQs=d.questions||[];
+    const sel=$("f-cat");sel.innerHTML='<option value="">كل التصنيفات</option>';
+    (d.categories||[]).forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;sel.appendChild(o);});
     filterQs();
-    log("📝 تم تحميل " + allQs.length + " سؤال");
+  });
+}
+function filterQs(){
+  const cat=$("f-cat").value,diff=$("f-diff").value,s=$("f-search").value.trim().toLowerCase();
+  let f=allQs;
+  if(cat)f=f.filter(q=>q.cat===cat);if(diff)f=f.filter(q=>q.diff===diff);
+  if(s)f=f.filter(q=>q.q.toLowerCase().includes(s)||q.a.toLowerCase().includes(s));
+  $("qcount").textContent=`${f.length} / ${allQs.length} سؤال`;
+  const show=f.slice(0,80);
+  $("qlist").innerHTML=show.length?show.map(q=>`<div class="qi"><div class="qi-body"><div class="qi-cat">${q.cat} • ${{easy:"سهل",medium:"متوسط",hard:"صعب"}[q.diff]||q.diff}</div><div class="qi-txt">${q.q}</div><div class="qi-ans">✅ ${q.a}</div></div><div class="qi-acts"><button class="btn btn-b" onclick="openEdit(${q.id})">✏️</button><button class="btn btn-r" onclick="delQ(${q.id})">🗑️</button></div></div>`).join("")+(f.length>80?`<div class="empty">+ ${f.length-80} أخرى</div>`:""):'<div class="empty">لا نتائج</div>';
+}
+
+function openModal(id){$("m-"+id).classList.add("on");}
+function closeModal(id){$("m-"+id).classList.remove("on");}
+
+function addQuestion(){
+  const q=$("aq-q").value.trim(),a=$("aq-a").value.trim(),cat=$("aq-cat").value.trim(),diff=$("aq-diff").value,img=$("aq-img").value.trim();
+  if(!q||!a){$("aq-err").textContent="أدخل السؤال والجواب";return;}
+  emit("admin-add-question",{q,a,cat:cat||"عامة",diff,img:img||undefined},r=>{
+    if(r.success){closeModal("addQ");$("aq-q").value="";$("aq-a").value="";$("aq-cat").value="";$("aq-img").value="";alog("إضافة سؤال");loadQs();}
   });
 }
 
-function filterQs() {
-  const cat = $("q-cat-filter").value;
-  const search = $("q-search").value.trim().toLowerCase();
-  const diff = $("q-diff-filter").value;
-  let filtered = allQs;
-  if (cat) filtered = filtered.filter(q => q.cat === cat);
-  if (diff) filtered = filtered.filter(q => q.diff === diff);
-  if (search) filtered = filtered.filter(q => q.q.toLowerCase().includes(search) || q.a.toLowerCase().includes(search));
+function openEdit(id){
+  const q=allQs.find(x=>x.id===id);if(!q)return;
+  $("eq-id").value=id;$("eq-q").value=q.q;$("eq-a").value=q.a;$("eq-cat").value=q.cat;$("eq-diff").value=q.diff||"medium";
+  openModal("editQ");
+}
+function saveEdit(){
+  const id=parseInt($("eq-id").value);
+  emit("admin-edit-question",{id,updates:{q:$("eq-q").value.trim(),a:$("eq-a").value.trim(),cat:$("eq-cat").value.trim(),diff:$("eq-diff").value}},r=>{
+    if(r.success){closeModal("editQ");alog("تعديل سؤال #"+id);loadQs();}
+  });
+}
+function delQ(id){if(!confirm("حذف السؤال؟"))return;emit("admin-delete-question",{id},r=>{if(r.success){alog("حذف سؤال #"+id);loadQs();}});}
 
-  $("q-count").textContent = `عرض ${filtered.length} من ${allQs.length} سؤال`;
-
-  const show = filtered.slice(0, 100); // Show max 100 at a time
-  $("q-list").innerHTML = show.length ? show.map(q =>
-    `<div class="q-item"><div class="q-cat">${q.cat} ${q.diff ? "• " + ({easy:"سهل",medium:"متوسط",hard:"صعب"}[q.diff]||q.diff) : ""}</div><div class="q-txt">${q.q}</div><div class="q-ans">✅ ${q.a}</div></div>`
-  ).join("") + (filtered.length > 100 ? `<div class="empty">+ ${filtered.length - 100} سؤال آخر</div>` : "")
-  : '<div class="empty">لا توجد نتائج</div>';
+function importQs(){
+  try{
+    const arr=JSON.parse($("imp-data").value);
+    if(!Array.isArray(arr)){$("imp-err").textContent="يجب أن تكون مصفوفة JSON";return;}
+    emit("admin-bulk-import",{questions:arr},r=>{if(r.success){closeModal("importQ");$("imp-data").value="";alog("استيراد "+r.count+" سؤال");loadQs();}});
+  }catch(e){$("imp-err").textContent="JSON غير صالح";}
 }
 
-// ── Actions ──
-function delRoom(code) { if (!confirm("حذف " + code + "؟")) return; socket.emit("admin-delete-room", { code }, r => { if (r.success) { log("🗑️ حذف: " + code); refresh(); } }); }
-function clearRooms() { if (!confirm("حذف جميع الغرف؟")) return; socket.emit("admin-clear-rooms", {}, r => { if (r.success) { log("🗑️ حذف جميع الغرف"); refresh(); } }); }
-function clearLB() { if (!confirm("مسح المتصدرين؟")) return; socket.emit("admin-clear-leaderboard", {}, r => { if (r.success) { log("🏆 مسح المتصدرين"); refresh(); } }); }
+function exportQs(){
+  const blob=new Blob([JSON.stringify(allQs,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="bazr-questions.json";a.click();
+  alog("تصدير الأسئلة");
+}
 
-// ── Log ──
-function log(msg) { const t = new Date().toLocaleTimeString("en",{hour12:false}); $("logbox").textContent += `[${t}] ${msg}\n`; $("logbox").scrollTop = $("logbox").scrollHeight; }
-function clearLog() { $("logbox").textContent = ""; }
+// ── Logs ──
+function loadLogs(){
+  emit("admin-get-logs",{limit:200},logs=>{
+    if(!logs||!logs.length){$("logmain").textContent="لا أحداث";return;}
+    $("logmain").textContent=logs.map(l=>{const d=new Date(l.time);return`[${d.toLocaleTimeString("en",{hour12:false})}] ${l.action}: ${l.details}`;}).join("\n");
+  });
+}
+
+// ── Local log ──
+function alog(msg){const t=new Date().toLocaleTimeString("en",{hour12:false});console.log(`[${t}] ${msg}`);}
 </script>
 </body>
 </html>

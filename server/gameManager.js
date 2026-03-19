@@ -372,9 +372,118 @@ function updateSettings(roomCode, settings) {
 
 function clearLeaderboard() { leaderboard.length = 0; }
 function getQuestionCount() { return QUESTION_BANK.length; }
-function getQuestionSample() {
-  // Return all questions (id, cat, diff, q, a) for admin browsing
-  return QUESTION_BANK.map(q => ({ id: q.id, cat: q.cat, diff: q.diff, q: q.q, a: q.a }));
+function getQuestionSample() { return QUESTION_BANK.map(q => ({ id: q.id, cat: q.cat, diff: q.diff, q: q.q, a: q.a, img: q.img || null })); }
+
+// ─── Admin: Custom questions (runtime additions) ───
+const customQuestions = [];
+let customIdCounter = 90001;
+
+function adminAddQuestion(q) {
+  const entry = { id: customIdCounter++, cat: q.cat || "عامة", diff: q.diff || "medium", q: q.q, a: q.a };
+  if (q.img) entry.img = q.img;
+  customQuestions.push(entry);
+  QUESTION_BANK.push(entry);
+  return entry;
+}
+
+function adminDeleteQuestion(id) {
+  const idx = QUESTION_BANK.findIndex(q => q.id === id);
+  if (idx !== -1) { QUESTION_BANK.splice(idx, 1); return true; }
+  return false;
+}
+
+function adminEditQuestion(id, updates) {
+  const q = QUESTION_BANK.find(q => q.id === id);
+  if (!q) return null;
+  if (updates.q) q.q = updates.q;
+  if (updates.a) q.a = updates.a;
+  if (updates.cat) q.cat = updates.cat;
+  if (updates.diff) q.diff = updates.diff;
+  if (updates.img !== undefined) q.img = updates.img || undefined;
+  return q;
+}
+
+function adminBulkImport(questions) {
+  let count = 0;
+  for (const q of questions) {
+    if (q.q && q.a) { adminAddQuestion(q); count++; }
+  }
+  return count;
+}
+
+// ─── Admin: Full room details ───
+function getAllRoomsFull() {
+  const result = [];
+  for (const [, room] of rooms) {
+    result.push({
+      code: room.code, state: room.state, createdAt: room.createdAt,
+      playerCount: room.players.filter(p => p.connected).length,
+      totalPlayers: room.players.length,
+      players: room.players.map(p => ({ id: p.id, name: p.name, team: p.team, score: p.score, connected: p.connected })),
+      settings: room.settings,
+      currentQuestion: room.currentQuestion,
+      totalQuestions: room.questions.length,
+      buzzerOpen: room.buzzerOpen,
+      buzzedPlayer: room.buzzedPlayer,
+    });
+  }
+  return result;
+}
+
+// ─── Admin: Get all online players across rooms ───
+function getAllPlayers() {
+  const players = [];
+  for (const [, room] of rooms) {
+    for (const p of room.players) {
+      players.push({ ...p, roomCode: room.code, roomState: room.state });
+    }
+  }
+  return players;
+}
+
+// ─── Admin: Force close room ───
+function forceCloseRoom(code) {
+  const room = rooms.get(code);
+  if (!room) return false;
+  if (room.timer) clearInterval(room.timer);
+  room.state = "ended";
+  return true;
+}
+
+// ─── Admin: Kick from any room ───
+function adminKickPlayer(roomCode, playerName) {
+  const room = rooms.get(roomCode);
+  if (!room) return null;
+  const idx = room.players.findIndex(p => p.name === playerName);
+  if (idx === -1) return null;
+  const player = room.players[idx];
+  room.players.splice(idx, 1);
+  return { room, player };
+}
+
+// ─── Admin: Activity log ───
+const activityLog = [];
+function addLog(action, details) {
+  activityLog.push({ time: Date.now(), action, details });
+  if (activityLog.length > 500) activityLog.shift();
+}
+function getLogs(limit = 100) { return activityLog.slice(-limit).reverse(); }
+function clearLogs() { activityLog.length = 0; }
+
+// ─── Admin: Platform stats ───
+function getFullStats() {
+  const allRooms = getAllRoomsFull();
+  const totalPlayers = allRooms.reduce((s, r) => s + r.playerCount, 0);
+  const cats = getAvailableCategories();
+  const catCounts = {};
+  QUESTION_BANK.forEach(q => { catCounts[q.cat] = (catCounts[q.cat] || 0) + 1; });
+  return {
+    online: globalOnline, roomCount: rooms.size, totalPlayers,
+    questionCount: QUESTION_BANK.length, categoryCount: cats.length,
+    categories: cats, categoryCounts: catCounts,
+    rooms: allRooms, leaderboard: getLeaderboard("monthly"),
+    logs: getLogs(50), customQuestionsCount: customQuestions.length,
+  };
 }
 
 module.exports = {
@@ -382,10 +491,14 @@ module.exports = {
   startGame, getCurrentQuestion, getCurrentQuestionFull,
   handleBuzz, openBuzzer, submitAnswer, judgeAnswer,
   nextQuestion, skipQuestion,
-  getScores, getPlayerInfo, getRoom, getRoomByHost, deleteRoom, clearLeaderboard, getQuestionCount, getQuestionSample,
+  getScores, getPlayerInfo, getRoom, getRoomByHost, deleteRoom,
+  clearLeaderboard, getQuestionCount, getQuestionSample,
   updateSettings, getAvailableCategories, checkAnswer,
   incrementOnline, decrementOnline, getOnlineCount,
   addChatMessage, addReaction,
   getLeaderboard, addToLeaderboard,
-  getRoomCount, getAllRoomInfo,
+  getRoomCount, getAllRoomInfo, getAllRoomsFull, getAllPlayers,
+  adminAddQuestion, adminDeleteQuestion, adminEditQuestion, adminBulkImport,
+  forceCloseRoom, adminKickPlayer,
+  addLog, getLogs, clearLogs, getFullStats,
 };
