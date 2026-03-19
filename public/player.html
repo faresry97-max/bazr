@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>بازر — اللاعب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <div class="page-header">
+    <div class="logo">🔔 بازر</div>
+    <div class="player-counter" id="player-counter">
+      <span class="dot"></span>
+      <span id="player-count">0</span> متصل
+    </div>
+  </div>
+
+  <div class="player-layout">
+    <!-- ── Waiting ── -->
+    <div class="screen active" id="sc-wait">
+      <div class="player-middle">
+        <div class="wait-screen">
+          <div class="wait-icon">⏳</div>
+          <h2>في الانتظار</h2>
+          <p class="text-dim mb-8">الغرفة</p>
+          <div class="wait-room-code" id="wait-code">------</div>
+          <div class="wait-team" id="wait-team"></div>
+          <p class="text-dim mt-16">بانتظار المقدّم لبدء اللعبة...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Game ── -->
+    <div class="screen" id="sc-game">
+      <div class="player-top">
+        <div class="player-mini-scores">
+          <div class="mini-score a"><div class="ms-lbl">الفريق أ</div><div class="ms-val" id="p-score-a">0</div></div>
+          <div class="mini-score b"><div class="ms-lbl">الفريق ب</div><div class="ms-val" id="p-score-b">0</div></div>
+        </div>
+      </div>
+
+      <div class="player-middle">
+        <!-- Question -->
+        <div class="player-question" id="p-question">—</div>
+
+        <!-- Timer -->
+        <div id="p-timer-section" class="hidden w-full">
+          <div class="timer-bar-wrap"><div class="timer-bar" id="p-timer-bar"></div></div>
+          <div class="timer-text" id="p-timer-text">15</div>
+        </div>
+
+        <!-- Status -->
+        <div class="player-status" id="p-status"></div>
+
+        <!-- Answer Result -->
+        <div class="player-answer-result hidden" id="p-answer-result"></div>
+
+        <!-- Buzzer -->
+        <div class="buzzer-wrap" id="buzzer-wrap">
+          <button class="buzzer-btn" id="buzz-btn" onclick="buzz()" disabled>بازر!</button>
+        </div>
+
+        <!-- Answer Input (shown after buzzing) -->
+        <div class="answer-input-wrap hidden" id="answer-wrap">
+          <div class="answer-input-label">✍️ اكتب إجابتك</div>
+          <div class="answer-input-row">
+            <input type="text" id="answer-input" placeholder="إجابتك هنا..." autocomplete="off" maxlength="100">
+            <button class="btn btn-gold" id="answer-submit-btn" onclick="submitAnswer()">إرسال</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disconnect overlay -->
+  <div class="disconnect-overlay hidden" id="dc-overlay">
+    <div class="spinner"></div>
+    <p class="mt-16" style="color:var(--mid)">جاري إعادة الاتصال...</p>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/player.js"></script>
+</body>
+</html>

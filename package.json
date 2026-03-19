@@ -1,0 +1,14 @@
+{
+  "name": "bazr",
+  "version": "1.0.0",
+  "description": "بازر — Team-based quiz buzzer game",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.4",
+    "socket.io-client": "^4.8.3"
+  }
+}
