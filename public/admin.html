@@ -112,7 +112,6 @@ label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin-botto
     <input type="password" id="i-p" placeholder="كلمة المرور" autocomplete="current-password">
     <button class="btn btn-g" style="width:100%;padding:11px;font-size:14px;margin-top:4px" onclick="doLogin()">دخول 🔑</button>
     <div class="err" id="lerr"></div>
-    <div style="margin-top:10px;font-size:10px;color:var(--dim)">admin / 112233</div>
   </div>
 </div>
 </div>
@@ -335,7 +334,6 @@ label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin-botto
     <div class="card" style="padding:14px">
       <div class="card-title">🔑 بيانات الدخول</div>
       <div style="font-size:12px;color:var(--dim);line-height:2.4">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span class="badge on">مسؤول</span> admin / 112233</div>
         <div style="display:flex;align-items:center;gap:6px"><span class="badge on">مسؤول</span> fares / fares97</div>
       </div>
     </div>
@@ -420,7 +418,7 @@ socket.on("connect",()=>{if(ok)refresh();});
 // ── Auth ──
 function doLogin(){
   const u=$("i-u").value.trim().toLowerCase(),p=$("i-p").value.trim();
-  if((u==="admin"&&p==="112233")||(u==="fares"&&p==="fares97")){
+  if(u==="fares"&&p==="fares97"){
     ok=true;$("sc-login").classList.add("hidden");$("sc-dash").classList.remove("hidden");$("sc-dash").style.display="flex";
     $("d-user").textContent="👤 "+u;refresh();loadQs();timer=setInterval(refresh,6000);alog("دخول: "+u);
   }else{$("lerr").textContent="❌ بيانات خاطئة";}
