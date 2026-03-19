@@ -205,9 +205,15 @@ label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin-botto
 <div class="panel" id="p-images">
   <div class="acts">
     <button class="btn btn-g" onclick="loadImgs()">🔄 تحديث</button>
+    <button class="btn btn-b" onclick="exportImgJson()">📤 تصدير JSON</button>
+  </div>
+  <div class="filters">
+    <select id="img-cat-filter" onchange="filterImgs()"><option value="">كل التصنيفات</option></select>
+    <input type="text" id="img-search" placeholder="بحث..." oninput="filterImgs()" style="max-width:200px">
+    <select id="img-view" onchange="filterImgs()"><option value="grid">شبكة</option><option value="list">قائمة</option></select>
   </div>
   <div class="q-count" id="img-count"></div>
-  <div class="q-scroll" id="img-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px"></div>
+  <div class="q-scroll" id="img-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px"></div>
 </div>
 
 <div class="panel" id="p-leaderboard">
@@ -546,43 +552,49 @@ function exportTxt(){
 }
 
 // ── Images ──
+let allImgs=[];
 function loadImgs(){
   if(!allQs.length){loadQs();setTimeout(loadImgs,500);return;}
-  const imgs=allQs.filter(q=>q.img);
-  $("img-count").textContent=`${imgs.length} سؤال بصورة`;
-  $("img-list").innerHTML=imgs.length?imgs.map(q=>`<div style="background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);overflow:hidden">
-    <img src="${q.img}" style="width:100%;height:120px;object-fit:contain;background:var(--s1);display:block" onerror="this.style.background='var(--s3)';this.alt='❌ فشل التحميل'">
-    <div style="padding:8px">
-      <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:2px">${q.cat}</div>
-      <div style="font-size:11px;font-weight:600;line-height:1.5;margin-bottom:4px">${q.q.substring(0,50)}</div>
-      <div style="font-size:10px;color:var(--lime);margin-bottom:6px">✅ ${q.a}</div>
-      <div style="display:flex;gap:4px">
-        <button class="btn btn-b" style="padding:3px 6px;font-size:9px;flex:1" onclick="replaceImg(${q.id})">🔄 تغيير</button>
-        <button class="btn btn-r" style="padding:3px 6px;font-size:9px" onclick="removeImg(${q.id})">🗑️</button>
-      </div>
-    </div>
-  </div>`).join(''):'<div class="empty" style="grid-column:1/-1">لا توجد أسئلة بصور</div>';
+  allImgs=allQs.filter(q=>q.img);
+  // Build category filter
+  const cats=[...new Set(allImgs.map(q=>q.cat))];
+  const sel=$("img-cat-filter");
+  sel.innerHTML='<option value="">كل التصنيفات ('+allImgs.length+')</option>';
+  cats.forEach(c=>{const count=allImgs.filter(q=>q.cat===c).length;const o=document.createElement("option");o.value=c;o.textContent=c+" ("+count+")";sel.appendChild(o);});
+  filterImgs();
+}
+
+function filterImgs(){
+  const cat=$("img-cat-filter").value;
+  const search=$("img-search").value.trim().toLowerCase();
+  const view=$("img-view").value;
+  let filtered=allImgs;
+  if(cat)filtered=filtered.filter(q=>q.cat===cat);
+  if(search)filtered=filtered.filter(q=>q.a.toLowerCase().includes(search)||q.q.toLowerCase().includes(search));
+  $("img-count").textContent=`${filtered.length} / ${allImgs.length} صورة`;
+
+  const show=filtered.slice(0,60);
+  if(view==="list"){
+    $("img-list").style.gridTemplateColumns="1fr";
+    $("img-list").innerHTML=show.length?show.map(q=>`<div class="qi"><div style="width:50px;height:40px;flex-shrink:0"><img src="${q.img}" style="width:100%;height:100%;object-fit:contain;border-radius:6px;background:var(--s1)" onerror="this.alt='❌'"></div><div class="qi-body"><div class="qi-cat">${q.cat}</div><div class="qi-txt">${q.a}</div></div><div class="qi-acts"><button class="btn btn-b" onclick="replaceImg(${q.id})" style="padding:3px 6px;font-size:9px">🔄</button><button class="btn btn-r" onclick="removeImg(${q.id})" style="padding:3px 6px;font-size:9px">🗑️</button></div></div>`).join("")+(filtered.length>60?`<div class="empty">+ ${filtered.length-60} أخرى</div>`:""):'<div class="empty">لا نتائج</div>';
+  }else{
+    $("img-list").style.gridTemplateColumns="repeat(auto-fill,minmax(160px,1fr))";
+    $("img-list").innerHTML=show.length?show.map(q=>`<div style="background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);overflow:hidden"><img src="${q.img}" style="width:100%;height:90px;object-fit:contain;background:var(--s1);display:block" onerror="this.style.background='var(--s3)';this.alt='❌'"><div style="padding:6px"><div style="font-size:9px;font-weight:700;color:var(--gold-2)">${q.cat}</div><div style="font-size:10px;font-weight:600;margin:2px 0">${q.a}</div><div style="display:flex;gap:3px"><button class="btn btn-b" style="padding:2px 5px;font-size:8px;flex:1" onclick="replaceImg(${q.id})">🔄</button><button class="btn btn-r" style="padding:2px 5px;font-size:8px" onclick="removeImg(${q.id})">🗑️</button></div></div></div>`).join("")+(filtered.length>60?`<div class="empty" style="grid-column:1/-1">+ ${filtered.length-60} أخرى</div>`:""):'<div class="empty" style="grid-column:1/-1">لا نتائج</div>';
+  }
 }
 
 function replaceImg(id){
   const url=prompt("أدخل رابط الصورة الجديدة:");
   if(!url||!url.startsWith("http"))return;
-  emit("admin-edit-question",{id,updates:{img:url}},r=>{
-    if(r.success){alog("تغيير صورة #"+id);
-      const q=allQs.find(x=>x.id===id);if(q)q.img=url;
-      loadImgs();
-    }
-  });
+  emit("admin-edit-question",{id,updates:{img:url}},r=>{if(r.success){alog("تغيير صورة #"+id);const q=allQs.find(x=>x.id===id);if(q)q.img=url;loadImgs();}});
 }
-
 function removeImg(id){
-  if(!confirm("إزالة الصورة من هذا السؤال؟"))return;
-  emit("admin-edit-question",{id,updates:{img:""}},r=>{
-    if(r.success){alog("إزالة صورة #"+id);
-      const q=allQs.find(x=>x.id===id);if(q)delete q.img;
-      loadImgs();
-    }
-  });
+  if(!confirm("إزالة الصورة؟"))return;
+  emit("admin-edit-question",{id,updates:{img:""}},r=>{if(r.success){alog("إزالة صورة #"+id);const q=allQs.find(x=>x.id===id);if(q)delete q.img;loadImgs();}});
+}
+function exportImgJson(){
+  const blob=new Blob([JSON.stringify(allImgs,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="jaras-images.json";a.click();alog("تصدير صور JSON");
 }
 
 // ── Analytics ──

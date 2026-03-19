@@ -82,7 +82,7 @@
   <div class="setup-hero">
     <div style="font-size:48px;margin-bottom:4px">🖼️</div>
     <h2 style="color:var(--gold-2)">من في الصورة؟</h2>
-    <p style="color:var(--muted);font-size:12px;margin-top:3px">أسرع فريق يجاوب صح ياخذ النقطة — اللعب سريع ومباشر!</p>
+    <p style="color:var(--muted);font-size:12px;margin-top:3px">تعرّف على الأعلام والشعارات والأندية والسيارات والمزيد!</p>
   </div>
   <div class="setup-card">
     <label>أسماء الفرق</label>
@@ -92,10 +92,12 @@
     </div>
     <label>عدد الجولات</label>
     <select id="rounds-count" style="margin-bottom:10px">
-      <option value="5">5 جولات</option>
-      <option value="10" selected>10 جولات</option>
-      <option value="15">15 جولة</option>
-      <option value="20">20 جولة</option>
+      <option value="5">5 جولات — سريعة</option>
+      <option value="10" selected>10 جولات — عادية</option>
+      <option value="15">15 جولة — طويلة</option>
+      <option value="20">20 جولة — ماراثون</option>
+      <option value="30">30 جولة — تحدّي</option>
+      <option value="50">50 جولة — بطولة</option>
     </select>
     <label>التصنيفات</label>
     <div class="cat-filter" id="cat-filter"></div>
@@ -175,13 +177,21 @@ let questions=[],tmr=null,tl=10,locked=false;
 let selectedCats=new Set();
 
 // ── Build category filters ──
+const catIcons={"أعلام":"🏳️","شعارات":"💻","شعارات تقنية":"💻","سيارات":"🚗","أندية":"⚽","أندية كرة قدم":"⚽","طعام":"🍔","طعام ومشروبات":"🍔","طيران":"✈️","رياضة":"🏅","ماركات أزياء":"👗","بنوك وتمويل":"🏦","تعليم وجامعات":"🎓","دول وعواصم":"🌍"};
 const allCats=[...new Set(BANK.map(q=>q.cat))];
 const catEl=$("cat-filter");
 allCats.forEach(c=>{
-  const b=document.createElement('button');b.className='cf-btn on';b.textContent=c;
+  const count=BANK.filter(q=>q.cat===c).length;
+  const b=document.createElement('button');b.className='cf-btn on';
+  b.textContent=(catIcons[c]||"❓")+" "+c+" ("+count+")";
   b.onclick=()=>{b.classList.toggle('on');if(selectedCats.has(c))selectedCats.delete(c);else selectedCats.add(c);};
   selectedCats.add(c);catEl.appendChild(b);
 });
+// Show total
+const totalEl=document.createElement('div');
+totalEl.style.cssText='width:100%;font-size:10px;color:var(--dim);margin-top:4px';
+totalEl.textContent='📊 إجمالي: '+BANK.length+' صورة في '+allCats.length+' تصنيف';
+catEl.appendChild(totalEl);
 
 function startGame(){
   t1.name=$("t1-name").value.trim()||"الفريق الأزرق";
@@ -204,7 +214,9 @@ function showRound(){
   $("g-t1s").textContent=t1.score;$("g-t2s").textContent=t2.score;
   $("g-round").textContent=`${round+1} / ${maxRounds}`;
   $("g-cat-display").textContent=q.cat||"";
-  $("g-cat-label").textContent=q.cat||"";
+  // Category-specific question text
+  const catQ={"أعلام":"🏳️ ما هذا العلم؟","شعارات":"💻 ما هذا الشعار؟","شعارات تقنية":"💻 ما هذا الشعار؟","سيارات":"🚗 ما هذه السيارة؟","أندية":"⚽ ما هذا النادي؟","أندية كرة قدم":"⚽ ما هذا النادي؟","طعام":"🍔 ما هذا؟","طعام ومشروبات":"🍔 ما هذا؟","طيران":"✈️ ما هذا الطيران؟","رياضة":"🏅 ما هذا؟","ماركات أزياء":"👗 ما هذه الماركة؟","بنوك وتمويل":"🏦 ما هذا البنك؟","تعليم وجامعات":"🎓 ما هذه الجامعة؟","دول وعواصم":"🌍 ما هذا العلم؟"};
+  $("g-cat-label").textContent=(catQ[q.cat]||"❓ ما في الصورة؟")+" — "+q.cat;
   $("g-status").textContent="⚡ أسرع فريق يجاوب صح ياخذ النقطة!";
   $("g-reveal").classList.remove("show");$("g-reveal").textContent="";
 
