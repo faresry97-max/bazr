@@ -15,7 +15,7 @@ function getBannedList() { return [...bannedUsers]; }
 const platformSettings = {
   siteName: "جرس",
   siteNameLatin: "JARAS",
-  parentBrand: "أصول طويق",
+  parentBrand: "",
   defaultTimer: 15,
   defaultQuestionCount: 20,
   maxPlayersPerTeam: 10,
