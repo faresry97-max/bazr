@@ -7,279 +7,260 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <style>
-/* ── Animated Background ── */
 .bg-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.saudi-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px;background:linear-gradient(90deg,rgba(0,100,60,.12),rgba(0,100,60,.04));border-bottom:1px solid rgba(0,100,60,.1);font-size:10px;color:rgba(0,200,83,.65);font-weight:600}
+.eid-banner{text-align:center;padding:16px;margin:0 0 10px;background:linear-gradient(135deg,rgba(240,180,41,.06),rgba(139,92,246,.04),rgba(34,213,142,.03));border:1px solid rgba(240,180,41,.1);border-radius:var(--rl);animation:fadeIn .6s ease}
+.eid-deco{font-size:18px;letter-spacing:5px;margin-bottom:3px;animation:eidSp 2s ease-in-out infinite}
+.eid-msg{font-size:clamp(15px,3vw,22px);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--glt),#fff,var(--glt),var(--gold));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:eidSh 3s linear infinite}
+.eid-sub{font-size:clamp(10px,2vw,13px);color:var(--mid);font-weight:600;margin-top:1px}
+@keyframes eidSp{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes eidSh{0%{background-position:200% center}100%{background-position:-200% center}}
 
-/* ── Saudi Identity ── */
-.saudi-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 12px;
-background:linear-gradient(90deg,rgba(0,100,60,.15),rgba(0,100,60,.05));border-bottom:1px solid rgba(0,100,60,.12);font-size:11px;color:rgba(0,200,83,.7);font-weight:600}
+.brand{text-align:center;padding:16px 0 8px}
+.brand-logo{font-size:clamp(40px,10vw,72px);font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#00c853,var(--gold),var(--glt));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
+.brand-sub{color:var(--dim);font-size:12px;display:flex;align-items:center;gap:5px;justify-content:center;margin-top:2px}
 
-/* ── Eid Banner ── */
-.eid-banner{text-align:center;padding:18px 16px;margin:0 0 12px;
-background:linear-gradient(135deg,rgba(240,180,41,.07),rgba(139,92,246,.05),rgba(34,213,142,.04));
-border:1.5px solid rgba(240,180,41,.12);border-radius:var(--rl);overflow:hidden;animation:fadeIn .6s ease}
-.eid-deco{font-size:20px;letter-spacing:6px;margin-bottom:4px;animation:eidSparkle 2s ease-in-out infinite}
-.eid-msg{font-size:clamp(16px,3.5vw,24px);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--glt),#fff,var(--glt),var(--gold));
-background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:eidShimmer 3s linear infinite}
-.eid-sub{font-size:clamp(11px,2vw,14px);color:var(--mid);font-weight:600;margin-top:2px}
-@keyframes eidSparkle{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-@keyframes eidShimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+/* ── Main Menu ── */
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.menu-item{padding:22px 14px;border-radius:var(--rl);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .25s;position:relative;overflow:hidden;text-decoration:none;color:inherit;display:block}
+.menu-item::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none}
+.menu-item:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.45)}
+.menu-item:active{transform:scale(.97)}
+.mi-icon{font-size:36px;margin-bottom:6px;position:relative}
+.mi-name{font-size:16px;font-weight:900;position:relative;margin-bottom:2px}
+.mi-desc{font-size:10px;color:var(--dim);line-height:1.6;position:relative}
+.mi-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:9px;font-weight:800;position:relative;margin-top:6px}
 
-/* ── Hero ── */
-.hero-logo{font-size:clamp(36px,8vw,64px);font-weight:900;letter-spacing:3px;
-background:linear-gradient(135deg,#00c853,var(--gold),var(--glt));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:2px}
-.hero-tagline{color:var(--dim);font-size:13px;display:flex;align-items:center;gap:6px;justify-content:center}
-.sa-flag{font-size:16px}
+.menu-item.mi-buzzer:hover,.menu-item.mi-buzzer:focus{border-color:var(--gold)}.menu-item.mi-buzzer:hover::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(240,180,41,.06),transparent 70%)}
+.mi-buzzer .mi-name{color:var(--gold)}.mi-buzzer .mi-tag{background:rgba(240,180,41,.08);color:var(--gold);border:1px solid rgba(240,180,41,.12)}
 
-/* ── Game Modes ── */
-.games-section{margin:20px 0 12px}
-.games-label{text-align:center;font-size:12px;font-weight:700;color:var(--dim);margin-bottom:10px;letter-spacing:.5px}
-.game-modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.game-mode{padding:24px 14px;border-radius:var(--rl);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .3s;position:relative;overflow:hidden}
-.game-mode::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none}
-.game-mode:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.5)}
-.game-mode.selected{border-width:2px}
-.game-mode.gm-buzzer.selected{border-color:var(--gold)}.game-mode.gm-buzzer.selected::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(240,180,41,.07),transparent 70%)}
-.game-mode.gm-buzzer:hover{border-color:rgba(240,180,41,.4)}
-.game-mode.gm-qa.selected{border-color:var(--purple)}.game-mode.gm-qa.selected::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(139,92,246,.07),transparent 70%)}
-.game-mode.gm-qa:hover{border-color:rgba(139,92,246,.4)}
-.game-mode.gm-guess.selected{border-color:var(--tA)}.game-mode.gm-guess.selected::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(56,199,240,.07),transparent 70%)}
-.game-mode.gm-guess:hover{border-color:rgba(56,199,240,.4)}
-.gm-guess .gm-name{color:var(--tA)}.gm-guess .gm-tag{background:rgba(56,199,240,.08);color:var(--tA);border:1px solid rgba(56,199,240,.15)}
-.gm-icon{font-size:40px;margin-bottom:6px;position:relative}
-.gm-name{font-size:18px;font-weight:900;position:relative;margin-bottom:2px}
-.gm-sub{font-size:10px;color:var(--dim);line-height:1.7;position:relative;margin-bottom:8px}
-.gm-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:9px;font-weight:800;position:relative}
-.gm-buzzer .gm-name{color:var(--gold)}.gm-buzzer .gm-tag{background:rgba(240,180,41,.08);color:var(--gold);border:1px solid rgba(240,180,41,.15)}
-.gm-qa .gm-name{color:var(--purple)}.gm-qa .gm-tag{background:rgba(139,92,246,.08);color:var(--purple);border:1px solid rgba(139,92,246,.15)}
+.menu-item.mi-qa:hover{border-color:var(--purple)}.menu-item.mi-qa:hover::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(139,92,246,.06),transparent 70%)}
+.mi-qa .mi-name{color:var(--purple)}.mi-qa .mi-tag{background:rgba(139,92,246,.08);color:var(--purple);border:1px solid rgba(139,92,246,.12)}
 
-.sub-opts{display:flex;gap:8px;margin-top:12px}
-.sub-opt{flex:1;padding:12px 8px;border-radius:var(--r);border:1.5px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .2s}
-.sub-opt:hover{border-color:rgba(240,180,41,.25)}
-.sub-opt.active{border-color:var(--gold);background:rgba(240,180,41,.04)}
-.sub-opt .so-icon{font-size:20px;margin-bottom:2px}.sub-opt .so-title{font-size:12px;font-weight:700}
+.menu-item.mi-guess:hover{border-color:var(--tA)}.menu-item.mi-guess:hover::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(56,199,240,.06),transparent 70%)}
+.mi-guess .mi-name{color:var(--tA)}.mi-guess .mi-tag{background:rgba(56,199,240,.08);color:var(--tA);border:1px solid rgba(56,199,240,.12)}
 
-.qa-features{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:10px 0 14px}
-.qa-feat{padding:3px 10px;border-radius:10px;font-size:9px;font-weight:700}
+.menu-item.mi-join:hover{border-color:var(--lime)}.menu-item.mi-join:hover::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(34,213,142,.06),transparent 70%)}
+.mi-join .mi-name{color:var(--lime)}.mi-join .mi-tag{background:rgba(34,213,142,.08);color:var(--lime);border:1px solid rgba(34,213,142,.12)}
 
-.footer{text-align:center;padding:20px 0 24px;font-size:11px;color:var(--dim)}
+.menu-item.mi-lb:hover{border-color:var(--glt)}.menu-item.mi-lb:hover::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(240,180,41,.06),transparent 70%)}
+.mi-lb .mi-name{color:var(--glt)}.mi-lb .mi-tag{background:rgba(240,180,41,.06);color:var(--glt);border:1px solid rgba(240,180,41,.1)}
+
+.menu-full{grid-column:1/-1}
+
+/* ── Join Page ── */
+.sub-page{display:none;animation:slideUp .3s ease}.sub-page.on{display:block}
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border:1px solid var(--s3);border-radius:var(--r);background:var(--s1);color:var(--mid);font-family:'Cairo';font-size:12px;font-weight:700;cursor:pointer;margin-bottom:12px;transition:all .15s}
+.back-btn:hover{border-color:var(--gold);color:var(--txt)}
+
+.footer{text-align:center;padding:16px 0 20px;font-size:10px;color:var(--dim)}
 .footer a{color:var(--dim);text-decoration:none;opacity:.3;transition:opacity .2s}
 .footer a:hover{opacity:1}
 
-@media(max-width:600px){.game-modes{grid-template-columns:1fr 1fr}.game-mode.gm-guess{grid-column:1/-1}}
-@media(max-width:480px){.sub-opts{flex-direction:column}.saudi-bar{font-size:10px}}
+@media(max-width:480px){.menu-grid{gap:8px}.mi-name{font-size:14px}.mi-icon{font-size:30px}.menu-item{padding:18px 10px}.saudi-bar{font-size:9px}}
 </style>
 </head>
 <body>
 <canvas class="bg-canvas" id="bgCanvas"></canvas>
 
-<!-- Saudi Identity Bar -->
-<div class="saudi-bar">
-  <span class="sa-flag">🇸🇦</span>
-  <span>صُنع في المملكة العربية السعودية</span>
-  <span class="sa-flag">🇸🇦</span>
-</div>
-
-<!-- Global Stats -->
+<div class="saudi-bar"><span>🇸🇦</span><span>صُنع في المملكة العربية السعودية</span><span>🇸🇦</span></div>
 <div class="global-bar">
-  <div class="global-stat"><span class="g-dot"></span> <span id="g-online">0</span> أونلاين</div>
+  <div class="global-stat"><span class="g-dot"></span><span id="g-online">0</span> أونلاين</div>
   <div class="global-stat">🏠 <span id="g-rooms">0</span> غرفة</div>
 </div>
 
 <div class="container">
-  <!-- Eid Banner -->
   <div class="eid-banner">
     <div class="eid-deco">🌙✨🕌✨🌙</div>
     <div class="eid-msg">كل عام وانتم بخير</div>
     <div class="eid-sub">تقبل الله منا ومنكم صالح الأعمال</div>
   </div>
 
-  <!-- Hero -->
-  <div class="hero" style="padding:20px 0 12px">
-    <div style="font-size:52px;margin-bottom:4px">🔔</div>
-    <div class="hero-logo">بازززز</div>
-    <div class="hero-tagline"><span class="sa-flag">🇸🇦</span> منصة مسابقات سعودية <span class="sa-flag">🇸🇦</span></div>
-  </div>
+  <!-- ═══ Main Menu ═══ -->
+  <div class="sub-page on" id="pg-main">
+    <div class="brand">
+      <div style="font-size:48px;margin-bottom:2px">🔔</div>
+      <div class="brand-logo">بازززز</div>
+      <div class="brand-sub"><span>🇸🇦</span> منصة مسابقات سعودية <span>🇸🇦</span></div>
+    </div>
 
-  <!-- Game Modes -->
-  <div class="games-section">
-    <div class="games-label">اختر وضع اللعب</div>
-    <div class="game-modes">
-      <div class="game-mode gm-buzzer selected" id="gm-buzzer" onclick="selectGame('buzzer')">
-        <div class="gm-icon">🔔</div>
-        <div class="gm-name">وضع الجرس</div>
-        <div class="gm-sub">اضغط الجرس أولاً واكتب الإجابة</div>
-        <div class="gm-tag">👥 أونلاين مباشر</div>
+    <div class="menu-grid">
+      <div class="menu-item mi-buzzer" onclick="goCreateBuzzer()">
+        <div class="mi-icon">🔔</div>
+        <div class="mi-name">وضع الجرس</div>
+        <div class="mi-desc">أنشئ جلسة جرس أونلاين</div>
+        <div class="mi-tag">🎙️ إنشاء جلسة</div>
       </div>
-      <div class="game-mode gm-qa" id="gm-qa" onclick="selectGame('qa')">
-        <div class="gm-icon">❓</div>
-        <div class="gm-name">سؤال وجواب</div>
-        <div class="gm-sub">اختيار من متعدد مع قدرات خاصة</div>
-        <div class="gm-tag">⚡ تنافسية</div>
+      <a href="/sg.html" class="menu-item mi-qa">
+        <div class="mi-icon">❓</div>
+        <div class="mi-name">سؤال وجواب</div>
+        <div class="mi-desc">اختيار من متعدد + قدرات خاصة</div>
+        <div class="mi-tag">🎮 إنشاء جلسة</div>
+      </a>
+      <a href="/guess.html" class="menu-item mi-guess">
+        <div class="mi-icon">🖼️</div>
+        <div class="mi-name">من في الصورة؟</div>
+        <div class="mi-desc">جلسة مقدّم — تحكّم كامل</div>
+        <div class="mi-tag">🎙️ جلسة مقدّم</div>
+      </a>
+      <div class="menu-item mi-join" onclick="goJoin()">
+        <div class="mi-icon">🏃</div>
+        <div class="mi-name">انضم للعبة</div>
+        <div class="mi-desc">ادخل بكود الغرفة</div>
+        <div class="mi-tag">🔗 انضمام</div>
       </div>
-      <div class="game-mode gm-guess" id="gm-guess" onclick="selectGame('guess')">
-        <div class="gm-icon">🖼️</div>
-        <div class="gm-name">من في الصورة؟</div>
-        <div class="gm-sub">اعرف الشخص أو المعلم من الصورة</div>
-        <div class="gm-tag">🏆 ٣ جولات</div>
+      <div class="menu-item mi-lb menu-full" onclick="goLB()">
+        <div class="mi-icon">🏆</div>
+        <div class="mi-name">المتصدّرين والإحصائيات</div>
+        <div class="mi-desc">إحصائيات شاملة لجميع أوضاع اللعب</div>
+        <div class="mi-tag">📊 إحصائيات</div>
       </div>
     </div>
   </div>
 
-  <!-- Buzzer Panel -->
-  <div id="buzzer-panel">
-    <div class="sub-opts">
-      <div class="sub-opt active" id="so-host" onclick="selectSub('host')"><div class="so-icon">🎙️</div><div class="so-title">أنشئ غرفة</div></div>
-      <div class="sub-opt" id="so-join" onclick="selectSub('join')"><div class="so-icon">🏃</div><div class="so-title">انضم</div></div>
-      <div class="sub-opt" id="so-lb" onclick="selectSub('lb')"><div class="so-icon">🏆</div><div class="so-title">المتصدّرين</div></div>
-    </div>
-    <div id="host-form" class="card mt-16 hidden">
-      <h2>🎮 إنشاء غرفة</h2>
-      <div class="form-group"><label>📂 التصنيفات</label><div class="cat-grid" id="cat-grid"></div></div>
-      <div class="form-group"><label>🔢 عدد الأسئلة</label><select id="host-qcount"><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option><option value="50">50</option></select></div>
-      <button class="btn btn-gold btn-lg w-full" onclick="createRoom()">🚀 أنشئ الغرفة</button>
+  <!-- ═══ Create Buzzer Session ═══ -->
+  <div class="sub-page" id="pg-buzzer">
+    <button class="back-btn" onclick="goBack()">→ رجوع</button>
+    <div class="card">
+      <h2>🔔 إنشاء جلسة جرس</h2>
+      <div class="form-group"><label>📂 التصنيفات (اختياري)</label><div class="cat-grid" id="cat-grid"></div></div>
+      <div class="form-group"><label>🔢 عدد الأسئلة</label>
+        <select id="host-qcount"><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option><option value="50">50</option></select>
+      </div>
+      <button class="btn btn-gold btn-lg w-full" onclick="createRoom()">🚀 أنشئ الجلسة</button>
       <div class="error-msg" id="host-error"></div>
     </div>
-    <div id="join-form" class="card mt-16 hidden">
+  </div>
+
+  <!-- ═══ Join Game ═══ -->
+  <div class="sub-page" id="pg-join">
+    <button class="back-btn" onclick="goBack()">→ رجوع</button>
+    <div class="card">
       <h2>🏃 انضم للعبة</h2>
+      <p style="color:var(--dim);font-size:12px;margin-bottom:14px">أدخل كود الغرفة واسمك للانضمام</p>
       <div class="form-group"><label>كود الغرفة</label><input type="text" id="join-code" placeholder="أدخل الكود (٦ أرقام)" maxlength="6" inputmode="numeric" autocomplete="off"></div>
       <div class="form-group"><label>اسمك</label><input type="text" id="join-name" placeholder="أدخل اسمك" maxlength="20" autocomplete="off"></div>
-      <div class="form-group"><label>فريقك</label><div class="team-select"><button class="team-btn a" id="team-a-btn" onclick="selectTeam('A')">🔵 الفريق أ</button><button class="team-btn b" id="team-b-btn" onclick="selectTeam('B')">🔴 الفريق ب</button></div></div>
-      <button class="btn btn-gold btn-lg w-full mt-8" onclick="joinRoom()">🚀 انضم</button>
+      <div class="form-group"><label>اختر فريقك</label>
+        <div class="team-select">
+          <button class="team-btn a" id="team-a-btn" onclick="selectTeam('A')">🔵 الفريق أ</button>
+          <button class="team-btn b" id="team-b-btn" onclick="selectTeam('B')">🔴 الفريق ب</button>
+        </div>
+      </div>
+      <button class="btn btn-gold btn-lg w-full mt-8" onclick="joinRoom()">🚀 انضم الآن</button>
       <div class="error-msg" id="join-error"></div>
     </div>
-    <div id="lb-panel" class="card mt-16 hidden">
-      <h2>🏆 المتصدّرين</h2>
-      <div class="lb-tabs"><button class="lb-tab active" onclick="loadLB('daily',this)">اليوم</button><button class="lb-tab" onclick="loadLB('monthly',this)">الشهر</button></div>
+  </div>
+
+  <!-- ═══ Leaderboard & Stats ═══ -->
+  <div class="sub-page" id="pg-lb">
+    <button class="back-btn" onclick="goBack()">→ رجوع</button>
+    <div class="card">
+      <h2>🏆 المتصدّرين والإحصائيات</h2>
+      <p style="color:var(--dim);font-size:12px;margin-bottom:12px">إحصائيات شاملة من جميع أوضاع اللعب</p>
+
+      <!-- Stats summary -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+        <div style="background:var(--s2);border-radius:var(--r);padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:var(--lime)" id="lb-online">0</div>
+          <div style="font-size:10px;color:var(--dim)">متصل الآن</div>
+        </div>
+        <div style="background:var(--s2);border-radius:var(--r);padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:var(--gold)" id="lb-rooms">0</div>
+          <div style="font-size:10px;color:var(--dim)">غرف نشطة</div>
+        </div>
+        <div style="background:var(--s2);border-radius:var(--r);padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:var(--purple)" id="lb-qs">0</div>
+          <div style="font-size:10px;color:var(--dim)">سؤال</div>
+        </div>
+      </div>
+
+      <div class="lb-tabs" style="display:flex;gap:5px;margin-bottom:12px">
+        <button class="lb-tab active" onclick="loadLB('daily',this)">اليوم</button>
+        <button class="lb-tab" onclick="loadLB('monthly',this)">الشهر</button>
+      </div>
       <div id="lb-list"></div>
     </div>
   </div>
 
-  <!-- Q&A Panel -->
-  <div id="qa-panel" class="hidden">
-    <div class="card mt-16" style="text-align:center;border-color:rgba(139,92,246,.15)">
-      <div style="font-size:48px;margin-bottom:4px">❓</div>
-      <h2 style="color:var(--purple)">وضع سؤال وجواب</h2>
-      <p style="color:var(--dim);font-size:12px;margin:4px 0 12px;line-height:1.8">اختيار من متعدد — فريقين — قدرات خاصة</p>
-      <div class="qa-features">
-        <span class="qa-feat" style="background:rgba(139,92,246,.08);color:var(--purple);border:1px solid rgba(139,92,246,.12)">⚔️ فريقين</span>
-        <span class="qa-feat" style="background:rgba(0,200,83,.05);color:var(--lime);border:1px solid rgba(0,200,83,.1)">❌ حذف خيارين</span>
-        <span class="qa-feat" style="background:rgba(240,180,41,.06);color:var(--gold);border:1px solid rgba(240,180,41,.1)">⏱️ وقت إضافي</span>
-        <span class="qa-feat" style="background:rgba(240,80,96,.05);color:var(--tB);border:1px solid rgba(240,80,96,.1)">🏴‍☠️ سرقة</span>
-        <span class="qa-feat" style="background:rgba(56,199,240,.05);color:var(--tA);border:1px solid rgba(56,199,240,.1)">⚡ مضاعفة</span>
-      </div>
-      <a href="/sg.html" class="btn btn-lg w-full" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;box-shadow:0 4px 20px rgba(139,92,246,.2)">🚀 ابدأ اللعب</a>
-    </div>
-  </div>
-
-  <!-- Guess Panel -->
-  <div id="guess-panel" class="hidden">
-    <div class="card mt-16" style="text-align:center;border-color:rgba(56,199,240,.15)">
-      <div style="font-size:48px;margin-bottom:4px">🖼️</div>
-      <h2 style="color:var(--tA)">من في الصورة؟</h2>
-      <p style="color:var(--dim);font-size:12px;margin:4px 0 12px;line-height:1.8">فريقين يتنافسان — ٣ جولات — ٥ نقاط لكل جولة<br>أول فريق يختار الإجابة الصحيحة يفوز!</p>
-      <div class="qa-features">
-        <span class="qa-feat" style="background:rgba(56,199,240,.06);color:var(--tA);border:1px solid rgba(56,199,240,.1)">🖼️ صور متنوعة</span>
-        <span class="qa-feat" style="background:rgba(240,180,41,.06);color:var(--gold);border:1px solid rgba(240,180,41,.1)">6️⃣ خيارات</span>
-        <span class="qa-feat" style="background:rgba(34,213,142,.05);color:var(--lime);border:1px solid rgba(34,213,142,.1)">⏱️ مؤقت ١٥ ثانية</span>
-        <span class="qa-feat" style="background:rgba(240,80,96,.05);color:var(--tB);border:1px solid rgba(240,80,96,.1)">🏆 ٣ جولات</span>
-      </div>
-      <a href="/guess.html" class="btn btn-lg w-full" style="background:linear-gradient(135deg,var(--tA),#2196f3);color:#fff;box-shadow:0 4px 20px rgba(56,199,240,.2)">🚀 ابدأ اللعب</a>
-    </div>
-  </div>
-
-  <div class="footer mt-24">
+  <div class="footer">
     <span>🇸🇦 بازززز — صنع في السعودية</span><br>
-    <a href="/admin.html" style="font-size:10px">🔐 لوحة التحكم</a>
+    <a href="/admin.html">🔐 لوحة التحكم</a>
   </div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-const socket = io();
-let selectedTeam = null, selectedCats = new Set();
+const socket=io();
+let selectedTeam=null,selectedCats=new Set();
 
-socket.on("global-stats", d => {
-  document.getElementById("g-online").textContent = d.online;
-  document.getElementById("g-rooms").textContent = d.rooms;
+socket.on("global-stats",d=>{
+  document.getElementById("g-online").textContent=d.online;
+  document.getElementById("g-rooms").textContent=d.rooms;
+  // Also update LB stats if visible
+  const lo=document.getElementById("lb-online");if(lo)lo.textContent=d.online;
+  const lr=document.getElementById("lb-rooms");if(lr)lr.textContent=d.rooms;
 });
-socket.emit("get-categories", cats => {
-  const grid = document.getElementById("cat-grid");
-  cats.forEach(cat => {
-    const t = document.createElement("button");
+
+socket.emit("get-categories",cats=>{
+  const grid=document.getElementById("cat-grid");
+  cats.forEach(cat=>{
+    const t=document.createElement("button");
     t.type="button";t.className="cat-tag";t.textContent=cat;
     t.onclick=()=>{t.classList.toggle("selected");selectedCats.has(cat)?selectedCats.delete(cat):selectedCats.add(cat);};
     grid.appendChild(t);
   });
 });
 
-function selectGame(g){
-  document.getElementById("gm-buzzer").classList.toggle("selected",g==="buzzer");
-  document.getElementById("gm-qa").classList.toggle("selected",g==="qa");
-  document.getElementById("gm-guess").classList.toggle("selected",g==="guess");
-  document.getElementById("buzzer-panel").classList.toggle("hidden",g!=="buzzer");
-  document.getElementById("qa-panel").classList.toggle("hidden",g!=="qa");
-  document.getElementById("guess-panel").classList.toggle("hidden",g!=="guess");
-  if(g==="buzzer")selectSub("host");
+// ── Navigation ──
+function showPage(id){document.querySelectorAll(".sub-page").forEach(p=>p.classList.remove("on"));document.getElementById("pg-"+id).classList.add("on");window.scrollTo({top:0,behavior:"smooth"});}
+function goBack(){showPage("main");}
+function goCreateBuzzer(){showPage("buzzer");}
+function goJoin(){showPage("join");}
+function goLB(){showPage("lb");loadLB("daily");
+  // Load stats
+  socket.emit("admin-stats",{},d=>{if(d){document.getElementById("lb-qs").textContent=d.questionCount||0;}});
 }
-function selectSub(m){
-  ["host","join","lb"].forEach(x=>document.getElementById("so-"+x).classList.toggle("active",x===m));
-  document.getElementById("host-form").classList.toggle("hidden",m!=="host");
-  document.getElementById("join-form").classList.toggle("hidden",m!=="join");
-  document.getElementById("lb-panel").classList.toggle("hidden",m!=="lb");
-  if(m==="lb")loadLB("daily");
-}
+
 function selectTeam(t){selectedTeam=t;document.getElementById("team-a-btn").classList.toggle("selected",t==="A");document.getElementById("team-b-btn").classList.toggle("selected",t==="B");}
-function createRoom(){socket.emit("create-room",{categories:[...selectedCats],questionCount:parseInt(document.getElementById("host-qcount").value)},r=>{if(r.success)window.location.href="/host.html?room="+r.roomCode;else document.getElementById("host-error").textContent="خطأ";});}
-function joinRoom(){const c=document.getElementById("join-code").value.trim(),n=document.getElementById("join-name").value.trim(),e=document.getElementById("join-error");if(!c||c.length!==6){e.textContent="أدخل كود ٦ أرقام";return;}if(!n){e.textContent="أدخل اسمك";return;}if(!selectedTeam){e.textContent="اختر فريقك";return;}window.location.href=`/player.html?room=${c}&name=${encodeURIComponent(n)}&team=${selectedTeam}`;}
-function loadLB(p,btn){if(btn){document.querySelectorAll(".lb-tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active");}socket.emit("get-leaderboard",{period:p},list=>{const el=document.getElementById("lb-list");if(!list.length){el.innerHTML='<div class="lb-empty">لا توجد نتائج — العب! 🎮</div>';return;}const m=["🥇","🥈","🥉"];el.innerHTML=list.map((e,i)=>`<div class="lb-row"><span class="lb-rank">${m[i]||(i+1)}</span><div><div class="lb-name">${e.name}</div><div class="lb-cat">${e.cat}</div></div><span class="lb-score">${e.score}</span></div>`).join("");});}
+
+function createRoom(){
+  socket.emit("create-room",{categories:[...selectedCats],questionCount:parseInt(document.getElementById("host-qcount").value)},r=>{
+    if(r.success)window.location.href="/host.html?room="+r.roomCode;
+    else document.getElementById("host-error").textContent="خطأ في إنشاء الجلسة";
+  });
+}
+
+function joinRoom(){
+  const c=document.getElementById("join-code").value.trim();
+  const n=document.getElementById("join-name").value.trim();
+  const e=document.getElementById("join-error");
+  if(!c||c.length!==6){e.textContent="أدخل كود الغرفة (٦ أرقام)";return;}
+  if(!n){e.textContent="أدخل اسمك";return;}
+  if(!selectedTeam){e.textContent="اختر فريقك";return;}
+  e.textContent="";
+  window.location.href=`/player.html?room=${c}&name=${encodeURIComponent(n)}&team=${selectedTeam}`;
+}
+
+function loadLB(p,btn){
+  if(btn){document.querySelectorAll(".lb-tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active");}
+  socket.emit("get-leaderboard",{period:p},list=>{
+    const el=document.getElementById("lb-list");
+    if(!list||!list.length){el.innerHTML='<div class="lb-empty">لا توجد نتائج بعد — العب أولاً! 🎮</div>';return;}
+    const m=["🥇","🥈","🥉"];
+    el.innerHTML=list.map((e,i)=>`<div class="lb-row"><span class="lb-rank">${m[i]||(i+1)}</span><div><div class="lb-name">${e.name}</div><div class="lb-cat">${e.cat}</div></div><span class="lb-score">${e.score}</span></div>`).join("");
+  });
+}
 
 document.getElementById("join-code").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("join-name").focus();});
 document.getElementById("join-name").addEventListener("keydown",e=>{if(e.key==="Enter")joinRoom();});
 
 // ── Animated Background ──
 (function(){
-  const canvas = document.getElementById("bgCanvas");
-  const ctx = canvas.getContext("2d");
-  let w, h, particles = [];
-  const colors = ["rgba(240,180,41,","rgba(0,200,83,","rgba(56,199,240,","rgba(139,92,246,"];
-
-  function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;init();}
-  function init(){
-    particles=[];
-    for(let i=0;i<40;i++){
-      particles.push({
-        x:Math.random()*w, y:Math.random()*h,
-        r:Math.random()*2+0.5, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
-        color:colors[Math.floor(Math.random()*colors.length)],
-        alpha:Math.random()*.15+.03
-      });
-    }
-  }
-  function draw(){
-    ctx.clearRect(0,0,w,h);
-    particles.forEach(p=>{
-      p.x+=p.vx; p.y+=p.vy;
-      if(p.x<0)p.x=w; if(p.x>w)p.x=0;
-      if(p.y<0)p.y=h; if(p.y>h)p.y=0;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=p.color+p.alpha+")"; ctx.fill();
-    });
-    // Draw connections
-    for(let i=0;i<particles.length;i++){
-      for(let j=i+1;j<particles.length;j++){
-        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
-        const dist=Math.sqrt(dx*dx+dy*dy);
-        if(dist<120){
-          ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y);
-          ctx.strokeStyle="rgba(240,180,41,"+(0.03*(1-dist/120))+")"; ctx.lineWidth=0.5; ctx.stroke();
-        }
-      }
-    }
-    requestAnimationFrame(draw);
-  }
-  window.addEventListener("resize",resize); resize(); draw();
+  const c=document.getElementById("bgCanvas"),x=c.getContext("2d");let w,h,pts=[];
+  const cl=["rgba(240,180,41,","rgba(0,200,83,","rgba(56,199,240,","rgba(139,92,246,"];
+  function rs(){w=c.width=innerWidth;h=c.height=innerHeight;pts=[];for(let i=0;i<35;i++)pts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.5,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,c:cl[Math.floor(Math.random()*cl.length)],a:Math.random()*.12+.03});}
+  function dr(){x.clearRect(0,0,w,h);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=p.c+p.a+")";x.fill();});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<100){x.beginPath();x.moveTo(pts[i].x,pts[i].y);x.lineTo(pts[j].x,pts[j].y);x.strokeStyle="rgba(240,180,41,"+(0.025*(1-d/100))+")";x.lineWidth=.4;x.stroke();}}requestAnimationFrame(dr);}
+  addEventListener("resize",rs);rs();dr();
 })();
 </script>
 </body>
