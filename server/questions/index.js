@@ -1,6 +1,8 @@
 // ═══════════════════════════════════════════════════════════════
-// Question Bank Index — Combines all 20 categories, deduplicates
+// Question Bank Index — All sources combined + deduplicated
 // ═══════════════════════════════════════════════════════════════
+
+const { loadFromHTML } = require("../htmlParser");
 
 const all = [
   ...require("./science"),      // 1-250     علوم
@@ -24,9 +26,10 @@ const all = [
   ...require("./law"),          // 4501-4750 قانون
   ...require("./philosophy"),   // 4751-5000 فلسفة
   ...require("./images"),       // 10001+    صور (أعلام + معالم)
+  ...loadFromHTML(),            // 20001+    سين جيم (parsed from s&g.html)
 ];
 
-// Deduplicate by question text + image (image questions share text but differ by img)
+// Deduplicate by question text + image
 const seen = new Set();
 const unique = [];
 for (const q of all) {
