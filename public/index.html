@@ -35,7 +35,7 @@ background:linear-gradient(135deg,#00c853,var(--gold),var(--glt));
 /* ── Game Modes ── */
 .games-section{margin:20px 0 12px}
 .games-label{text-align:center;font-size:12px;font-weight:700;color:var(--dim);margin-bottom:10px;letter-spacing:.5px}
-.game-modes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.game-modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 .game-mode{padding:24px 14px;border-radius:var(--rl);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .3s;position:relative;overflow:hidden}
 .game-mode::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none}
 .game-mode:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.5)}
@@ -44,6 +44,9 @@ background:linear-gradient(135deg,#00c853,var(--gold),var(--glt));
 .game-mode.gm-buzzer:hover{border-color:rgba(240,180,41,.4)}
 .game-mode.gm-qa.selected{border-color:var(--purple)}.game-mode.gm-qa.selected::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(139,92,246,.07),transparent 70%)}
 .game-mode.gm-qa:hover{border-color:rgba(139,92,246,.4)}
+.game-mode.gm-guess.selected{border-color:var(--tA)}.game-mode.gm-guess.selected::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(56,199,240,.07),transparent 70%)}
+.game-mode.gm-guess:hover{border-color:rgba(56,199,240,.4)}
+.gm-guess .gm-name{color:var(--tA)}.gm-guess .gm-tag{background:rgba(56,199,240,.08);color:var(--tA);border:1px solid rgba(56,199,240,.15)}
 .gm-icon{font-size:40px;margin-bottom:6px;position:relative}
 .gm-name{font-size:18px;font-weight:900;position:relative;margin-bottom:2px}
 .gm-sub{font-size:10px;color:var(--dim);line-height:1.7;position:relative;margin-bottom:8px}
@@ -64,6 +67,7 @@ background:linear-gradient(135deg,#00c853,var(--gold),var(--glt));
 .footer a{color:var(--dim);text-decoration:none;opacity:.3;transition:opacity .2s}
 .footer a:hover{opacity:1}
 
+@media(max-width:600px){.game-modes{grid-template-columns:1fr 1fr}.game-mode.gm-guess{grid-column:1/-1}}
 @media(max-width:480px){.sub-opts{flex-direction:column}.saudi-bar{font-size:10px}}
 </style>
 </head>
@@ -114,6 +118,12 @@ background:linear-gradient(135deg,#00c853,var(--gold),var(--glt));
         <div class="gm-sub">اختيار من متعدد مع قدرات خاصة</div>
         <div class="gm-tag">⚡ تنافسية</div>
       </div>
+      <div class="game-mode gm-guess" id="gm-guess" onclick="selectGame('guess')">
+        <div class="gm-icon">🖼️</div>
+        <div class="gm-name">من في الصورة؟</div>
+        <div class="gm-sub">اعرف الشخص أو المعلم من الصورة</div>
+        <div class="gm-tag">🏆 ٣ جولات</div>
+      </div>
     </div>
   </div>
 
@@ -163,6 +173,22 @@ background:linear-gradient(135deg,#00c853,var(--gold),var(--glt));
     </div>
   </div>
 
+  <!-- Guess Panel -->
+  <div id="guess-panel" class="hidden">
+    <div class="card mt-16" style="text-align:center;border-color:rgba(56,199,240,.15)">
+      <div style="font-size:48px;margin-bottom:4px">🖼️</div>
+      <h2 style="color:var(--tA)">من في الصورة؟</h2>
+      <p style="color:var(--dim);font-size:12px;margin:4px 0 12px;line-height:1.8">فريقين يتنافسان — ٣ جولات — ٥ نقاط لكل جولة<br>أول فريق يختار الإجابة الصحيحة يفوز!</p>
+      <div class="qa-features">
+        <span class="qa-feat" style="background:rgba(56,199,240,.06);color:var(--tA);border:1px solid rgba(56,199,240,.1)">🖼️ صور متنوعة</span>
+        <span class="qa-feat" style="background:rgba(240,180,41,.06);color:var(--gold);border:1px solid rgba(240,180,41,.1)">6️⃣ خيارات</span>
+        <span class="qa-feat" style="background:rgba(34,213,142,.05);color:var(--lime);border:1px solid rgba(34,213,142,.1)">⏱️ مؤقت ١٥ ثانية</span>
+        <span class="qa-feat" style="background:rgba(240,80,96,.05);color:var(--tB);border:1px solid rgba(240,80,96,.1)">🏆 ٣ جولات</span>
+      </div>
+      <a href="/guess.html" class="btn btn-lg w-full" style="background:linear-gradient(135deg,var(--tA),#2196f3);color:#fff;box-shadow:0 4px 20px rgba(56,199,240,.2)">🚀 ابدأ اللعب</a>
+    </div>
+  </div>
+
   <div class="footer mt-24">
     <span>🇸🇦 بازززز — صنع في السعودية</span><br>
     <a href="/admin.html" style="font-size:10px">🔐 لوحة التحكم</a>
@@ -191,8 +217,10 @@ socket.emit("get-categories", cats => {
 function selectGame(g){
   document.getElementById("gm-buzzer").classList.toggle("selected",g==="buzzer");
   document.getElementById("gm-qa").classList.toggle("selected",g==="qa");
+  document.getElementById("gm-guess").classList.toggle("selected",g==="guess");
   document.getElementById("buzzer-panel").classList.toggle("hidden",g!=="buzzer");
   document.getElementById("qa-panel").classList.toggle("hidden",g!=="qa");
+  document.getElementById("guess-panel").classList.toggle("hidden",g!=="guess");
   if(g==="buzzer")selectSub("host");
 }
 function selectSub(m){
