@@ -183,7 +183,8 @@ label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin-botto
   <div class="acts">
     <button class="btn btn-g" onclick="openModal('addQ')">➕ إضافة سؤال</button>
     <button class="btn btn-p" onclick="openModal('importQ')">📥 استيراد</button>
-    <button class="btn btn-b" onclick="exportQs()">📤 تصدير JSON</button>
+    <button class="btn btn-b" onclick="exportQs()">📤 JSON</button>
+    <button class="btn btn-l" onclick="exportTxt()">📄 TXT</button>
     <button class="btn btn-o" onclick="loadQs()">🔄 تحديث</button>
   </div>
   <div class="filters">
@@ -406,7 +407,15 @@ function importQs(){
 function exportQs(){
   const blob=new Blob([JSON.stringify(allQs,null,2)],{type:"application/json"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="bazr-questions.json";a.click();
-  alog("تصدير الأسئلة");
+  alog("تصدير JSON");
+}
+
+function exportTxt(){
+  const lines=allQs.map((q,i)=>`${i+1}. [${q.cat}] [${({easy:"سهل",medium:"متوسط",hard:"صعب"})[q.diff]||q.diff}]\nالسؤال: ${q.q}\nالإجابة: ${q.a}\n`);
+  const header=`بازززز — بنك الأسئلة\nالعدد: ${allQs.length} سؤال\nتاريخ التصدير: ${new Date().toLocaleDateString("ar")}\n${"═".repeat(50)}\n\n`;
+  const blob=new Blob([header+lines.join("\n")],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="bazr-questions.txt";a.click();
+  alog("تصدير TXT");
 }
 
 // ── Logs ──
