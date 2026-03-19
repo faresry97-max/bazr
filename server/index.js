@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 const path = require("path");
 const gm = require("./gameManager");
 const qa = require("./qaGame");
+const gg = require("./guessGame");
 
 const app = express();
 const server = http.createServer(app);
@@ -298,6 +299,78 @@ io.on("connection", (socket) => {
 
   socket.on("qa-get-cards", (d, cb) => { cb(qa.getPlayerCards(d.code, socket.id)); });
   socket.on("qa-get-categories", (d, cb) => { cb(qa.getCategories()); });
+
+  // ══════════════════════════════════
+  // ║    Guess Game (FFA Online)     ║
+  // ══════════════════════════════════
+
+  socket.on("gg-create", (d, cb) => {
+    const room = gg.createRoom(socket.id, { hostName: d.hostName, rounds: d.rounds });
+    socket.join(`gg:${room.code}`);
+    socket.data.ggRoom = room.code;
+    cb({ success: true, code: room.code });
+  });
+
+  socket.on("gg-join", (d, cb) => {
+    const result = gg.joinRoom(d.code, d.name, socket.id);
+    if (!result.success) return cb(result);
+    socket.join(`gg:${d.code}`);
+    socket.data.ggRoom = d.code;
+    socket.data.ggName = d.name;
+    const room = gg.getRoom(d.code);
+    cb({ success: true, player: result.player, reconnected: result.reconnected, state: room.state, players: gg.getPlayerInfo(room) });
+    io.to(`gg:${d.code}`).emit("gg-players", gg.getPlayerInfo(room));
+  });
+
+  socket.on("gg-start", (d) => {
+    const room = gg.startGame(d.code, d.questions || []);
+    if (!room) return;
+    const q = gg.getCurrentQuestion(room);
+    io.to(`gg:${d.code}`).emit("gg-started", { question: q, players: gg.getPlayerInfo(room) });
+    // Start timer
+    room.timeLeft = room.settings.timerDuration;
+    room.timer = setInterval(() => {
+      room.timeLeft--;
+      io.to(`gg:${d.code}`).emit("gg-tick", { time: room.timeLeft });
+      if (room.timeLeft <= 0) {
+        clearInterval(room.timer); room.timer = null;
+        const result = gg.timeUp(d.code);
+        if (result) io.to(`gg:${d.code}`).emit("gg-timeup", result);
+      }
+    }, 1000);
+  });
+
+  socket.on("gg-answer", (d) => {
+    const result = gg.handleAnswer(d.code, socket.id, d.answer);
+    if (!result) return;
+    if (result.correct) {
+      io.to(`gg:${d.code}`).emit("gg-correct", result);
+    } else {
+      socket.emit("gg-wrong", result);
+    }
+  });
+
+  socket.on("gg-next", (d) => {
+    const room = gg.getRoom(d.code);
+    if (!room) return;
+    const result = gg.nextQuestion(d.code);
+    if (!result) return;
+    if (result.gameOver) {
+      io.to(`gg:${d.code}`).emit("gg-ended", result);
+    } else {
+      room.timeLeft = room.settings.timerDuration;
+      io.to(`gg:${d.code}`).emit("gg-question", result.question);
+      room.timer = setInterval(() => {
+        room.timeLeft--;
+        io.to(`gg:${d.code}`).emit("gg-tick", { time: room.timeLeft });
+        if (room.timeLeft <= 0) {
+          clearInterval(room.timer); room.timer = null;
+          const r = gg.timeUp(d.code);
+          if (r) io.to(`gg:${d.code}`).emit("gg-timeup", r);
+        }
+      }, 1000);
+    }
+  });
 
   // ══════════════════════════════════
   // ║       Admin Dashboard Events   ║
