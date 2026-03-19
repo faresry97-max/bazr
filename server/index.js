@@ -261,6 +261,12 @@ io.on("connection", (socket) => {
     cb({ success: true });
   });
 
+  socket.on("admin-get-questions", (data, cb) => {
+    const qs = gm.getQuestionSample();
+    const cats = gm.getAvailableCategories();
+    cb({ questions: qs, categories: cats });
+  });
+
   socket.on("admin-clear-leaderboard", (data, cb) => {
     gm.clearLeaderboard();
     cb({ success: true });

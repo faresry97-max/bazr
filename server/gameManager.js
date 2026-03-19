@@ -372,13 +372,17 @@ function updateSettings(roomCode, settings) {
 
 function clearLeaderboard() { leaderboard.length = 0; }
 function getQuestionCount() { return QUESTION_BANK.length; }
+function getQuestionSample() {
+  // Return all questions (id, cat, diff, q, a) for admin browsing
+  return QUESTION_BANK.map(q => ({ id: q.id, cat: q.cat, diff: q.diff, q: q.q, a: q.a }));
+}
 
 module.exports = {
   createRoom, addPlayer, disconnectPlayer, kickPlayer,
   startGame, getCurrentQuestion, getCurrentQuestionFull,
   handleBuzz, openBuzzer, submitAnswer, judgeAnswer,
   nextQuestion, skipQuestion,
-  getScores, getPlayerInfo, getRoom, getRoomByHost, deleteRoom, clearLeaderboard, getQuestionCount,
+  getScores, getPlayerInfo, getRoom, getRoomByHost, deleteRoom, clearLeaderboard, getQuestionCount, getQuestionSample,
   updateSettings, getAvailableCategories, checkAnswer,
   incrementOnline, decrementOnline, getOnlineCount,
   addChatMessage, addReaction,
