@@ -10,59 +10,59 @@
 .bg-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none}
 .saudi-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px;background:linear-gradient(90deg,rgba(0,100,60,.12),rgba(0,100,60,.04));border-bottom:1px solid rgba(0,100,60,.1);font-size:10px;color:rgba(0,200,83,.65);font-weight:600}
 .eid-banner{text-align:center;padding:16px;margin:0 0 10px;background:linear-gradient(135deg,rgba(240,180,41,.06),rgba(139,92,246,.04),rgba(34,213,142,.03));border:1px solid rgba(240,180,41,.1);border-radius:var(--rl);animation:fadeIn .6s ease}
-.eid-deco{font-size:18px;letter-spacing:5px;margin-bottom:3px;animation:eidSp 2s ease-in-out infinite}
+.eid-deco{font-size:18px;letter-spacing:5px;margin-bottom:3px}
 .eid-msg{font-size:clamp(15px,3vw,22px);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--glt),#fff,var(--glt),var(--gold));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:eidSh 3s linear infinite}
 .eid-sub{font-size:clamp(10px,2vw,13px);color:var(--mid);font-weight:600;margin-top:1px}
-@keyframes eidSp{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
 @keyframes eidSh{0%{background-position:200% center}100%{background-position:-200% center}}
 
 .brand{text-align:center;padding:16px 0 8px}
 .brand-logo{font-size:clamp(40px,10vw,72px);font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#00c853,var(--gold),var(--glt));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
 .brand-sub{color:var(--dim);font-size:12px;display:flex;align-items:center;gap:5px;justify-content:center;margin-top:2px}
 
-/* ── Main Menu ── */
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
-.menu-item{padding:22px 14px;border-radius:var(--rl);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;transition:all .25s;position:relative;overflow:hidden;text-decoration:none;color:inherit;display:block}
-.menu-item::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none}
-.menu-item:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.45)}
-.menu-item:active{transform:scale(.97)}
-.mi-icon{font-size:36px;margin-bottom:6px;position:relative}
-.mi-name{font-size:16px;font-weight:900;position:relative;margin-bottom:2px}
-.mi-desc{font-size:10px;color:var(--dim);line-height:1.6;position:relative}
-.mi-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:9px;font-weight:800;position:relative;margin-top:6px}
+/* Main 3 buttons */
+.main-actions{display:flex;flex-direction:column;gap:10px;margin:18px 0}
+.main-btn{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:var(--rl);border:2px solid var(--s3);background:var(--s1);cursor:pointer;transition:all .25s;text-decoration:none;color:inherit;position:relative;overflow:hidden}
+.main-btn::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none}
+.main-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.main-btn:active{transform:scale(.98)}
+.mb-icon{font-size:36px;flex-shrink:0;position:relative}
+.mb-body{flex:1;min-width:0;position:relative}
+.mb-name{font-size:17px;font-weight:900;margin-bottom:1px}
+.mb-desc{font-size:11px;color:var(--dim);line-height:1.5}
+.mb-arrow{font-size:18px;color:var(--dim);position:relative;transition:transform .2s}
+.main-btn:hover .mb-arrow{transform:translateX(-4px)}
 
-.menu-item.mi-buzzer:hover,.menu-item.mi-buzzer:focus{border-color:var(--gold)}.menu-item.mi-buzzer:hover::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(240,180,41,.06),transparent 70%)}
-.mi-buzzer .mi-name{color:var(--gold)}.mi-buzzer .mi-tag{background:rgba(240,180,41,.08);color:var(--gold);border:1px solid rgba(240,180,41,.12)}
+.main-btn.play:hover{border-color:var(--gold)}.main-btn.play:hover::after{opacity:1;background:radial-gradient(ellipse at 80% 50%,rgba(240,180,41,.06),transparent 70%)}
+.main-btn.play .mb-name{color:var(--gold)}
+.main-btn.join:hover{border-color:var(--lime)}.main-btn.join:hover::after{opacity:1;background:radial-gradient(ellipse at 80% 50%,rgba(34,213,142,.06),transparent 70%)}
+.main-btn.join .mb-name{color:var(--lime)}
+.main-btn.stats:hover{border-color:var(--purple)}.main-btn.stats:hover::after{opacity:1;background:radial-gradient(ellipse at 80% 50%,rgba(139,92,246,.06),transparent 70%)}
+.main-btn.stats .mb-name{color:var(--purple)}
 
-.menu-item.mi-qa:hover{border-color:var(--purple)}.menu-item.mi-qa:hover::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(139,92,246,.06),transparent 70%)}
-.mi-qa .mi-name{color:var(--purple)}.mi-qa .mi-tag{background:rgba(139,92,246,.08);color:var(--purple);border:1px solid rgba(139,92,246,.12)}
+/* Game Mode Picker */
+.mode-picker{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.mode-item{display:flex;align-items:center;gap:12px;padding:16px;border-radius:var(--r);border:1.5px solid var(--s3);background:var(--s1);cursor:pointer;transition:all .2s;text-decoration:none;color:inherit}
+.mode-item:hover{border-color:var(--gold);transform:translateX(-4px);background:rgba(240,180,41,.02)}
+.mode-item:active{transform:scale(.98)}
+.mi-ico{font-size:28px;flex-shrink:0}
+.mi-body{flex:1}
+.mi-title{font-size:14px;font-weight:800}.mi-info{font-size:10px;color:var(--dim);line-height:1.5;margin-top:1px}
+.mi-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.mi-badge{padding:2px 8px;border-radius:8px;font-size:8px;font-weight:700}
+.mi-go{font-size:14px;color:var(--dim);flex-shrink:0}
 
-.menu-item.mi-guess:hover{border-color:var(--tA)}.menu-item.mi-guess:hover::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(56,199,240,.06),transparent 70%)}
-.mi-guess .mi-name{color:var(--tA)}.mi-guess .mi-tag{background:rgba(56,199,240,.08);color:var(--tA);border:1px solid rgba(56,199,240,.12)}
-
-.menu-item.mi-join:hover{border-color:var(--lime)}.menu-item.mi-join:hover::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(34,213,142,.06),transparent 70%)}
-.mi-join .mi-name{color:var(--lime)}.mi-join .mi-tag{background:rgba(34,213,142,.08);color:var(--lime);border:1px solid rgba(34,213,142,.12)}
-
-.menu-item.mi-lb:hover{border-color:var(--glt)}.menu-item.mi-lb:hover::after{opacity:1;background:radial-gradient(ellipse at 50% 80%,rgba(240,180,41,.06),transparent 70%)}
-.mi-lb .mi-name{color:var(--glt)}.mi-lb .mi-tag{background:rgba(240,180,41,.06);color:var(--glt);border:1px solid rgba(240,180,41,.1)}
-
-.menu-full{grid-column:1/-1}
-
-/* ── Join Page ── */
 .sub-page{display:none;animation:slideUp .3s ease}.sub-page.on{display:block}
-.back-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border:1px solid var(--s3);border-radius:var(--r);background:var(--s1);color:var(--mid);font-family:'Cairo';font-size:12px;font-weight:700;cursor:pointer;margin-bottom:12px;transition:all .15s}
-.back-btn:hover{border-color:var(--gold);color:var(--txt)}
-
+.bk{display:inline-flex;align-items:center;gap:4px;padding:7px 14px;border:1px solid var(--s3);border-radius:var(--r);background:var(--s1);color:var(--mid);font-family:'Cairo';font-size:12px;font-weight:700;cursor:pointer;margin-bottom:12px;transition:all .15s}
+.bk:hover{border-color:var(--gold);color:var(--txt)}
 .footer{text-align:center;padding:16px 0 20px;font-size:10px;color:var(--dim)}
 .footer a{color:var(--dim);text-decoration:none;opacity:.3;transition:opacity .2s}
 .footer a:hover{opacity:1}
 
-@media(max-width:480px){.menu-grid{gap:8px}.mi-name{font-size:14px}.mi-icon{font-size:30px}.menu-item{padding:18px 10px}.saudi-bar{font-size:9px}}
+@media(max-width:480px){.saudi-bar{font-size:9px}}
 </style>
 </head>
 <body>
 <canvas class="bg-canvas" id="bgCanvas"></canvas>
-
 <div class="saudi-bar"><span>🇸🇦</span><span>صُنع في المملكة العربية السعودية</span><span>🇸🇦</span></div>
 <div class="global-bar">
   <div class="global-stat"><span class="g-dot"></span><span id="g-online">0</span> أونلاين</div>
@@ -84,46 +84,92 @@
       <div class="brand-sub"><span>🇸🇦</span> منصة مسابقات سعودية <span>🇸🇦</span></div>
     </div>
 
-    <div class="menu-grid">
-      <div class="menu-item mi-buzzer" onclick="goCreateBuzzer()">
-        <div class="mi-icon">🔔</div>
-        <div class="mi-name">وضع الجرس</div>
-        <div class="mi-desc">أنشئ جلسة جرس أونلاين</div>
-        <div class="mi-tag">🎙️ إنشاء جلسة</div>
+    <div class="main-actions">
+      <div class="main-btn play" onclick="showPage('pg-games')">
+        <div class="mb-icon">🎮</div>
+        <div class="mb-body">
+          <div class="mb-name">ابدأ اللعب</div>
+          <div class="mb-desc">٣ أوضاع لعب — جرس، سؤال وجواب، من في الصورة</div>
+        </div>
+        <div class="mb-arrow">←</div>
       </div>
-      <a href="/qa.html" class="menu-item mi-qa">
-        <div class="mi-icon">❓</div>
-        <div class="mi-name">سؤال وجواب</div>
-        <div class="mi-desc">اختيار من متعدد + قدرات خاصة</div>
-        <div class="mi-tag">🎮 إنشاء جلسة</div>
-      </a>
-      <a href="/guess.html" class="menu-item mi-guess">
-        <div class="mi-icon">🖼️</div>
-        <div class="mi-name">من في الصورة؟</div>
-        <div class="mi-desc">جلسة مقدّم — تحكّم كامل</div>
-        <div class="mi-tag">🎙️ جلسة مقدّم</div>
-      </a>
-      <div class="menu-item mi-join" onclick="goJoin()">
-        <div class="mi-icon">🏃</div>
-        <div class="mi-name">انضم للعبة</div>
-        <div class="mi-desc">ادخل بكود الغرفة</div>
-        <div class="mi-tag">🔗 انضمام</div>
+      <div class="main-btn join" onclick="showPage('pg-join')">
+        <div class="mb-icon">🏃</div>
+        <div class="mb-body">
+          <div class="mb-name">انضم للعبة</div>
+          <div class="mb-desc">ادخل بكود الغرفة وانضم لجلسة موجودة</div>
+        </div>
+        <div class="mb-arrow">←</div>
       </div>
-      <div class="menu-item mi-lb menu-full" onclick="goLB()">
-        <div class="mi-icon">🏆</div>
-        <div class="mi-name">المتصدّرين والإحصائيات</div>
-        <div class="mi-desc">إحصائيات شاملة لجميع أوضاع اللعب</div>
-        <div class="mi-tag">📊 إحصائيات</div>
+      <div class="main-btn stats" onclick="showPage('pg-lb')">
+        <div class="mb-icon">🏆</div>
+        <div class="mb-body">
+          <div class="mb-name">المتصدّرين</div>
+          <div class="mb-desc">إحصائيات وترتيب اللاعبين</div>
+        </div>
+        <div class="mb-arrow">←</div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ Create Buzzer Session ═══ -->
+  <!-- ═══ Game Mode Picker ═══ -->
+  <div class="sub-page" id="pg-games">
+    <button class="bk" onclick="showPage('pg-main')">→ رجوع</button>
+    <h2 style="margin-bottom:4px">🎮 اختر وضع اللعب</h2>
+    <p style="color:var(--dim);font-size:12px;margin-bottom:14px">كل الأوضاع تستخدم بنك الأسئلة الموحّد (٥٠٠٠+ سؤال)</p>
+
+    <div class="mode-picker">
+      <div class="mode-item" onclick="showPage('pg-buzzer')">
+        <div class="mi-ico">🔔</div>
+        <div class="mi-body">
+          <div class="mi-title" style="color:var(--gold)">وضع الجرس</div>
+          <div class="mi-info">اضغط الجرس أولاً واكتب الإجابة — تطابق ذكي</div>
+          <div class="mi-badges">
+            <span class="mi-badge" style="background:rgba(240,180,41,.08);color:var(--gold);border:1px solid rgba(240,180,41,.12)">👥 أونلاين</span>
+            <span class="mi-badge" style="background:rgba(34,213,142,.06);color:var(--lime);border:1px solid rgba(34,213,142,.1)">✍️ إجابة كتابية</span>
+            <span class="mi-badge" style="background:rgba(56,199,240,.06);color:var(--tA);border:1px solid rgba(56,199,240,.1)">⚡ سريع</span>
+          </div>
+        </div>
+        <div class="mi-go">←</div>
+      </div>
+
+      <a href="/qa.html" class="mode-item">
+        <div class="mi-ico">❓</div>
+        <div class="mi-body">
+          <div class="mi-title" style="color:var(--purple)">سؤال وجواب</div>
+          <div class="mi-info">اختيار من متعدد — فريقين — بطاقات خاصة</div>
+          <div class="mi-badges">
+            <span class="mi-badge" style="background:rgba(139,92,246,.08);color:var(--purple);border:1px solid rgba(139,92,246,.12)">👥 أونلاين</span>
+            <span class="mi-badge" style="background:rgba(240,180,41,.06);color:var(--gold);border:1px solid rgba(240,180,41,.1)">🃏 بطاقات</span>
+            <span class="mi-badge" style="background:rgba(240,80,96,.06);color:var(--tB);border:1px solid rgba(240,80,96,.1)">⚔️ فرق</span>
+          </div>
+        </div>
+        <div class="mi-go">←</div>
+      </a>
+
+      <a href="/guess.html" class="mode-item">
+        <div class="mi-ico">🖼️</div>
+        <div class="mi-body">
+          <div class="mi-title" style="color:var(--tA)">من في الصورة؟</div>
+          <div class="mi-info">تعرّف على العلم من الصورة — ٦ خيارات</div>
+          <div class="mi-badges">
+            <span class="mi-badge" style="background:rgba(56,199,240,.06);color:var(--tA);border:1px solid rgba(56,199,240,.1)">🖼️ صور</span>
+            <span class="mi-badge" style="background:rgba(240,180,41,.06);color:var(--gold);border:1px solid rgba(240,180,41,.1)">🏆 جولات</span>
+            <span class="mi-badge" style="background:rgba(34,213,142,.06);color:var(--lime);border:1px solid rgba(34,213,142,.1)">⚡ محلي</span>
+          </div>
+        </div>
+        <div class="mi-go">←</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ Buzzer Setup ═══ -->
   <div class="sub-page" id="pg-buzzer">
-    <button class="back-btn" onclick="goBack()">→ رجوع</button>
+    <button class="bk" onclick="showPage('pg-games')">→ رجوع</button>
     <div class="card">
       <h2>🔔 إنشاء جلسة جرس</h2>
-      <div class="form-group"><label>📂 التصنيفات (اختياري)</label><div class="cat-grid" id="cat-grid"></div></div>
+      <p style="color:var(--dim);font-size:12px;margin-bottom:12px">أنشئ غرفة وشارك الكود مع اللاعبين</p>
+      <div class="form-group"><label>📂 التصنيفات (اختياري — اتركها فارغة للكل)</label><div class="cat-grid" id="cat-grid"></div></div>
       <div class="form-group"><label>🔢 عدد الأسئلة</label>
         <select id="host-qcount"><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option><option value="50">50</option></select>
       </div>
@@ -134,10 +180,10 @@
 
   <!-- ═══ Join Game ═══ -->
   <div class="sub-page" id="pg-join">
-    <button class="back-btn" onclick="goBack()">→ رجوع</button>
+    <button class="bk" onclick="showPage('pg-main')">→ رجوع</button>
     <div class="card">
       <h2>🏃 انضم للعبة</h2>
-      <p style="color:var(--dim);font-size:12px;margin-bottom:14px">أدخل كود الغرفة واسمك للانضمام</p>
+      <p style="color:var(--dim);font-size:12px;margin-bottom:12px">أدخل كود الغرفة الذي أعطاك إياه المقدّم</p>
       <div class="form-group"><label>كود الغرفة</label><input type="text" id="join-code" placeholder="أدخل الكود (٦ أرقام)" maxlength="6" inputmode="numeric" autocomplete="off"></div>
       <div class="form-group"><label>اسمك</label><input type="text" id="join-name" placeholder="أدخل اسمك" maxlength="20" autocomplete="off"></div>
       <div class="form-group"><label>اختر فريقك</label>
@@ -151,30 +197,26 @@
     </div>
   </div>
 
-  <!-- ═══ Leaderboard & Stats ═══ -->
+  <!-- ═══ Leaderboard ═══ -->
   <div class="sub-page" id="pg-lb">
-    <button class="back-btn" onclick="goBack()">→ رجوع</button>
+    <button class="bk" onclick="showPage('pg-main')">→ رجوع</button>
     <div class="card">
-      <h2>🏆 المتصدّرين والإحصائيات</h2>
-      <p style="color:var(--dim);font-size:12px;margin-bottom:12px">إحصائيات شاملة من جميع أوضاع اللعب</p>
-
-      <!-- Stats summary -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
-        <div style="background:var(--s2);border-radius:var(--r);padding:12px;text-align:center">
-          <div style="font-size:22px;font-weight:900;color:var(--lime)" id="lb-online">0</div>
-          <div style="font-size:10px;color:var(--dim)">متصل الآن</div>
+      <h2>🏆 المتصدّرين</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+        <div style="background:var(--s2);border-radius:var(--r);padding:10px;text-align:center">
+          <div style="font-size:20px;font-weight:900;color:var(--lime)" id="lb-online">0</div>
+          <div style="font-size:10px;color:var(--dim)">متصل</div>
         </div>
-        <div style="background:var(--s2);border-radius:var(--r);padding:12px;text-align:center">
-          <div style="font-size:22px;font-weight:900;color:var(--gold)" id="lb-rooms">0</div>
-          <div style="font-size:10px;color:var(--dim)">غرف نشطة</div>
+        <div style="background:var(--s2);border-radius:var(--r);padding:10px;text-align:center">
+          <div style="font-size:20px;font-weight:900;color:var(--gold)" id="lb-rooms">0</div>
+          <div style="font-size:10px;color:var(--dim)">غرف</div>
         </div>
-        <div style="background:var(--s2);border-radius:var(--r);padding:12px;text-align:center">
-          <div style="font-size:22px;font-weight:900;color:var(--purple)" id="lb-qs">0</div>
+        <div style="background:var(--s2);border-radius:var(--r);padding:10px;text-align:center">
+          <div style="font-size:20px;font-weight:900;color:var(--purple)" id="lb-qs">0</div>
           <div style="font-size:10px;color:var(--dim)">سؤال</div>
         </div>
       </div>
-
-      <div class="lb-tabs" style="display:flex;gap:5px;margin-bottom:12px">
+      <div class="lb-tabs" style="display:flex;gap:5px;margin-bottom:10px">
         <button class="lb-tab active" onclick="loadLB('daily',this)">اليوم</button>
         <button class="lb-tab" onclick="loadLB('monthly',this)">الشهر</button>
       </div>
@@ -196,7 +238,6 @@ let selectedTeam=null,selectedCats=new Set();
 socket.on("global-stats",d=>{
   document.getElementById("g-online").textContent=d.online;
   document.getElementById("g-rooms").textContent=d.rooms;
-  // Also update LB stats if visible
   const lo=document.getElementById("lb-online");if(lo)lo.textContent=d.online;
   const lr=document.getElementById("lb-rooms");if(lr)lr.textContent=d.rooms;
 });
@@ -211,16 +252,7 @@ socket.emit("get-categories",cats=>{
   });
 });
 
-// ── Navigation ──
-function showPage(id){document.querySelectorAll(".sub-page").forEach(p=>p.classList.remove("on"));document.getElementById("pg-"+id).classList.add("on");window.scrollTo({top:0,behavior:"smooth"});}
-function goBack(){showPage("main");}
-function goCreateBuzzer(){showPage("buzzer");}
-function goJoin(){showPage("join");}
-function goLB(){showPage("lb");loadLB("daily");
-  // Load stats
-  socket.emit("admin-stats",{},d=>{if(d){document.getElementById("lb-qs").textContent=d.questionCount||0;}});
-}
-
+function showPage(id){document.querySelectorAll(".sub-page").forEach(p=>p.classList.remove("on"));document.getElementById(id).classList.add("on");window.scrollTo({top:0,behavior:"smooth"});}
 function selectTeam(t){selectedTeam=t;document.getElementById("team-a-btn").classList.toggle("selected",t==="A");document.getElementById("team-b-btn").classList.toggle("selected",t==="B");}
 
 function createRoom(){
@@ -231,9 +263,7 @@ function createRoom(){
 }
 
 function joinRoom(){
-  const c=document.getElementById("join-code").value.trim();
-  const n=document.getElementById("join-name").value.trim();
-  const e=document.getElementById("join-error");
+  const c=document.getElementById("join-code").value.trim(),n=document.getElementById("join-name").value.trim(),e=document.getElementById("join-error");
   if(!c||c.length!==6){e.textContent="أدخل كود الغرفة (٦ أرقام)";return;}
   if(!n){e.textContent="أدخل اسمك";return;}
   if(!selectedTeam){e.textContent="اختر فريقك";return;}
@@ -245,10 +275,11 @@ function loadLB(p,btn){
   if(btn){document.querySelectorAll(".lb-tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active");}
   socket.emit("get-leaderboard",{period:p},list=>{
     const el=document.getElementById("lb-list");
-    if(!list||!list.length){el.innerHTML='<div class="lb-empty">لا توجد نتائج بعد — العب أولاً! 🎮</div>';return;}
+    if(!list||!list.length){el.innerHTML='<div class="lb-empty">لا توجد نتائج — العب أولاً! 🎮</div>';return;}
     const m=["🥇","🥈","🥉"];
     el.innerHTML=list.map((e,i)=>`<div class="lb-row"><span class="lb-rank">${m[i]||(i+1)}</span><div><div class="lb-name">${e.name}</div><div class="lb-cat">${e.cat}</div></div><span class="lb-score">${e.score}</span></div>`).join("");
   });
+  socket.emit("admin-stats",{},d=>{if(d)document.getElementById("lb-qs").textContent=d.questionCount||0;});
 }
 
 document.getElementById("join-code").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("join-name").focus();});
@@ -258,8 +289,8 @@ document.getElementById("join-name").addEventListener("keydown",e=>{if(e.key==="
 (function(){
   const c=document.getElementById("bgCanvas"),x=c.getContext("2d");let w,h,pts=[];
   const cl=["rgba(240,180,41,","rgba(0,200,83,","rgba(56,199,240,","rgba(139,92,246,"];
-  function rs(){w=c.width=innerWidth;h=c.height=innerHeight;pts=[];for(let i=0;i<35;i++)pts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.5,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,c:cl[Math.floor(Math.random()*cl.length)],a:Math.random()*.12+.03});}
-  function dr(){x.clearRect(0,0,w,h);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=p.c+p.a+")";x.fill();});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<100){x.beginPath();x.moveTo(pts[i].x,pts[i].y);x.lineTo(pts[j].x,pts[j].y);x.strokeStyle="rgba(240,180,41,"+(0.025*(1-d/100))+")";x.lineWidth=.4;x.stroke();}}requestAnimationFrame(dr);}
+  function rs(){w=c.width=innerWidth;h=c.height=innerHeight;pts=[];for(let i=0;i<30;i++)pts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.5,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,c:cl[Math.floor(Math.random()*cl.length)],a:Math.random()*.1+.03});}
+  function dr(){x.clearRect(0,0,w,h);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=p.c+p.a+")";x.fill();});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<100){x.beginPath();x.moveTo(pts[i].x,pts[i].y);x.lineTo(pts[j].x,pts[j].y);x.strokeStyle="rgba(240,180,41,"+(0.02*(1-d/100))+")";x.lineWidth=.4;x.stroke();}}requestAnimationFrame(dr);}
   addEventListener("resize",rs);rs();dr();
 })();
 </script>
