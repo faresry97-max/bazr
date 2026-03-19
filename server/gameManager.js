@@ -3,6 +3,25 @@
 const rooms = new Map();
 const QUESTION_BANK = require("./questions");
 
+// ── Ban list (in-memory) ──
+const bannedUsers = new Set();
+
+function banUser(name) { bannedUsers.add(name.toLowerCase()); }
+function unbanUser(name) { bannedUsers.delete(name.toLowerCase()); }
+function isBanned(name) { return bannedUsers.has(name.toLowerCase()); }
+function getBannedList() { return [...bannedUsers]; }
+
+// ── Platform settings (in-memory, editable from admin) ──
+const platformSettings = {
+  siteName: "جرس",
+  siteNameLatin: "JARAS",
+  parentBrand: "أصول طويق",
+  defaultTimer: 15,
+  defaultQuestionCount: 20,
+  maxPlayersPerTeam: 10,
+  maintenanceMode: false,
+};
+
 // ─── Global State ───
 let globalOnline = 0;
 const leaderboard = []; // {name, score, cat, date, roomCode}
@@ -150,6 +169,7 @@ function getAllRoomInfo() {
 // ─── Player Management ───
 
 function addPlayer(roomCode, name, team, socketId) {
+  if (isBanned(name)) return { success: false, error: "تم حظرك من المنصة" };
   const room = rooms.get(roomCode);
   if (!room) return { success: false, error: "الغرفة غير موجودة" };
   if (room.state === "ended") return { success: false, error: "اللعبة انتهت" };
@@ -501,4 +521,6 @@ module.exports = {
   adminAddQuestion, adminDeleteQuestion, adminEditQuestion, adminBulkImport,
   forceCloseRoom, adminKickPlayer,
   addLog, getLogs, clearLogs, getFullStats,
+  banUser, unbanUser, isBanned, getBannedList,
+  platformSettings,
 };

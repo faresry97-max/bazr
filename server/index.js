@@ -381,6 +381,19 @@ io.on("connection", (socket) => {
 
   socket.on("admin-get-players", (d, cb) => cb(gm.getAllPlayers()));
 
+  // Ban system
+  socket.on("admin-ban-user", (d, cb) => { gm.banUser(d.name); gm.addLog("ban-user", d.name); cb({ success: true }); });
+  socket.on("admin-unban-user", (d, cb) => { gm.unbanUser(d.name); gm.addLog("unban-user", d.name); cb({ success: true }); });
+  socket.on("admin-get-bans", (d, cb) => cb(gm.getBannedList()));
+
+  // Platform settings
+  socket.on("admin-get-settings", (d, cb) => cb(gm.platformSettings));
+  socket.on("admin-update-settings", (d, cb) => {
+    if (d.settings) Object.assign(gm.platformSettings, d.settings);
+    gm.addLog("update-settings", JSON.stringify(d.settings));
+    cb({ success: true });
+  });
+
   socket.on("admin-broadcast", (d) => {
     io.emit("system-broadcast", { msg: d.msg, type: d.type || "info" });
     gm.addLog("broadcast", d.msg);

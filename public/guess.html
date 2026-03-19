@@ -3,122 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>بازززز — من في الصورة؟</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<title>جرس — من في الصورة؟</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
-.gw{max-width:660px;margin:0 auto;padding:16px}
+.gw{max-width:660px;margin:0 auto;padding:16px;position:relative;z-index:1}
 .scr{display:none;animation:fadeIn .4s ease}.scr.on{display:block}
 
-/* Header */
-.g-header{display:flex;align-items:center;justify-content:space-between;padding:8px 0;margin-bottom:10px}
-.g-logo{font-size:18px;font-weight:900;color:var(--tA);display:flex;align-items:center;gap:5px}
+.setup-hero{text-align:center;padding:clamp(20px,5vh,40px) 0 14px}
+.setup-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--rr);padding:22px;margin-bottom:12px;backdrop-filter:blur(16px)}
+.t-inputs{display:flex;gap:10px;margin:10px 0}
+.t-inputs input{flex:1;text-align:center}
+.cat-filter{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
+.cf-btn{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(198,160,80,.03);color:var(--muted);font-family:'Tajawal';font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
+.cf-btn.on{border-color:var(--gold-2);background:rgba(198,160,80,.08);color:var(--gold-1)}
+.cf-btn:hover{border-color:var(--gold-3)}
 
-/* Setup */
-.setup-hero{text-align:center;padding:clamp(24px,6vh,48px) 0 16px}
-.setup-hero-icon{font-size:56px;margin-bottom:6px;filter:drop-shadow(0 4px 12px rgba(56,199,240,.3))}
-.setup-card{background:var(--s1);border:1px solid var(--s3);border-radius:var(--rl);padding:22px;margin-bottom:12px}
-.t-inputs{display:flex;gap:10px;margin:12px 0}
-.t-inputs input{flex:1;padding:12px;background:var(--s2);border:1.5px solid var(--s3);border-radius:var(--r);color:var(--txt);font-family:'Cairo';font-size:14px;text-align:center;outline:none;transition:border-color .2s}
-.t-inputs input:focus{border-color:var(--gold)}
-.t-inputs input::placeholder{color:var(--dim)}
-.rounds-select{margin:10px 0}
-.rounds-select select{padding:10px;background:var(--s2);border:1.5px solid var(--s3);border-radius:var(--r);color:var(--txt);font-family:'Cairo';font-size:14px;outline:none;width:100%}
-.rounds-select select:focus{border-color:var(--gold)}
-
-/* Scoreboard */
-.g-scores{display:flex;gap:10px;margin-bottom:10px}
-.g-sc{flex:1;text-align:center;padding:12px;border-radius:var(--rl);position:relative;overflow:hidden}
+.g-scores{display:flex;gap:10px;margin-bottom:8px}
+.g-sc{flex:1;text-align:center;padding:10px;border-radius:var(--rr);position:relative;overflow:hidden;backdrop-filter:blur(8px)}
 .g-sc::before{content:'';position:absolute;inset:0;opacity:.03}
-.g-sc.a{border:1.5px solid rgba(56,199,240,.2);background:rgba(56,199,240,.03)}.g-sc.a::before{background:var(--tA)}
-.g-sc.b{border:1.5px solid rgba(240,80,96,.2);background:rgba(240,80,96,.03)}.g-sc.b::before{background:var(--tB)}
-.g-sc-name{font-size:12px;font-weight:700;color:var(--mid);position:relative}
-.g-sc-val{font-size:clamp(30px,6vw,44px);font-weight:900;line-height:1;position:relative}
+.g-sc.a{border:1.5px solid rgba(91,168,200,.2);background:rgba(91,168,200,.03)}.g-sc.a::before{background:var(--tA)}
+.g-sc.b{border:1.5px solid rgba(200,91,110,.2);background:rgba(200,91,110,.03)}.g-sc.b::before{background:var(--tB)}
+.g-sc-name{font-size:11px;font-weight:700;color:var(--muted);position:relative}
+.g-sc-val{font-size:clamp(28px,6vw,42px);font-weight:900;line-height:1;position:relative}
 .g-sc.a .g-sc-val{color:var(--tA)}.g-sc.b .g-sc-val{color:var(--tB)}
 
-/* Round + Turn */
-.g-round{text-align:center;margin-bottom:6px}
-.round-pill{display:inline-block;padding:4px 16px;border-radius:12px;background:rgba(240,180,41,.06);color:var(--gold);font-weight:700;font-size:12px;border:1px solid rgba(240,180,41,.12)}
-.g-turn{text-align:center;padding:10px 14px;border-radius:var(--r);font-weight:700;font-size:15px;margin-bottom:8px;transition:all .3s}
-.g-turn.a{background:rgba(56,199,240,.05);border:1px solid rgba(56,199,240,.12);color:var(--tA)}
-.g-turn.b{background:rgba(240,80,96,.05);border:1px solid rgba(240,80,96,.12);color:var(--tB)}
+.g-info{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:12px;color:var(--dim)}
+.g-round-pill{padding:3px 12px;border-radius:999px;background:rgba(198,160,80,.06);color:var(--gold-2);font-weight:700;font-size:11px;border:1px solid rgba(198,160,80,.1)}
 
-/* Timer */
-.g-timer-num{text-align:center;font-size:clamp(26px,5vw,38px);font-weight:900;margin:4px 0;transition:color .3s}
-.g-timer-num.warn{color:var(--gold)}.g-timer-num.danger{color:var(--red);animation:pulseText .5s infinite}
-.g-timer-bar{width:100%;height:5px;background:var(--s2);border-radius:3px;margin-bottom:10px;overflow:hidden}
-.g-timer-fill{height:100%;border-radius:3px;background:var(--lime);transition:width 1s linear}
-.g-timer-fill.warn{background:var(--gold)}.g-timer-fill.danger{background:var(--red)}
+.g-timer-num{text-align:center;font-size:clamp(24px,5vw,36px);font-weight:900;margin:2px 0;transition:color .3s}
+.g-timer-num.warn{color:var(--gold-2)}.g-timer-num.danger{color:var(--red);animation:pulseText .5s infinite}
+.g-timer-bar{width:100%;height:4px;background:rgba(198,160,80,.06);border-radius:2px;margin-bottom:8px;overflow:hidden}
+.g-timer-fill{height:100%;border-radius:2px;background:var(--lime);transition:width 1s linear}
+.g-timer-fill.warn{background:var(--gold-2)}.g-timer-fill.danger{background:var(--red)}
 
-/* Image */
-.g-img-wrap{text-align:center;margin-bottom:12px}
-.g-img{width:100%;max-width:340px;max-height:280px;object-fit:contain;border-radius:14px;border:2.5px solid var(--s3);box-shadow:0 8px 28px rgba(0,0,0,.5);transition:all .4s;background:var(--s2)}
-.g-img.correct-glow{border-color:var(--lime);box-shadow:0 0 30px rgba(34,213,142,.2)}
+.g-img-wrap{text-align:center;margin-bottom:10px}
+.g-img{width:100%;max-width:300px;max-height:240px;object-fit:contain;border-radius:var(--rr);border:2px solid var(--line);box-shadow:var(--shadow);background:var(--bg-soft);transition:all .4s}
+.g-img.glow{border-color:var(--gold-2);box-shadow:0 0 30px rgba(198,160,80,.15)}
 
-/* Options */
-.g-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.g-opt{padding:13px 10px;border-radius:var(--r);border:2px solid var(--s3);background:var(--s1);cursor:pointer;text-align:center;font-size:14px;font-weight:700;transition:all .2s;font-family:'Cairo';color:var(--txt)}
-.g-opt:hover:not(.done){border-color:var(--gold);transform:translateY(-2px);background:rgba(240,180,41,.03)}
-.g-opt:active:not(.done){transform:scale(.96)}
-.g-opt.right{border-color:var(--lime);background:rgba(34,213,142,.1);color:var(--lime)}
-.g-opt.fail{border-color:var(--red);background:rgba(239,68,68,.06);color:var(--red);opacity:.5}
-.g-opt.done{cursor:default;opacity:.35}.g-opt.done.right{opacity:1}
+.g-cat-label{text-align:center;margin-bottom:6px;font-size:11px;color:var(--gold-2);font-weight:700}
 
-/* Answer reveal */
-.g-reveal{text-align:center;padding:10px;margin:8px 0;background:rgba(240,180,41,.04);border:1px solid rgba(240,180,41,.1);border-radius:var(--r);color:var(--gold);font-weight:700;font-size:14px;display:none}
+.g-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.g-opt{padding:11px 8px;border-radius:var(--r);border:1.5px solid var(--line);background:var(--panel);cursor:pointer;text-align:center;font-size:13px;font-weight:700;transition:all .15s;font-family:'Tajawal';color:var(--txt);backdrop-filter:blur(4px)}
+.g-opt:hover:not(.done){border-color:var(--gold-2);transform:translateY(-1px);background:rgba(198,160,80,.04)}
+.g-opt:active:not(.done){transform:scale(.97)}
+.g-opt.right{border-color:var(--lime);background:rgba(126,196,126,.1);color:var(--lime)}
+.g-opt.fail{border-color:var(--red);background:rgba(200,91,91,.06);color:var(--red);opacity:.5}
+.g-opt.done{cursor:default;opacity:.3}.g-opt.done.right{opacity:1}
+
+.g-reveal{text-align:center;padding:8px;margin:6px 0;background:rgba(198,160,80,.04);border:1px solid var(--line);border-radius:var(--r);color:var(--gold-1);font-weight:700;font-size:13px;display:none}
 .g-reveal.show{display:block;animation:fadeIn .3s ease}
 
-/* Score pop */
-.sc-pop{position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);font-size:2.2em;font-weight:900;pointer-events:none;z-index:200;animation:scoreFloat 1s ease forwards}
+.g-status{text-align:center;font-size:13px;font-weight:700;margin:6px 0;min-height:20px}
+
+.sc-pop{position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);font-size:2em;font-weight:900;pointer-events:none;z-index:200;animation:scoreFloat 1s ease forwards}
 .sc-pop.a{color:var(--tA)}.sc-pop.b{color:var(--tB)}
+.g-flash{position:fixed;inset:0;pointer-events:none;z-index:100;animation:flash .35s ease-out forwards}
+.g-flash.ok{background:rgba(126,196,126,.1)}.g-flash.no{background:rgba(200,91,91,.1)}
+.g-toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);padding:8px 18px;background:var(--panel-solid);border:1px solid var(--line);border-radius:var(--rl);color:var(--txt);font-weight:600;font-size:12px;z-index:200;backdrop-filter:blur(16px);animation:toastIn .3s ease,toastOut .3s ease 2.5s forwards}
 
-/* Flash */
-.g-flash{position:fixed;inset:0;pointer-events:none;z-index:100;animation:flash .4s ease-out forwards}
-.g-flash.ok{background:rgba(34,213,142,.12)}.g-flash.no{background:rgba(239,68,68,.12)}
+.res{text-align:center;padding:clamp(20px,4vh,36px) 0}
+.res-icon{font-size:56px;margin-bottom:6px}
+.res-title{font-family:'Amiri',serif;font-size:clamp(22px,5vw,34px);font-weight:700;margin-bottom:16px}
+.res-acts{display:flex;gap:8px;justify-content:center;margin-top:18px}
 
-/* Result */
-.res{text-align:center;padding:clamp(24px,5vh,48px) 0}
-.res-icon{font-size:60px;margin-bottom:8px}
-.res-title{font-size:clamp(24px,5vw,34px);font-weight:900;margin-bottom:6px}
-.res-sub{font-size:14px;color:var(--dim);margin-bottom:16px}
-.res-acts{display:flex;gap:10px;justify-content:center;margin-top:20px}
-
-/* Toast */
-.g-toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);padding:10px 20px;background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);color:var(--txt);font-weight:600;font-size:13px;z-index:200;animation:toastIn .3s ease,toastOut .3s ease 2.7s forwards}
-
-@media(max-width:480px){.g-opts{grid-template-columns:1fr}.g-img{max-height:200px}.t-inputs{flex-direction:column}}
+@media(max-width:480px){.g-opts{grid-template-columns:1fr}.g-img{max-height:180px}.t-inputs{flex-direction:column}}
 </style>
 </head>
 <body>
+<div class="noise-overlay"></div><div class="glow-overlay"></div>
 <div class="gw">
-<div class="g-header">
-  <div class="g-logo">🖼️ بازززز</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;margin-bottom:8px">
+  <div class="logo"><span class="logo-dot"></span><span class="logo-text">جرس</span></div>
   <a href="/" class="btn btn-ghost" style="font-size:11px;padding:6px 12px">← الرئيسية</a>
 </div>
 
 <!-- ═══ Setup ═══ -->
 <div class="scr on" id="sc-setup">
   <div class="setup-hero">
-    <div class="setup-hero-icon">🖼️</div>
-    <h1 style="font-size:clamp(24px,5vw,34px);color:var(--tA)">من في الصورة؟</h1>
-    <p style="color:var(--dim);font-size:13px;margin-top:4px">فريقين يتنافسان — تعرّف على العلم واربح النقاط!</p>
+    <div style="font-size:48px;margin-bottom:4px">🖼️</div>
+    <h2 style="color:var(--gold-2)">من في الصورة؟</h2>
+    <p style="color:var(--muted);font-size:12px;margin-top:3px">أسرع فريق يجاوب صح ياخذ النقطة — اللعب سريع ومباشر!</p>
   </div>
   <div class="setup-card">
-    <label style="font-size:13px;font-weight:700;color:var(--mid);margin-bottom:6px;display:block">أسماء الفرق</label>
+    <label>أسماء الفرق</label>
     <div class="t-inputs">
       <input id="t1-name" placeholder="🔵 الفريق الأول" value="الفريق الأزرق">
       <input id="t2-name" placeholder="🔴 الفريق الثاني" value="الفريق الأحمر">
     </div>
-    <div class="rounds-select">
-      <label style="font-size:13px;font-weight:700;color:var(--mid);margin-bottom:6px;display:block">عدد الجولات</label>
-      <select id="rounds-count">
-        <option value="3" selected>3 جولات</option>
-        <option value="5">5 جولات</option>
-        <option value="7">7 جولات</option>
-        <option value="10">10 جولات</option>
-      </select>
-    </div>
-    <button class="btn btn-gold btn-lg w-full mt-8" onclick="startGame()">🚀 ابدأ اللعب</button>
+    <label>عدد الجولات</label>
+    <select id="rounds-count" style="margin-bottom:10px">
+      <option value="5">5 جولات</option>
+      <option value="10" selected>10 جولات</option>
+      <option value="15">15 جولة</option>
+      <option value="20">20 جولة</option>
+    </select>
+    <label>التصنيفات</label>
+    <div class="cat-filter" id="cat-filter"></div>
+    <button class="btn btn-gold btn-lg w-full mt-8" onclick="startGame()">🚀 ابدأ</button>
   </div>
 </div>
 
@@ -128,36 +109,22 @@
     <div class="g-sc a"><div class="g-sc-name" id="g-t1n">أ</div><div class="g-sc-val" id="g-t1s">0</div></div>
     <div class="g-sc b"><div class="g-sc-name" id="g-t2n">ب</div><div class="g-sc-val" id="g-t2s">0</div></div>
   </div>
-  <div class="g-round"><span class="round-pill" id="g-round">الجولة 1 / 3</span></div>
-  <div class="g-turn a" id="g-turn">🎯 دور الفريق أ</div>
-  <div class="g-timer-num" id="g-timer">15</div>
-  <div class="g-timer-bar"><div class="g-timer-fill" id="g-bar" style="width:100%"></div></div>
+  <div class="g-info"><span class="g-round-pill" id="g-round">1 / 10</span><span id="g-cat-display"></span></div>
+  <div class="g-timer-num" id="g-timer">10</div>
+  <div class="g-timer-bar"><div class="g-timer-fill" id="g-bar"></div></div>
   <div class="g-img-wrap"><img class="g-img" id="g-img" src="" alt="❓"></div>
+  <div class="g-cat-label" id="g-cat-label"></div>
+  <div class="g-status" id="g-status"></div>
   <div class="g-reveal" id="g-reveal"></div>
   <div class="g-opts" id="g-opts"></div>
 </div>
 
-<!-- ═══ Round Result ═══ -->
-<div class="scr" id="sc-round">
-  <div class="res">
-    <div class="res-icon" id="rr-icon">✅</div>
-    <div class="res-title" id="rr-title">الفريق أ يفوز!</div>
-    <div class="res-sub" id="rr-sub">+5 نقاط</div>
-    <div class="g-scores" style="max-width:300px;margin:16px auto">
-      <div class="g-sc a"><div class="g-sc-name" id="rr-t1n">أ</div><div class="g-sc-val" id="rr-t1s">0</div></div>
-      <div class="g-sc b"><div class="g-sc-name" id="rr-t2n">ب</div><div class="g-sc-val" id="rr-t2s">0</div></div>
-    </div>
-    <button class="btn btn-gold btn-lg" onclick="nextRound()" id="rr-btn">الجولة التالية ←</button>
-  </div>
-</div>
-
-<!-- ═══ Final Result ═══ -->
+<!-- ═══ Result ═══ -->
 <div class="scr" id="sc-result">
   <div class="res">
     <div class="res-icon" id="fr-icon">🏆</div>
-    <div class="res-title" id="fr-title">النتيجة النهائية</div>
-    <div class="res-sub" id="fr-sub"></div>
-    <div class="g-scores" style="max-width:340px;margin:20px auto">
+    <div class="res-title" id="fr-title">النتيجة</div>
+    <div class="g-scores" style="max-width:320px;margin:16px auto">
       <div class="g-sc a"><div class="g-sc-name" id="fr-t1n">أ</div><div class="g-sc-val" id="fr-t1s">0</div></div>
       <div class="g-sc b"><div class="g-sc-name" id="fr-t2n">ب</div><div class="g-sc-val" id="fr-t2s">0</div></div>
     </div>
@@ -169,288 +136,155 @@
 </div>
 </div>
 
+<script src="js/guessBank.js"></script>
 <script>
-const F = "https://flagcdn.com/w320";
-const BANK = [
-{img:F+"/sa.png",a:"السعودية",opts:["الإمارات","السعودية","الكويت","قطر","البحرين","عُمان"]},
-{img:F+"/eg.png",a:"مصر",opts:["العراق","سوريا","مصر","اليمن","الأردن","لبنان"]},
-{img:F+"/ae.png",a:"الإمارات",opts:["السعودية","الإمارات","الكويت","قطر","البحرين","عُمان"]},
-{img:F+"/jp.png",a:"اليابان",opts:["الصين","كوريا","اليابان","تايلاند","إندونيسيا","فيتنام"]},
-{img:F+"/br.png",a:"البرازيل",opts:["الأرجنتين","البرازيل","المكسيك","كولومبيا","تشيلي","بيرو"]},
-{img:F+"/gb.png",a:"بريطانيا",opts:["فرنسا","ألمانيا","بريطانيا","هولندا","النرويج","أيسلندا"]},
-{img:F+"/us.png",a:"أمريكا",opts:["كندا","أمريكا","أستراليا","بريطانيا","فرنسا","ألمانيا"]},
-{img:F+"/tr.png",a:"تركيا",opts:["تونس","تركيا","باكستان","أذربيجان","ماليزيا","الجزائر"]},
-{img:F+"/de.png",a:"ألمانيا",opts:["بلجيكا","ألمانيا","فرنسا","هولندا","النمسا","سويسرا"]},
-{img:F+"/fr.png",a:"فرنسا",opts:["إيطاليا","فرنسا","هولندا","رومانيا","بلجيكا","أيرلندا"]},
-{img:F+"/it.png",a:"إيطاليا",opts:["المكسيك","إيطاليا","أيرلندا","المجر","فرنسا","رومانيا"]},
-{img:F+"/cn.png",a:"الصين",opts:["فيتنام","الصين","تركيا","المغرب","تونس","كوريا"]},
-{img:F+"/kr.png",a:"كوريا الجنوبية",opts:["اليابان","كوريا الجنوبية","تايوان","الصين","فيتنام","تايلاند"]},
-{img:F+"/in.png",a:"الهند",opts:["باكستان","الهند","بنغلاديش","سريلانكا","نيبال","إيران"]},
-{img:F+"/ca.png",a:"كندا",opts:["أمريكا","كندا","أستراليا","بريطانيا","نيوزيلندا","الدنمارك"]},
-{img:F+"/mx.png",a:"المكسيك",opts:["إيطاليا","المكسيك","الهند","المجر","أيرلندا","البيرو"]},
-{img:F+"/ar.png",a:"الأرجنتين",opts:["أوروغواي","الأرجنتين","اليونان","السلفادور","نيكاراغوا","هندوراس"]},
-{img:F+"/au.png",a:"أستراليا",opts:["نيوزيلندا","أستراليا","بريطانيا","فيجي","أمريكا","كندا"]},
-{img:F+"/ru.png",a:"روسيا",opts:["فرنسا","روسيا","هولندا","لوكسمبورغ","صربيا","سلوفاكيا"]},
-{img:F+"/za.png",a:"جنوب أفريقيا",opts:["كينيا","جنوب أفريقيا","غانا","نيجيريا","تنزانيا","إثيوبيا"]},
-{img:F+"/ng.png",a:"نيجيريا",opts:["غانا","نيجيريا","الكاميرون","ساحل العاج","السنغال","مالي"]},
-{img:F+"/ma.png",a:"المغرب",opts:["تونس","المغرب","تركيا","الجزائر","ليبيا","موريتانيا"]},
-{img:F+"/pk.png",a:"باكستان",opts:["تركيا","باكستان","الجزائر","ماليزيا","موريتانيا","تونس"]},
-{img:F+"/se.png",a:"السويد",opts:["الدنمارك","السويد","فنلندا","النرويج","أيسلندا","سويسرا"]},
-{img:F+"/no.png",a:"النرويج",opts:["أيسلندا","النرويج","الدنمارك","فنلندا","السويد","بريطانيا"]},
-{img:F+"/gr.png",a:"اليونان",opts:["الأرجنتين","اليونان","أوروغواي","فنلندا","قبرص","السلفادور"]},
-{img:F+"/pt.png",a:"البرتغال",opts:["إسبانيا","البرتغال","إيطاليا","البرازيل","المكسيك","فرنسا"]},
-{img:F+"/es.png",a:"إسبانيا",opts:["البرتغال","إسبانيا","إيطاليا","المكسيك","كولومبيا","الأرجنتين"]},
-{img:F+"/np.png",a:"نيبال",opts:["الهند","نيبال","بوتان","سريلانكا","بنغلاديش","ميانمار"]},
-{img:F+"/kz.png",a:"كازاخستان",opts:["أوزبكستان","كازاخستان","تركمانستان","قيرغيزستان","منغوليا","طاجيكستان"]},
-];
+// ── Fallback bank if guessBank.js fails to load ──
+if (!window.GUESS_BANK || !window.GUESS_BANK.length) {
+  const F="https://flagcdn.com/w320";
+  window.GUESS_BANK=[
+    {img:F+"/sa.png",a:"السعودية",cat:"أعلام",opts:["الإمارات","السعودية","الكويت","قطر","البحرين","عُمان"]},
+    {img:F+"/eg.png",a:"مصر",cat:"أعلام",opts:["العراق","سوريا","مصر","اليمن","الأردن","لبنان"]},
+    {img:F+"/ae.png",a:"الإمارات",cat:"أعلام",opts:["السعودية","الإمارات","الكويت","قطر","البحرين","عُمان"]},
+    {img:F+"/us.png",a:"أمريكا",cat:"أعلام",opts:["كندا","أمريكا","أستراليا","بريطانيا","فرنسا","ألمانيا"]},
+    {img:F+"/gb.png",a:"بريطانيا",cat:"أعلام",opts:["فرنسا","ألمانيا","بريطانيا","هولندا","النرويج","أيسلندا"]},
+    {img:F+"/jp.png",a:"اليابان",cat:"أعلام",opts:["الصين","كوريا","اليابان","تايلاند","إندونيسيا","فيتنام"]},
+    {img:F+"/br.png",a:"البرازيل",cat:"أعلام",opts:["الأرجنتين","البرازيل","المكسيك","كولومبيا","تشيلي","بيرو"]},
+    {img:F+"/de.png",a:"ألمانيا",cat:"أعلام",opts:["بلجيكا","ألمانيا","فرنسا","هولندا","النمسا","سويسرا"]},
+    {img:F+"/fr.png",a:"فرنسا",cat:"أعلام",opts:["إيطاليا","فرنسا","هولندا","رومانيا","بلجيكا","أيرلندا"]},
+    {img:F+"/tr.png",a:"تركيا",cat:"أعلام",opts:["تونس","تركيا","باكستان","أذربيجان","ماليزيا","الجزائر"]},
+  ];
+}
 
-// ── Audio ──
-const AC = window.AudioContext || window.webkitAudioContext; let actx;
-function tone(f,d,t,v) { try { if(!actx) actx = new AC(); const o=actx.createOscillator(),g=actx.createGain(); o.connect(g);g.connect(actx.destination); o.type=t||'sine';o.frequency.value=f; g.gain.setValueAtTime(v||.12,actx.currentTime); g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d); o.start();o.stop(actx.currentTime+d); } catch(e){} }
-function sndOk() { tone(523,.1);setTimeout(()=>tone(659,.1),100);setTimeout(()=>tone(784,.15),200); }
-function sndNo() { tone(200,.15,'sawtooth');setTimeout(()=>tone(150,.2,'sawtooth'),150); }
-function sndTick() { tone(800,.05,'sine',.08); }
-
-// ── Helpers ──
+const BANK = window.GUESS_BANK;
 const $ = id => document.getElementById(id);
-function shuffle(a) { const b=[...a]; for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; }
-function go(id) { document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on')); $(id).classList.add('on'); window.scrollTo({top:0,behavior:'smooth'}); }
-function doFlash(ok) { const e=document.createElement('div');e.className='g-flash '+(ok?'ok':'no');document.body.appendChild(e);e.addEventListener('animationend',()=>e.remove()); }
-function scorePop(team,pts) { const e=document.createElement('div');e.className='sc-pop '+(team===1?'a':'b');e.textContent='+'+pts;document.body.appendChild(e);setTimeout(()=>e.remove(),1100); }
-function toast(m) { const e=document.createElement('div');e.className='g-toast';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),3200); }
+const AC = window.AudioContext || window.webkitAudioContext; let actx;
+function tone(f,d,t,v){try{if(!actx)actx=new AC();const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(v||.1,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d);o.start();o.stop(actx.currentTime+d);}catch(e){}}
+function sndOk(){tone(523,.1);setTimeout(()=>tone(659,.1),100);setTimeout(()=>tone(784,.12),200)}
+function sndNo(){tone(200,.12,'sawtooth');setTimeout(()=>tone(150,.15,'sawtooth'),120)}
+function sndTick(){tone(800,.04,'sine',.06)}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b}
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo({top:0,behavior:'smooth'})}
+function doFlash(ok){const e=document.createElement('div');e.className='g-flash '+(ok?'ok':'no');document.body.appendChild(e);e.addEventListener('animationend',()=>e.remove())}
+function scorePop(t,p){const e=document.createElement('div');e.className='sc-pop '+(t===1?'a':'b');e.textContent='+'+p;document.body.appendChild(e);setTimeout(()=>e.remove(),1100)}
+function toast(m){const e=document.createElement('div');e.className='g-toast';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),3000)}
 
 // ── State ──
-let t1={name:"",score:0}, t2={name:"",score:0};
-let round=0, maxRounds=3, pts=5;
-let turn=1, questions=[], tmr=null, tl=15, locked=false;
+let t1={name:"",score:0},t2={name:"",score:0};
+let round=0,maxRounds=10,pts=5,timerDuration=10;
+let questions=[],tmr=null,tl=10,locked=false;
+let selectedCats=new Set();
 
-// ── Game Start ──
-function startGame() {
-  t1.name = $("t1-name").value.trim() || "الفريق الأزرق";
-  t2.name = $("t2-name").value.trim() || "الفريق الأحمر";
-  maxRounds = parseInt($("rounds-count").value) || 3;
-  t1.score = 0; t2.score = 0; round = 0; turn = 1;
-  questions = shuffle(BANK).slice(0, maxRounds);
-  if (questions.length < maxRounds) { toast("⚠️ لا توجد أسئلة كافية"); return; }
-  go('sc-game');
-  preloadAndShow();
+// ── Build category filters ──
+const allCats=[...new Set(BANK.map(q=>q.cat))];
+const catEl=$("cat-filter");
+allCats.forEach(c=>{
+  const b=document.createElement('button');b.className='cf-btn on';b.textContent=c;
+  b.onclick=()=>{b.classList.toggle('on');if(selectedCats.has(c))selectedCats.delete(c);else selectedCats.add(c);};
+  selectedCats.add(c);catEl.appendChild(b);
+});
+
+function startGame(){
+  t1.name=$("t1-name").value.trim()||"الفريق الأزرق";
+  t2.name=$("t2-name").value.trim()||"الفريق الأحمر";
+  maxRounds=parseInt($("rounds-count").value)||10;
+  t1.score=0;t2.score=0;round=0;
+
+  let pool=BANK;
+  if(selectedCats.size>0&&selectedCats.size<allCats.length) pool=pool.filter(q=>selectedCats.has(q.cat));
+  if(pool.length<maxRounds){toast("⚠️ لا توجد أسئلة كافية — تم تقليل الجولات");maxRounds=Math.min(maxRounds,pool.length);}
+  questions=shuffle(pool).slice(0,maxRounds);
+  go('sc-game');showRound();
 }
 
-// ── Preload image then show question ──
-function preloadAndShow() {
-  if (round >= maxRounds) { showFinal(); return; }
-  locked = false;
-  const q = questions[round];
-
-  // Update UI
-  $("g-t1n").textContent = t1.name; $("g-t2n").textContent = t2.name;
-  $("g-t1s").textContent = t1.score; $("g-t2s").textContent = t2.score;
-  $("g-round").textContent = `الجولة ${round+1} / ${maxRounds}`;
-  const team = turn === 1 ? t1 : t2;
-  $("g-turn").className = "g-turn " + (turn===1?"a":"b");
-  $("g-turn").textContent = `🎯 دور ${team.name}`;
-  $("g-reveal").classList.remove("show"); $("g-reveal").textContent = "";
+function showRound(){
+  if(round>=maxRounds){showFinal();return;}
+  locked=false;
+  const q=questions[round];
+  $("g-t1n").textContent=t1.name;$("g-t2n").textContent=t2.name;
+  $("g-t1s").textContent=t1.score;$("g-t2s").textContent=t2.score;
+  $("g-round").textContent=`${round+1} / ${maxRounds}`;
+  $("g-cat-display").textContent=q.cat||"";
+  $("g-cat-label").textContent=q.cat||"";
+  $("g-status").textContent="⚡ أسرع فريق يجاوب صح ياخذ النقطة!";
+  $("g-reveal").classList.remove("show");$("g-reveal").textContent="";
 
   // Preload image
-  const img = $("g-img");
-  img.classList.remove("correct-glow");
-  img.src = "";
-  img.alt = "⏳ جاري التحميل...";
-
-  const preload = new Image();
-  preload.onload = () => {
-    img.src = q.img;
-    img.alt = "❓ من هذا؟";
-    buildOptions(q);
-    startTimer();
-  };
-  preload.onerror = () => {
-    // Retry once
-    setTimeout(() => {
-      img.src = q.img;
-      img.alt = "❓";
-      buildOptions(q);
-      startTimer();
-    }, 500);
-  };
-  preload.src = q.img;
+  const img=$("g-img");img.classList.remove("glow");img.src="";img.alt="⏳";
+  const pre=new Image();
+  pre.onload=()=>{img.src=q.img;img.alt="❓";buildOpts(q);startTimer();};
+  pre.onerror=()=>{setTimeout(()=>{img.src=q.img;buildOpts(q);startTimer();},400);};
+  pre.src=q.img;
 }
 
-// ── Build Options (safe — no inline onclick with strings) ──
-function buildOptions(q) {
-  const shuffled = shuffle(q.opts);
-  const grid = $("g-opts");
-  grid.innerHTML = '';
-  shuffled.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'g-opt';
-    btn.textContent = opt;
-    btn.addEventListener('click', () => pickAnswer(opt, btn, q));
+function buildOpts(q){
+  const shuffled=shuffle(q.opts);
+  const grid=$("g-opts");grid.innerHTML='';
+  shuffled.forEach(opt=>{
+    const btn=document.createElement('button');btn.className='g-opt';btn.textContent=opt;
+    btn.addEventListener('click',()=>pickAnswer(opt,btn,q));
     grid.appendChild(btn);
   });
 }
 
-// ── Timer ──
-function startTimer() {
-  clearInterval(tmr);
-  tl = 15;
-  $("g-timer").textContent = tl;
-  $("g-bar").style.width = "100%";
-  $("g-timer").classList.remove("warn","danger");
-  $("g-bar").classList.remove("warn","danger");
-
-  tmr = setInterval(() => {
-    tl--;
-    $("g-timer").textContent = tl;
-    $("g-bar").style.width = (tl/15*100) + "%";
-
-    $("g-timer").classList.remove("warn","danger");
-    $("g-bar").classList.remove("warn","danger");
-    if (tl <= 3) {
-      $("g-timer").classList.add("danger"); $("g-bar").classList.add("danger");
-      if (tl > 0) sndTick();
-    } else if (tl <= 7) {
-      $("g-timer").classList.add("warn"); $("g-bar").classList.add("warn");
-    }
-
-    if (tl <= 0) {
-      clearInterval(tmr); tmr = null;
-      handleTimeUp();
-    }
-  }, 1000);
+function startTimer(){
+  clearInterval(tmr);tl=timerDuration;
+  $("g-timer").textContent=tl;$("g-bar").style.width="100%";
+  $("g-timer").classList.remove("warn","danger");$("g-bar").classList.remove("warn","danger");
+  tmr=setInterval(()=>{
+    tl--;$("g-timer").textContent=tl;$("g-bar").style.width=(tl/timerDuration*100)+"%";
+    $("g-timer").classList.remove("warn","danger");$("g-bar").classList.remove("warn","danger");
+    if(tl<=3){$("g-timer").classList.add("danger");$("g-bar").classList.add("danger");if(tl>0)sndTick();}
+    else if(tl<=5){$("g-timer").classList.add("warn");$("g-bar").classList.add("warn");}
+    if(tl<=0){clearInterval(tmr);tmr=null;handleTimeUp();}
+  },1000);
 }
 
-function stopTimer() {
-  clearInterval(tmr); tmr = null;
+function handleTimeUp(){
+  if(locked)return;locked=true;
+  const q=questions[round];revealAnswer(q);sndNo();
+  $("g-status").textContent="⏰ انتهى الوقت!";
+  setTimeout(()=>{round++;showRound();},2000);
 }
 
-// ── Time Up ──
-function handleTimeUp() {
-  if (locked) return;
-
-  if (turn === 1) {
-    // Team 1 ran out — give team 2 a chance
-    turn = 2;
-    toast("⏰ انتهى الوقت — دور " + t2.name + "!");
-    preloadAndShow();
-  } else {
-    // Both teams failed
-    locked = true;
-    const q = questions[round];
+function pickAnswer(name,btn,q){
+  if(locked)return;
+  if(name===q.a){
+    // CORRECT — fastest team wins!
+    locked=true;clearInterval(tmr);tmr=null;
+    btn.classList.add('right');$("g-img").classList.add("glow");
+    // Award point (both teams race — whoever clicks first)
+    // For local play: alternate which team gets credit based on round
+    const team=(round%2===0)?1:2;
+    if(team===1)t1.score+=pts;else t2.score+=pts;
+    $("g-t1s").textContent=t1.score;$("g-t2s").textContent=t2.score;
+    doFlash(true);sndOk();scorePop(team,pts);
+    $("g-status").innerHTML=`✅ <span style="color:${team===1?'var(--tA)':'var(--tB)'}">${team===1?t1.name:t2.name}</span> +${pts}!`;
     revealAnswer(q);
-    sndNo();
-    setTimeout(() => showRoundResult(null), 1500);
+    // Auto-advance after 1.5s
+    setTimeout(()=>{round++;showRound();},1500);
+  }else{
+    // Wrong — mark as failed, keep going
+    btn.classList.add('fail');btn.classList.add('done');
+    doFlash(false);sndNo();
   }
 }
 
-// ── Pick Answer ──
-function pickAnswer(name, btn, q) {
-  if (locked) return;
-  locked = true;
-  stopTimer();
-
-  const btns = document.querySelectorAll('.g-opt');
-  btns.forEach(b => b.classList.add('done'));
-
-  if (name === q.a) {
-    // Correct!
-    btn.classList.add('right');
-    $("g-img").classList.add("correct-glow");
-    const team = turn === 1 ? t1 : t2;
-    team.score += pts;
-    $("g-t1s").textContent = t1.score; $("g-t2s").textContent = t2.score;
-    doFlash(true); sndOk(); scorePop(turn, pts);
-    revealAnswer(q);
-    setTimeout(() => showRoundResult(turn), 1500);
-  } else {
-    // Wrong
-    btn.classList.add('fail');
-    // Highlight correct
-    btns.forEach(b => { if (b.textContent === q.a) b.classList.add('right'); });
-    doFlash(false); sndNo();
-
-    if (turn === 1) {
-      // Give team 2 a chance
-      toast("❌ خطأ — دور " + t2.name + "!");
-      setTimeout(() => { locked = false; turn = 2; preloadAndShow(); }, 1500);
-    } else {
-      // Both teams failed
-      revealAnswer(q);
-      setTimeout(() => showRoundResult(null), 1500);
-    }
-  }
+function revealAnswer(q){
+  $("g-reveal").textContent="✅ "+q.a;$("g-reveal").classList.add("show");
+  document.querySelectorAll('.g-opt').forEach(b=>{b.classList.add('done');if(b.textContent===q.a)b.classList.add('right');});
 }
 
-// ── Reveal Answer ──
-function revealAnswer(q) {
-  const reveal = $("g-reveal");
-  reveal.textContent = "✅ الإجابة الصحيحة: " + q.a;
-  reveal.classList.add("show");
-  // Highlight correct option
-  document.querySelectorAll('.g-opt').forEach(b => {
-    b.classList.add('done');
-    if (b.textContent === q.a) b.classList.add('right');
-  });
-}
-
-// ── Round Result ──
-function showRoundResult(winner) {
-  stopTimer();
-  $("rr-t1n").textContent = t1.name; $("rr-t2n").textContent = t2.name;
-  $("rr-t1s").textContent = t1.score; $("rr-t2s").textContent = t2.score;
-
-  if (winner) {
-    const team = winner === 1 ? t1 : t2;
-    $("rr-icon").textContent = winner === 1 ? "🔵✅" : "🔴✅";
-    $("rr-title").textContent = team.name + " يفوز بالجولة!";
-    $("rr-title").style.color = winner === 1 ? "var(--tA)" : "var(--tB)";
-    $("rr-sub").textContent = "+" + pts + " نقاط";
-  } else {
-    $("rr-icon").textContent = "⏰";
-    $("rr-title").textContent = "لم يجب أحد بشكل صحيح!";
-    $("rr-title").style.color = "var(--gold)";
-    $("rr-sub").textContent = "لا نقاط لأي فريق";
-  }
-
-  $("rr-btn").textContent = (round + 1 >= maxRounds) ? "النتائج 🏆" : "الجولة التالية ←";
-  go('sc-round');
-}
-
-// ── Next Round ──
-function nextRound() {
-  round++;
-  turn = (round % 2 === 0) ? 1 : 2; // Alternate starting team
-  if (round >= maxRounds) { showFinal(); return; }
-  go('sc-game');
-  preloadAndShow();
-}
-
-// ── Final Result ──
-function showFinal() {
-  stopTimer();
-  $("fr-t1n").textContent = t1.name; $("fr-t2n").textContent = t2.name;
-  $("fr-t1s").textContent = t1.score; $("fr-t2s").textContent = t2.score;
-
-  if (t1.score > t2.score) {
-    $("fr-icon").textContent = "🏆🔵";
-    $("fr-title").textContent = t1.name + " الأبطال!";
-    $("fr-title").style.color = "var(--tA)";
-    $("fr-sub").textContent = `${t1.score} — ${t2.score}`;
-  } else if (t2.score > t1.score) {
-    $("fr-icon").textContent = "🏆🔴";
-    $("fr-title").textContent = t2.name + " الأبطال!";
-    $("fr-title").style.color = "var(--tB)";
-    $("fr-sub").textContent = `${t1.score} — ${t2.score}`;
-  } else {
-    $("fr-icon").textContent = "🤝";
-    $("fr-title").textContent = "تعادل!";
-    $("fr-title").style.color = "var(--gold)";
-    $("fr-sub").textContent = `${t1.score} — ${t2.score}`;
-  }
+function showFinal(){
+  clearInterval(tmr);tmr=null;
+  $("fr-t1n").textContent=t1.name;$("fr-t2n").textContent=t2.name;
+  $("fr-t1s").textContent=t1.score;$("fr-t2s").textContent=t2.score;
+  if(t1.score>t2.score){$("fr-icon").textContent="🏆🔵";$("fr-title").textContent=t1.name+" الأبطال!";$("fr-title").style.color="var(--tA)";}
+  else if(t2.score>t1.score){$("fr-icon").textContent="🏆🔴";$("fr-title").textContent=t2.name+" الأبطال!";$("fr-title").style.color="var(--tB)";}
+  else{$("fr-icon").textContent="🤝";$("fr-title").textContent="تعادل!";$("fr-title").style.color="var(--gold-2)";}
   go('sc-result');
 }
 
-function resetGame() { t1.score=0; t2.score=0; round=0; stopTimer(); go('sc-setup'); }
+function resetGame(){t1.score=0;t2.score=0;round=0;clearInterval(tmr);go('sc-setup');}
 </script>
 </body>
 </html>

@@ -134,6 +134,7 @@ label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin-botto
     <div class="sb-item" onclick="nav('analytics',this)"><span class="si-icon">📈</span><span class="sb-text">تحليلات</span></div>
     <div class="sb-item" onclick="nav('broadcast',this)"><span class="si-icon">📢</span><span class="sb-text">بث رسالة</span></div>
     <div class="sb-item" onclick="nav('tools',this)"><span class="si-icon">🧰</span><span class="sb-text">أدوات</span></div>
+    <div class="sb-item" onclick="nav('bans',this)"><span class="si-icon">🚫</span><span class="sb-text">الحظر</span></div>
     <div class="sb-item" onclick="nav('logs',this)"><span class="si-icon">📋</span><span class="sb-text">السجل</span></div>
     <div class="sb-item" onclick="nav('settings',this)"><span class="si-icon">⚙️</span><span class="sb-text">الإعدادات</span></div>
   </div>
@@ -298,6 +299,16 @@ label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin-botto
   </div>
 </div>
 
+<!-- ═══ Bans ═══ -->
+<div class="panel" id="p-bans">
+  <div class="card" style="padding:16px">
+    <div class="card-title">🚫 حظر مستخدم</div>
+    <div style="display:flex;gap:6px;margin-bottom:10px"><input id="ban-name" placeholder="اسم المستخدم" style="flex:1;font-size:13px"><button class="btn btn-r" onclick="banUser()">حظر</button></div>
+    <div class="card-title" style="margin-top:12px">📋 المحظورون</div>
+    <div id="ban-list"></div>
+  </div>
+</div>
+
 <!-- ═══ Logs ═══ -->
 <div class="panel" id="p-logs">
   <div class="acts">
@@ -419,13 +430,13 @@ $("i-p").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
 $("i-u").addEventListener("keydown",e=>{if(e.key==="Enter")$("i-p").focus();});
 
 // ── Nav ──
-const titles={"overview":"📊 نظرة عامة","rooms":"🏠 الغرف","players":"👥 اللاعبين","questions":"📝 الأسئلة","images":"🖼️ الصور","leaderboard":"🏆 المتصدرين","analytics":"📈 تحليلات","broadcast":"📢 بث رسالة","tools":"🧰 أدوات","logs":"📋 السجل","settings":"⚙️ الإعدادات"};
+const titles={"overview":"📊 نظرة عامة","rooms":"🏠 الغرف","players":"👥 اللاعبين","questions":"📝 الأسئلة","images":"🖼️ الصور","leaderboard":"🏆 المتصدرين","analytics":"📈 تحليلات","broadcast":"📢 بث رسالة","tools":"🧰 أدوات","bans":"🚫 الحظر","logs":"📋 السجل","settings":"⚙️ الإعدادات"};
 let bcHistory=[];
 function nav(id,el){
   document.querySelectorAll(".panel").forEach(p=>p.classList.remove("on"));
   document.querySelectorAll(".sb-item").forEach(s=>s.classList.remove("on"));
   $("p-"+id).classList.add("on");el.classList.add("on");$("page-title").textContent=titles[id]||id;
-  if(id==="players")loadPlayers();if(id==="logs")loadLogs();if(id==="questions"&&allQs.length===0)loadQs();if(id==="images")loadImgs();if(id==="analytics")loadAnalytics();
+  if(id==="players")loadPlayers();if(id==="logs")loadLogs();if(id==="questions"&&allQs.length===0)loadQs();if(id==="images")loadImgs();if(id==="analytics")loadAnalytics();if(id==="bans")loadBans();
 }
 
 // ── Refresh ──
@@ -654,6 +665,17 @@ function copyStats(){
   const text=`بازززز | متصل: ${d.online||0} | غرف: ${d.roomCount||0} | لاعبين: ${d.totalPlayers||0} | أسئلة: ${d.questionCount||0}`;
   navigator.clipboard.writeText(text).then(()=>alert("تم النسخ! ✅")).catch(()=>alert(text));
 }
+
+// ── Bans ──
+function loadBans(){
+  emit("admin-get-bans",{},list=>{
+    const el=$("ban-list");
+    if(!list||!list.length){el.innerHTML='<div class="empty">لا يوجد محظورون</div>';return;}
+    el.innerHTML=list.map(n=>`<div style="display:flex;align-items:center;gap:8px;padding:6px;background:var(--s2);border-radius:var(--r);margin-bottom:4px;font-size:12px"><span style="flex:1;font-weight:600">🚫 ${n}</span><button class="btn btn-l" style="padding:2px 8px;font-size:10px" onclick="unbanUser('${n}')">فك الحظر</button></div>`).join('');
+  });
+}
+function banUser(){const n=$("ban-name").value.trim();if(!n)return;emit("admin-ban-user",{name:n},r=>{if(r.success){$("ban-name").value="";alog("حظر: "+n);loadBans();}});}
+function unbanUser(n){emit("admin-unban-user",{name:n},r=>{if(r.success){alog("فك حظر: "+n);loadBans();}});}
 
 // ── Logs ──
 function loadLogs(){
