@@ -23,14 +23,16 @@ const all = [
   ...require("./art"),          // 4251-4500 فنون
   ...require("./law"),          // 4501-4750 قانون
   ...require("./philosophy"),   // 4751-5000 فلسفة
+  ...require("./images"),       // 10001+    صور (أعلام + معالم)
 ];
 
-// Deduplicate by question text (keep first occurrence)
+// Deduplicate by question text + image (image questions share text but differ by img)
 const seen = new Set();
 const unique = [];
 for (const q of all) {
-  if (!seen.has(q.q)) {
-    seen.add(q.q);
+  const key = q.img ? q.q + "|" + q.img : q.q;
+  if (!seen.has(key)) {
+    seen.add(key);
     unique.push(q);
   }
 }

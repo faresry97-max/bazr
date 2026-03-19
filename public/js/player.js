@@ -77,7 +77,9 @@ function submitAnswer() { const input = $("answer-input"); const a = input.value
 
 // ── UI ──
 function showScreen(id) { document.querySelectorAll(".screen").forEach(s => s.classList.remove("active")); $(id).classList.add("active"); }
-function showQuestion(q) { if (!q) return; $("p-question").textContent = q.text || "—"; }
+function showQuestion(q) { if (!q) return; $("p-question").textContent = q.text || "—";
+  if (q.img) { $("p-img").src = q.img; $("p-img-wrap").classList.remove("hidden"); } else { $("p-img-wrap").classList.add("hidden"); }
+}
 function enableBuzzer() { buzzerEnabled = true; const b = $("buzz-btn"); b.disabled = false; b.classList.add("open"); b.textContent = "بازر!"; $("buzzer-wrap").classList.remove("hidden"); }
 function disableBuzzer(l) { buzzerEnabled = false; const b = $("buzz-btn"); b.disabled = true; b.classList.remove("open"); b.textContent = l || "بازر!"; }
 function showAnswerInput() { $("answer-wrap").classList.remove("hidden"); $("buzzer-wrap").classList.add("hidden"); $("answer-submit-btn").disabled = false; const i = $("answer-input"); i.value = ""; setTimeout(() => i.focus(), 100); }

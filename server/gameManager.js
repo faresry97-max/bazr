@@ -226,13 +226,17 @@ function startGame(roomCode) {
 function getCurrentQuestion(room) {
   if (room.currentQuestion < 0 || room.currentQuestion >= room.questions.length) return null;
   const q = room.questions[room.currentQuestion];
-  return { text: q.q, cat: q.cat || "", index: room.currentQuestion, total: room.questions.length };
+  const result = { text: q.q, cat: q.cat || "", index: room.currentQuestion, total: room.questions.length };
+  if (q.img) result.img = q.img;
+  return result;
 }
 
 function getCurrentQuestionFull(room) {
   if (room.currentQuestion < 0 || room.currentQuestion >= room.questions.length) return null;
   const q = room.questions[room.currentQuestion];
-  return { text: q.q, answer: q.a, cat: q.cat || "", diff: q.diff || "", index: room.currentQuestion, total: room.questions.length };
+  const result = { text: q.q, answer: q.a, cat: q.cat || "", diff: q.diff || "", index: room.currentQuestion, total: room.questions.length };
+  if (q.img) result.img = q.img;
+  return result;
 }
 
 // ─── Buzzer ───

@@ -123,6 +123,11 @@ font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;tra
 .question-cat{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px}
 .question-progress{font-size:12px;color:var(--dim)}
 .question-text{font-size:clamp(18px,3vw,28px);font-weight:700;line-height:1.6;margin-top:10px}
+/* ── Question Image ── */
+.question-img-wrap,.player-img-wrap{text-align:center;margin:12px 0;animation:fadeIn .3s ease}
+.question-img{max-width:100%;max-height:280px;border-radius:var(--r);object-fit:contain;box-shadow:0 4px 20px rgba(0,0,0,.4);border:2px solid var(--s3);background:var(--s2)}
+@media(min-width:700px){.question-img{max-height:340px}}
+
 .question-answer{margin-top:14px;padding:12px 16px;background:rgba(240,180,41,.06);border:1px solid rgba(240,180,41,.15);border-radius:var(--r);
 color:var(--gold);font-size:17px;font-weight:700;max-height:0;overflow:hidden;opacity:0;transition:all .3s ease}
 .question-answer.visible{max-height:200px;opacity:1;padding:12px 16px}
