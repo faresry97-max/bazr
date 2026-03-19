@@ -5,6 +5,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const path = require("path");
 const gm = require("./gameManager");
+const qa = require("./qaGame");
 
 const app = express();
 const server = http.createServer(app);
@@ -225,6 +226,78 @@ io.on("connection", (socket) => {
       buzzedPlayer: room.buzzedPlayer, settings: room.settings,
     });
   });
+
+  // ══════════════════════════════════
+  // ║    Q&A Game Mode Events        ║
+  // ══════════════════════════════════
+
+  socket.on("qa-create", (d, cb) => {
+    const room = qa.createSession(socket.id, d);
+    socket.join(`qa:${room.code}`);
+    socket.data.qaRoom = room.code;
+    socket.data.qaRole = "mod";
+    cb({ success: true, code: room.code, categories: qa.getCategories() });
+  });
+
+  socket.on("qa-join", (d, cb) => {
+    const result = qa.joinSession(d.code, d.name, d.team, socket.id);
+    if (!result.success) return cb(result);
+    socket.join(`qa:${d.code}`);
+    socket.data.qaRoom = d.code;
+    socket.data.qaRole = "player";
+    socket.data.qaName = d.name;
+    const room = qa.getSession(d.code);
+    cb({ success: true, player: result.player, reconnected: result.reconnected, info: qa.getSessionInfo(room), cards: qa.getPlayerCards(d.code, socket.id) });
+    io.to(`qa:${d.code}`).emit("qa-update", qa.getSessionInfo(room));
+  });
+
+  socket.on("qa-start", (d) => {
+    const room = qa.startSession(d.code);
+    if (!room) return;
+    const q = qa.getQuestion(room);
+    io.to(`qa:${d.code}`).emit("qa-started", { question: q, info: qa.getSessionInfo(room) });
+  });
+
+  socket.on("qa-answer", (d) => {
+    const result = qa.answerQuestion(d.code, socket.id, d.optionIdx);
+    if (!result) return;
+    io.to(`qa:${d.code}`).emit("qa-answered", result);
+  });
+
+  socket.on("qa-use-card", (d) => {
+    const result = qa.useCard(d.code, socket.id, d.card);
+    if (!result) return;
+    io.to(`qa:${d.code}`).emit("qa-card-used", result);
+  });
+
+  socket.on("qa-next", (d) => {
+    const result = qa.nextQuestion(d.code);
+    if (!result) return;
+    if (result.gameOver) {
+      const w = result.scores.A > result.scores.B ? "A" : result.scores.B > result.scores.A ? "B" : "tie";
+      io.to(`qa:${d.code}`).emit("qa-ended", { scores: result.scores, winner: w });
+    } else {
+      io.to(`qa:${d.code}`).emit("qa-question", result.question);
+    }
+  });
+
+  socket.on("qa-timer-start", (d) => {
+    const room = qa.getSession(d.code);
+    if (!room) return;
+    room.timeLeft = room.settings.timePerQuestion;
+    room.timer = setInterval(() => {
+      room.timeLeft--;
+      io.to(`qa:${d.code}`).emit("qa-tick", { time: room.timeLeft });
+      if (room.timeLeft <= 0) {
+        clearInterval(room.timer); room.timer = null;
+        const result = qa.timeUp(d.code);
+        if (result) io.to(`qa:${d.code}`).emit("qa-timeup", result);
+      }
+    }, 1000);
+  });
+
+  socket.on("qa-get-cards", (d, cb) => { cb(qa.getPlayerCards(d.code, socket.id)); });
+  socket.on("qa-get-categories", (d, cb) => { cb(qa.getCategories()); });
 
   // ══════════════════════════════════
   // ║       Admin Dashboard Events   ║
