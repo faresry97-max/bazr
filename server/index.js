@@ -10,7 +10,12 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" }, pingInterval: 10000, pingTimeout: 5000 });
 
-app.use(express.static(path.join(__dirname, "..", "public")));
+const publicPath = path.join(__dirname, "..", "public");
+console.log("Serving static files from:", publicPath);
+app.use(express.static(publicPath));
+
+// Health check
+app.get("/health", (req, res) => res.json({ status: "ok", uptime: process.uptime() }));
 
 // Broadcast online count to everyone every 5 seconds
 setInterval(() => {
