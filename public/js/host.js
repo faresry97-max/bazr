@@ -53,7 +53,7 @@ function sendReaction(emoji) { socket.emit("reaction", { roomCode, emoji }); }
 // ── UI ──
 function showScreen(id) { document.querySelectorAll(".screen").forEach(s => s.classList.remove("active")); $(id).classList.add("active"); }
 function showQuestion(q) { currentQuestion = q; $("q-cat").textContent = q.cat || ""; $("q-progress").textContent = `${q.index+1} / ${q.total}`; $("q-text").textContent = q.text; $("q-answer").textContent = ""; $("q-answer").classList.remove("visible"); $("open-buzz-btn").disabled = false;
-  if (q.img) { $("q-img").src = q.img; $("q-img-wrap").classList.remove("hidden"); } else { $("q-img-wrap").classList.add("hidden"); }
+  if (q.img) { loadImg($("q-img"), q.img); $("q-img-wrap").classList.remove("hidden"); } else { $("q-img-wrap").classList.add("hidden"); }
 }
 function resetBuzzState() { buzzedPlayer = null; $("buzz-status").className = "buzz-status"; $("buzz-status").innerHTML = '<div class="text-dim">⏳ بانتظار فتح الجرس...</div>'; $("timer-section").classList.add("hidden"); $("timer-text").classList.remove("danger"); $("answer-result").classList.add("hidden"); $("judge-override").classList.add("hidden"); }
 function handleBuzzIn(d) { buzzedPlayer = d; const tc = d.winnerTeam === "A" ? "locked-a" : "locked-b", clr = d.winnerTeam === "A" ? "var(--tA)" : "var(--tB)"; $("buzz-status").className = "buzz-status " + tc; $("buzz-status").innerHTML = `<div class="buzz-name" style="color:${clr}">🎤 ${d.winnerName}</div><div class="buzz-team-label" style="color:${clr}">يكتب إجابته...</div>`; $("timer-section").classList.remove("hidden"); $("open-buzz-btn").disabled = true; $("answer-result").classList.add("hidden"); $("judge-override").classList.add("hidden"); showBuzzFlash(d.winnerTeam); }
@@ -81,6 +81,17 @@ function appendChat(d) {
 function showBuzzFlash(t) { const el = document.createElement("div"); el.className = "buzz-flash " + (t==="A"?"team-a":"team-b"); document.body.appendChild(el); el.addEventListener("animationend", () => el.remove()); }
 function spawnScorePop(t) { const c = t==="A"?$("score-a"):$("score-b"); const p = document.createElement("div"); p.className = "score-pop "+(t==="A"?"team-a":"team-b"); p.textContent = "+1"; p.style.position = "fixed"; const r = c.getBoundingClientRect(); p.style.left = r.left+r.width/2-18+"px"; p.style.top = r.top-8+"px"; document.body.appendChild(p); p.addEventListener("animationend", () => p.remove()); }
 function toast(m) { const el = document.createElement("div"); el.className = "toast"; el.textContent = m; document.body.appendChild(el); setTimeout(()=>el.remove(),3200); }
+
+// ── Robust image loader with retry ──
+function loadImg(el, src, retries=2) {
+  el.classList.add("loading"); el.classList.remove("failed");
+  el.onload = () => { el.classList.remove("loading"); };
+  el.onerror = () => {
+    if (retries > 0) { setTimeout(() => { el.src = ""; loadImg(el, src, retries - 1); }, 1000); }
+    else { el.classList.add("failed"); el.classList.remove("loading"); }
+  };
+  el.src = src;
+}
 
 socket.on("disconnect", () => toast("⚠️ انقطع الاتصال..."));
 socket.on("connect", () => { if (gameActive) socket.emit("host-reconnect", { roomCode }, res => { if (res.success) { if (res.question) showQuestion(res.question); if (res.scores) updateScores(res.scores); updatePlayerList(res.players); toast("✅ تم إعادة الاتصال"); } }); });

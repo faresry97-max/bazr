@@ -152,25 +152,39 @@ background:radial-gradient(ellipse at 20% 0%,rgba(56,199,240,.06),transparent 50
 
 <script>
 // ── Guess Who Question Bank ──
+// All images use flagcdn.com — 100% reliable, no rate limiting
+const F = "https://flagcdn.com/w320";
 const GUESS_BANK = [
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Elon_Musk_Royal_Society_%28crop2%29.jpg/220px-Elon_Musk_Royal_Society_%28crop2%29.jpg",answer:"إيلون ماسك",opts:["جيف بيزوس","إيلون ماسك","بيل غيتس","مارك زوكربيرغ","تيم كوك","لاري بيج"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cristiano_Ronaldo_2018.jpg/220px-Cristiano_Ronaldo_2018.jpg",answer:"كريستيانو رونالدو",opts:["ليونيل ميسي","كريستيانو رونالدو","نيمار","محمد صلاح","كيليان مبابي","كريم بنزيما"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Lionel_Messi_20180626.jpg/220px-Lionel_Messi_20180626.jpg",answer:"ليونيل ميسي",opts:["كريستيانو رونالدو","أنطوان غريزمان","ليونيل ميسي","لوكا مودريتش","محمد صلاح","روبرت ليفاندوفسكي"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Albert_Einstein_1947.jpg/220px-Albert_Einstein_1947.jpg",answer:"ألبرت أينشتاين",opts:["نيكولا تسلا","ألبرت أينشتاين","إسحاق نيوتن","ستيفن هوكينغ","ماري كوري","توماس إديسون"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Smiley.svg/220px-Smiley.svg.png",answer:"وجه مبتسم",opts:["وجه حزين","وجه مبتسم","وجه غاضب","وجه نائم","وجه متفاجئ","وجه خائف"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/220px-Camponotus_flavomarginatus_ant.jpg",answer:"نملة",opts:["نحلة","نملة","عنكبوت","خنفساء","ذبابة","فراشة"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Kheops-Pyramid.jpg/320px-Kheops-Pyramid.jpg",answer:"الأهرامات",opts:["برج إيفل","تاج محل","الأهرامات","الكولوسيوم","سور الصين","البتراء"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/220px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg",answer:"برج إيفل",opts:["برج بيزا","برج إيفل","بيغ بن","برج خليفة","تمثال الحرية","الأهرامات"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Lady_Liberty_under_a_blue_sky_%28cropped%29.jpg/180px-Lady_Liberty_under_a_blue_sky_%28cropped%29.jpg",answer:"تمثال الحرية",opts:["تمثال الحرية","برج إيفل","الكولوسيوم","تاج محل","ساعة بيغ بن","أبو الهول"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Taj_Mahal_%28Edited%29.jpeg/320px-Taj_Mahal_%28Edited%29.jpeg",answer:"تاج محل",opts:["قصر الحمراء","المسجد الأقصى","تاج محل","البتراء","آيا صوفيا","مسجد قباء"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Burj_Khalifa.jpg/140px-Burj_Khalifa.jpg",answer:"برج خليفة",opts:["برج إيفل","برج خليفة","برج طوكيو","برج بيزا","برج شنغهاي","برج CN"]},
-{img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Al-Khazneh_%28Petra%29.jpg/180px-Al-Khazneh_%28Petra%29.jpg",answer:"البتراء",opts:["الأهرامات","ماتشو بيتشو","البتراء","تشيتشن إيتزا","أنغكور وات","الكولوسيوم"]},
-{img:"https://flagcdn.com/w320/sa.png",answer:"علم السعودية",opts:["علم الإمارات","علم السعودية","علم الكويت","علم قطر","علم البحرين","علم عُمان"]},
-{img:"https://flagcdn.com/w320/jp.png",answer:"علم اليابان",opts:["علم الصين","علم كوريا","علم اليابان","علم تايلاند","علم إندونيسيا","علم فيتنام"]},
-{img:"https://flagcdn.com/w320/br.png",answer:"علم البرازيل",opts:["علم الأرجنتين","علم البرازيل","علم المكسيك","علم كولومبيا","علم تشيلي","علم بيرو"]},
-{img:"https://flagcdn.com/w320/gb.png",answer:"علم بريطانيا",opts:["علم فرنسا","علم ألمانيا","علم بريطانيا","علم هولندا","علم النرويج","علم أيسلندا"]},
-{img:"https://flagcdn.com/w320/eg.png",answer:"علم مصر",opts:["علم العراق","علم سوريا","علم مصر","علم اليمن","علم الأردن","علم لبنان"]},
-{img:"https://flagcdn.com/w320/tr.png",answer:"علم تركيا",opts:["علم تونس","علم تركيا","علم باكستان","علم أذربيجان","علم ماليزيا","علم الجزائر"]},
+{img:F+"/sa.png",answer:"السعودية",opts:["الإمارات","السعودية","الكويت","قطر","البحرين","عُمان"]},
+{img:F+"/eg.png",answer:"مصر",opts:["العراق","سوريا","مصر","اليمن","الأردن","لبنان"]},
+{img:F+"/ae.png",answer:"الإمارات",opts:["السعودية","الإمارات","الكويت","قطر","البحرين","عُمان"]},
+{img:F+"/jp.png",answer:"اليابان",opts:["الصين","كوريا","اليابان","تايلاند","إندونيسيا","فيتنام"]},
+{img:F+"/br.png",answer:"البرازيل",opts:["الأرجنتين","البرازيل","المكسيك","كولومبيا","تشيلي","بيرو"]},
+{img:F+"/gb.png",answer:"بريطانيا",opts:["فرنسا","ألمانيا","بريطانيا","هولندا","النرويج","أيسلندا"]},
+{img:F+"/us.png",answer:"أمريكا",opts:["كندا","أمريكا","أستراليا","بريطانيا","فرنسا","ألمانيا"]},
+{img:F+"/tr.png",answer:"تركيا",opts:["تونس","تركيا","باكستان","أذربيجان","ماليزيا","الجزائر"]},
+{img:F+"/de.png",answer:"ألمانيا",opts:["بلجيكا","ألمانيا","فرنسا","هولندا","النمسا","سويسرا"]},
+{img:F+"/fr.png",answer:"فرنسا",opts:["إيطاليا","فرنسا","هولندا","رومانيا","بلجيكا","أيرلندا"]},
+{img:F+"/it.png",answer:"إيطاليا",opts:["المكسيك","إيطاليا","أيرلندا","المجر","فرنسا","رومانيا"]},
+{img:F+"/cn.png",answer:"الصين",opts:["فيتنام","الصين","تركيا","المغرب","تونس","كوريا"]},
+{img:F+"/kr.png",answer:"كوريا الجنوبية",opts:["اليابان","كوريا الجنوبية","تايوان","الصين","فيتنام","تايلاند"]},
+{img:F+"/in.png",answer:"الهند",opts:["باكستان","الهند","بنغلاديش","سريلانكا","نيبال","إيران"]},
+{img:F+"/ca.png",answer:"كندا",opts:["أمريكا","كندا","أستراليا","بريطانيا","نيوزيلندا","الدنمارك"]},
+{img:F+"/mx.png",answer:"المكسيك",opts:["إيطاليا","المكسيك","الهند","المجر","أيرلندا","البيرو"]},
+{img:F+"/ar.png",answer:"الأرجنتين",opts:["أوروغواي","الأرجنتين","اليونان","السلفادور","نيكاراغوا","هندوراس"]},
+{img:F+"/au.png",answer:"أستراليا",opts:["نيوزيلندا","أستراليا","بريطانيا","فيجي","أمريكا","كندا"]},
+{img:F+"/ru.png",answer:"روسيا",opts:["فرنسا","روسيا","هولندا","لوكسمبورغ","صربيا","سلوفاكيا"]},
+{img:F+"/za.png",answer:"جنوب أفريقيا",opts:["كينيا","جنوب أفريقيا","غانا","نيجيريا","تنزانيا","إثيوبيا"]},
+{img:F+"/ng.png",answer:"نيجيريا",opts:["غانا","نيجيريا","الكاميرون","ساحل العاج","السنغال","مالي"]},
+{img:F+"/ma.png",answer:"المغرب",opts:["تونس","المغرب","تركيا","الجزائر","ليبيا","موريتانيا"]},
+{img:F+"/pk.png",answer:"باكستان",opts:["تركيا","باكستان","الجزائر","ماليزيا","موريتانيا","تونس"]},
+{img:F+"/se.png",answer:"السويد",opts:["الدنمارك","السويد","فنلندا","النرويج","أيسلندا","سويسرا"]},
+{img:F+"/no.png",answer:"النرويج",opts:["أيسلندا","النرويج","الدنمارك","فنلندا","السويد","بريطانيا"]},
+{img:F+"/gr.png",answer:"اليونان",opts:["الأرجنتين","اليونان","أوروغواي","فنلندا","إسرائيل","السلفادور"]},
+{img:F+"/pt.png",answer:"البرتغال",opts:["إسبانيا","البرتغال","إيطاليا","البرازيل","المكسيك","فرنسا"]},
+{img:F+"/es.png",answer:"إسبانيا",opts:["البرتغال","إسبانيا","إيطاليا","المكسيك","كولومبيا","الأرجنتين"]},
+{img:F+"/np.png",answer:"نيبال",opts:["الهند","نيبال","بوتان","سريلانكا","بنغلاديش","ميانمار"]},
+{img:F+"/kz.png",answer:"كازاخستان",opts:["أوزبكستان","كازاخستان","تركمانستان","قيرغيزستان","منغوليا","طاجيكستان"]},
 ];
 
 // ── Audio ──
@@ -207,7 +221,9 @@ function showQuestion(){
   const team=currentTurn===1?t1:t2;
   $("g-turn").className="turn-indicator "+(currentTurn===1?"ta":"tb");
   $("g-turn").textContent=`🎯 دور ${team.name}`;
-  $("g-img").src=q.img;$("g-img").classList.remove("reveal");
+  const img=$("g-img");img.classList.remove("reveal");
+  img.onerror=()=>{setTimeout(()=>{img.src="";img.src=q.img;},800);};
+  img.src=q.img;
 
   // Shuffle 6 options
   const shuffled=shuffle(q.opts);

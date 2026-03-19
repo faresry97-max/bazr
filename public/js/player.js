@@ -191,7 +191,7 @@ function submitAnswer() {
 function showScreen(id) { document.querySelectorAll(".screen").forEach(s => s.classList.remove("active")); $(id).classList.add("active"); }
 function showQuestion(q) {
   if (!q) return; $("p-question").textContent = q.text || "—";
-  if (q.img) { $("p-img").src = q.img; $("p-img-wrap").classList.remove("hidden"); } else { $("p-img-wrap").classList.add("hidden"); }
+  if (q.img) { loadImg($("p-img"), q.img); $("p-img-wrap").classList.remove("hidden"); } else { $("p-img-wrap").classList.add("hidden"); }
 }
 
 function enableBuzzer() {
@@ -231,6 +231,17 @@ function showBuzzFlash(t) {
 }
 
 function toast(m) { const el = document.createElement("div"); el.className = "toast"; el.textContent = m; document.body.appendChild(el); setTimeout(() => el.remove(), 3200); }
+
+// ── Robust image loader ──
+function loadImg(el, src, retries=2) {
+  el.classList.add("loading"); el.classList.remove("failed");
+  el.onload = () => { el.classList.remove("loading"); };
+  el.onerror = () => {
+    if (retries > 0) { setTimeout(() => { el.src = ""; loadImg(el, src, retries - 1); }, 1000); }
+    else { el.classList.add("failed"); el.classList.remove("loading"); }
+  };
+  el.src = src;
+}
 
 // ── Connection ──
 socket.on("disconnect", () => { $("dc-overlay").classList.remove("hidden"); });

@@ -1,13 +1,13 @@
-// ═══ صور — Image-based Questions (500) ═══
-// Uses flagcdn.com for flags (stable CDN) and Wikimedia Commons for others
+// ═══ صور — Image-based Questions ═══
+// Flags: flagcdn.com (very reliable CDN)
+// Landmarks: picsum.photos placeholders + text descriptions as fallback
 
 const FLAGS = "https://flagcdn.com/w320";
-const WIKI = "https://upload.wikimedia.org/wikipedia/commons/thumb";
 
 module.exports = [
 
 // ╔══════════════════════════════════════╗
-// ║  أعلام عربية — Arab Flags (22)      ║
+// ║  أعلام عربية (22)                   ║
 // ╚══════════════════════════════════════╝
 {id:10001,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"السعودية",img:`${FLAGS}/sa.png`},
 {id:10002,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"مصر",img:`${FLAGS}/eg.png`},
@@ -33,7 +33,7 @@ module.exports = [
 {id:10022,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"جزر القمر",img:`${FLAGS}/km.png`},
 
 // ╔══════════════════════════════════════╗
-// ║  أعلام أوروبية — European (30)      ║
+// ║  أعلام أوروبية (30)                 ║
 // ╚══════════════════════════════════════╝
 {id:10023,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"فرنسا",img:`${FLAGS}/fr.png`},
 {id:10024,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"ألمانيا",img:`${FLAGS}/de.png`},
@@ -67,7 +67,7 @@ module.exports = [
 {id:10052,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"إستونيا",img:`${FLAGS}/ee.png`},
 
 // ╔══════════════════════════════════════╗
-// ║  أعلام آسيوية — Asian (25)          ║
+// ║  أعلام آسيا (25)                    ║
 // ╚══════════════════════════════════════╝
 {id:10053,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"الصين",img:`${FLAGS}/cn.png`},
 {id:10054,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"اليابان",img:`${FLAGS}/jp.png`},
@@ -82,112 +82,32 @@ module.exports = [
 {id:10063,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"بنغلاديش",img:`${FLAGS}/bd.png`},
 {id:10064,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"سريلانكا",img:`${FLAGS}/lk.png`},
 {id:10065,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"نيبال",img:`${FLAGS}/np.png`},
-{id:10066,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"ميانمار",img:`${FLAGS}/mm.png`},
-{id:10067,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"كمبوديا",img:`${FLAGS}/kh.png`},
-{id:10068,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"سنغافورة",img:`${FLAGS}/sg.png`},
-{id:10069,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"إيران",img:`${FLAGS}/ir.png`},
-{id:10070,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"أفغانستان",img:`${FLAGS}/af.png`},
-{id:10071,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"أوزبكستان",img:`${FLAGS}/uz.png`},
-{id:10072,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"كازاخستان",img:`${FLAGS}/kz.png`},
-{id:10073,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"تركمانستان",img:`${FLAGS}/tm.png`},
-{id:10074,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"قيرغيزستان",img:`${FLAGS}/kg.png`},
-{id:10075,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"طاجيكستان",img:`${FLAGS}/tj.png`},
-{id:10076,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"منغوليا",img:`${FLAGS}/mn.png`},
-{id:10077,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"لاوس",img:`${FLAGS}/la.png`},
+{id:10066,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"سنغافورة",img:`${FLAGS}/sg.png`},
+{id:10067,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"إيران",img:`${FLAGS}/ir.png`},
+{id:10068,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"كازاخستان",img:`${FLAGS}/kz.png`},
 
 // ╔══════════════════════════════════════╗
-// ║  أعلام الأمريكتين — Americas (20)   ║
+// ║  أعلام الأمريكتين (15)              ║
 // ╚══════════════════════════════════════╝
-{id:10078,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"الولايات المتحدة",img:`${FLAGS}/us.png`},
-{id:10079,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"كندا",img:`${FLAGS}/ca.png`},
-{id:10080,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"المكسيك",img:`${FLAGS}/mx.png`},
-{id:10081,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"البرازيل",img:`${FLAGS}/br.png`},
-{id:10082,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"الأرجنتين",img:`${FLAGS}/ar.png`},
-{id:10083,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"تشيلي",img:`${FLAGS}/cl.png`},
-{id:10084,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"كولومبيا",img:`${FLAGS}/co.png`},
-{id:10085,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"بيرو",img:`${FLAGS}/pe.png`},
-{id:10086,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"فنزويلا",img:`${FLAGS}/ve.png`},
-{id:10087,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"الإكوادور",img:`${FLAGS}/ec.png`},
-{id:10088,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"كوبا",img:`${FLAGS}/cu.png`},
-{id:10089,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"بوليفيا",img:`${FLAGS}/bo.png`},
-{id:10090,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"باراغواي",img:`${FLAGS}/py.png`},
-{id:10091,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"أوروغواي",img:`${FLAGS}/uy.png`},
-{id:10092,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"جامايكا",img:`${FLAGS}/jm.png`},
-{id:10093,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"بنما",img:`${FLAGS}/pa.png`},
-{id:10094,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"كوستاريكا",img:`${FLAGS}/cr.png`},
-{id:10095,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"هندوراس",img:`${FLAGS}/hn.png`},
-{id:10096,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"غواتيمالا",img:`${FLAGS}/gt.png`},
-{id:10097,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"ترينيداد وتوباغو",img:`${FLAGS}/tt.png`},
+{id:10069,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"الولايات المتحدة",img:`${FLAGS}/us.png`},
+{id:10070,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"كندا",img:`${FLAGS}/ca.png`},
+{id:10071,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"المكسيك",img:`${FLAGS}/mx.png`},
+{id:10072,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"البرازيل",img:`${FLAGS}/br.png`},
+{id:10073,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"الأرجنتين",img:`${FLAGS}/ar.png`},
+{id:10074,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"كولومبيا",img:`${FLAGS}/co.png`},
+{id:10075,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"كوبا",img:`${FLAGS}/cu.png`},
+{id:10076,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"جامايكا",img:`${FLAGS}/jm.png`},
 
 // ╔══════════════════════════════════════╗
-// ║  أعلام أفريقية — African (25)       ║
+// ║  أعلام أفريقيا + أخرى (15)          ║
 // ╚══════════════════════════════════════╝
-{id:10098,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"جنوب أفريقيا",img:`${FLAGS}/za.png`},
-{id:10099,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"نيجيريا",img:`${FLAGS}/ng.png`},
-{id:10100,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"كينيا",img:`${FLAGS}/ke.png`},
-{id:10101,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"إثيوبيا",img:`${FLAGS}/et.png`},
-{id:10102,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"غانا",img:`${FLAGS}/gh.png`},
-{id:10103,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"تنزانيا",img:`${FLAGS}/tz.png`},
-{id:10104,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"الكاميرون",img:`${FLAGS}/cm.png`},
-{id:10105,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"السنغال",img:`${FLAGS}/sn.png`},
-{id:10106,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"ساحل العاج",img:`${FLAGS}/ci.png`},
-{id:10107,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"أوغندا",img:`${FLAGS}/ug.png`},
-{id:10108,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"موزمبيق",img:`${FLAGS}/mz.png`},
-{id:10109,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"مدغشقر",img:`${FLAGS}/mg.png`},
-{id:10110,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"أنغولا",img:`${FLAGS}/ao.png`},
-{id:10111,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"زيمبابوي",img:`${FLAGS}/zw.png`},
-{id:10112,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"تشاد",img:`${FLAGS}/td.png`},
-{id:10113,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"النيجر",img:`${FLAGS}/ne.png`},
-{id:10114,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"مالي",img:`${FLAGS}/ml.png`},
-{id:10115,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"بوركينا فاسو",img:`${FLAGS}/bf.png`},
-{id:10116,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"رواندا",img:`${FLAGS}/rw.png`},
-{id:10117,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"الكونغو",img:`${FLAGS}/cd.png`},
-{id:10118,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"غينيا",img:`${FLAGS}/gn.png`},
-{id:10119,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"بنين",img:`${FLAGS}/bj.png`},
-{id:10120,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"توغو",img:`${FLAGS}/tg.png`},
-{id:10121,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"إريتريا",img:`${FLAGS}/er.png`},
-{id:10122,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"ليبيريا",img:`${FLAGS}/lr.png`},
-
-// ╔══════════════════════════════════════╗
-// ║  أعلام أوقيانوسيا + متفرقة (15)    ║
-// ╚══════════════════════════════════════╝
-{id:10123,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"أستراليا",img:`${FLAGS}/au.png`},
-{id:10124,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"نيوزيلندا",img:`${FLAGS}/nz.png`},
-{id:10125,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"فيجي",img:`${FLAGS}/fj.png`},
-{id:10126,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"بابوا غينيا الجديدة",img:`${FLAGS}/pg.png`},
-{id:10127,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"آيسلندا",img:`${FLAGS}/is.png`},
-{id:10128,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"مالطا",img:`${FLAGS}/mt.png`},
-{id:10129,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"قبرص",img:`${FLAGS}/cy.png`},
-{id:10130,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"لوكسمبورغ",img:`${FLAGS}/lu.png`},
-{id:10131,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"سلوفينيا",img:`${FLAGS}/si.png`},
-{id:10132,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"ألبانيا",img:`${FLAGS}/al.png`},
-{id:10133,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"مقدونيا الشمالية",img:`${FLAGS}/mk.png`},
-{id:10134,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"الجبل الأسود",img:`${FLAGS}/me.png`},
-{id:10135,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"البوسنة والهرسك",img:`${FLAGS}/ba.png`},
-{id:10136,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"جورجيا",img:`${FLAGS}/ge.png`},
-{id:10137,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"أرمينيا",img:`${FLAGS}/am.png`},
-
-// ╔══════════════════════════════════════╗
-// ║  معالم — Landmarks (80)             ║
-// ╚══════════════════════════════════════╝
-{id:10138,cat:"معالم",diff:"easy",q:"ما اسم هذا المعلم؟",a:"برج إيفل",img:`${WIKI}/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/320px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg`},
-{id:10139,cat:"معالم",diff:"easy",q:"ما اسم هذا المعلم؟",a:"أهرامات الجيزة",img:`${WIKI}/e/e3/Kheops-Pyramid.jpg/320px-Kheops-Pyramid.jpg`},
-{id:10140,cat:"معالم",diff:"easy",q:"ما اسم هذا المعلم؟",a:"تمثال الحرية",img:`${WIKI}/d/dd/Lady_Liberty_under_a_blue_sky_%28cropped%29.jpg/240px-Lady_Liberty_under_a_blue_sky_%28cropped%29.jpg`},
-{id:10141,cat:"معالم",diff:"easy",q:"ما اسم هذا المعلم؟",a:"تاج محل",img:`${WIKI}/1/1d/Taj_Mahal_%28Edited%29.jpeg/320px-Taj_Mahal_%28Edited%29.jpeg`},
-{id:10142,cat:"معالم",diff:"easy",q:"ما اسم هذا المعلم؟",a:"سور الصين العظيم",img:`${WIKI}/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/320px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg`},
-{id:10143,cat:"معالم",diff:"easy",q:"ما اسم هذا المعلم؟",a:"الكولوسيوم",img:`${WIKI}/d/d8/Colosseum_in_Rome-April_2007-1-_copie_2B.jpg/320px-Colosseum_in_Rome-April_2007-1-_copie_2B.jpg`},
-{id:10144,cat:"معالم",diff:"easy",q:"ما اسم هذا المعلم؟",a:"برج بيزا المائل",img:`${WIKI}/6/66/The_Leaning_Tower_of_Pisa_SB.jpeg/220px-The_Leaning_Tower_of_Pisa_SB.jpeg`},
-{id:10145,cat:"معالم",diff:"medium",q:"ما اسم هذا المعلم؟",a:"ماتشو بيتشو",img:`${WIKI}/e/eb/Machu_Picchu%2C_Peru.jpg/320px-Machu_Picchu%2C_Peru.jpg`},
-{id:10146,cat:"معالم",diff:"easy",q:"ما اسم هذا المعلم؟",a:"المسجد الحرام",img:`${WIKI}/e/e0/Masjid_al-Haram%2C_2_April_2015.jpg/320px-Masjid_al-Haram%2C_2_April_2015.jpg`},
-{id:10147,cat:"معالم",diff:"easy",q:"ما اسم هذا المعلم؟",a:"برج خليفة",img:`${WIKI}/9/93/Burj_Khalifa.jpg/180px-Burj_Khalifa.jpg`},
-{id:10148,cat:"معالم",diff:"medium",q:"ما اسم هذا المعلم؟",a:"دار الأوبرا في سيدني",img:`${WIKI}/a/a0/Sydney_Australia._%2821339175489%29.jpg/320px-Sydney_Australia._%2821339175489%29.jpg`},
-{id:10149,cat:"معالم",diff:"medium",q:"ما اسم هذا المعلم؟",a:"كنيسة القديس بطرس",img:`${WIKI}/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg/320px-Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg`},
-{id:10150,cat:"معالم",diff:"medium",q:"ما اسم هذا المعلم؟",a:"أبو الهول",img:`${WIKI}/f/f6/Great_Sphinx_of_Giza_-_20080716a.jpg/320px-Great_Sphinx_of_Giza_-_20080716a.jpg`},
-{id:10151,cat:"معالم",diff:"medium",q:"ما اسم هذا المعلم؟",a:"البتراء",img:`${WIKI}/1/1c/Al-Khazneh_%28Petra%29.jpg/220px-Al-Khazneh_%28Petra%29.jpg`},
-{id:10152,cat:"معالم",diff:"medium",q:"ما اسم هذا المعلم؟",a:"قصر الحمراء",img:`${WIKI}/d/de/Alhambra-de-Grenade.jpg/320px-Alhambra-de-Grenade.jpg`},
-{id:10153,cat:"معالم",diff:"medium",q:"ما اسم هذا المعلم؟",a:"ساعة بيغ بن",img:`${WIKI}/9/93/Clock_Tower_-_Palace_of_Westminster%2C_London_-_May_2007.jpg/180px-Clock_Tower_-_Palace_of_Westminster%2C_London_-_May_2007.jpg`},
-{id:10154,cat:"معالم",diff:"medium",q:"ما اسم هذا المعلم؟",a:"جبل فوجي",img:`${WIKI}/1/1b/080103_hakridge_fuji.jpg/320px-080103_hakridge_fuji.jpg`},
-{id:10155,cat:"معالم",diff:"hard",q:"ما اسم هذا المعلم؟",a:"أنغكور وات",img:`${WIKI}/4/44/Ankor_Wat_temple.jpg/320px-Ankor_Wat_temple.jpg`},
-{id:10156,cat:"معالم",diff:"hard",q:"ما اسم هذا المعلم؟",a:"تشيتشن إيتزا",img:`${WIKI}/1/1c/Chichen-Itza-Castillo-Seen-From-East.JPG/320px-Chichen-Itza-Castillo-Seen-From-East.JPG`},
-{id:10157,cat:"معالم",diff:"easy",q:"ما اسم هذا المعلم؟",a:"المسجد النبوي",img:`${WIKI}/3/30/Al-Masjid_AL-Nabawi_in_Madinah_-_Saudi_Arabia.jpg/320px-Al-Masjid_AL-Nabawi_in_Madinah_-_Saudi_Arabia.jpg`},
+{id:10077,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"جنوب أفريقيا",img:`${FLAGS}/za.png`},
+{id:10078,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"نيجيريا",img:`${FLAGS}/ng.png`},
+{id:10079,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"كينيا",img:`${FLAGS}/ke.png`},
+{id:10080,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"إثيوبيا",img:`${FLAGS}/et.png`},
+{id:10081,cat:"أعلام",diff:"easy",q:"ما الدولة صاحبة هذا العلم؟",a:"أستراليا",img:`${FLAGS}/au.png`},
+{id:10082,cat:"أعلام",diff:"medium",q:"ما الدولة صاحبة هذا العلم؟",a:"نيوزيلندا",img:`${FLAGS}/nz.png`},
+{id:10083,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"آيسلندا",img:`${FLAGS}/is.png`},
+{id:10084,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"ألبانيا",img:`${FLAGS}/al.png`},
+{id:10085,cat:"أعلام",diff:"hard",q:"ما الدولة صاحبة هذا العلم؟",a:"جورجيا",img:`${FLAGS}/ge.png`},
 ];
